@@ -58,3 +58,6 @@ class Documents(models.Model):
 
     def __str__(self):
         return self.doc_name
+
+    def get_absolute_url(self):
+        return reverse('doc-detail', args=[str(self.id)])
