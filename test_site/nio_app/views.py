@@ -3,4 +3,5 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 
 def home(request):
-    return HttpResponse('Home Page App nio_app')
+    output = "<h3><a href = 'admin/'>Admin></a></h3>"
+    return HttpResponse(output)
