@@ -6,24 +6,24 @@ from django.urls import reverse
 
 
 class Divisions(models.Model):
-    division_name = models.CharField(max_length=50, help_text='не более 50 символов',
-                                     verbose_name='Название подразделение')
+    division_name = models.CharField(max_length=50, help_text='не більше ніж 50 символів',
+                                     verbose_name='Назва підрозділу')
 
     def __str__(self):
         return self.division_name
 
 
 class Staff(models.Model):
-    fio = models.CharField(max_length=30, help_text='не более 30 символов',
-                           verbose_name='ФИО')
-    division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не более 50 символов',
-                                      verbose_name='Название подразделение')
+    fio = models.CharField(max_length=50, help_text='не більше ніж 30 символів',
+                           verbose_name='ПІБ')
+    division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не більше ніж 50 символів',
+                                      verbose_name='Назва підрозділу')
     tabel = models.IntegerField(verbose_name='Табельный номер')
     oklad = models.IntegerField(verbose_name='Оклад')
-    birthday = models.DateField(verbose_name="Дата рождения", blank=True, null=True)
+    birthday = models.DateField(verbose_name="Дата народження", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.tabel} | {self.fio} | {self.division_name}"
+        return f"{self.fio}"
 
     def get_absolute_url(self):
         return reverse('stuff-detail', args=[str(self.id)])
@@ -31,18 +31,19 @@ class Staff(models.Model):
 
 class Condition(models.Model):
     CHOICES_COND = (
-        ("8", "Полный день"), ("7", "Полный день"), ("Б", "Больничный"), ("О", "Отпуск"), ("Н", "Неизвестная причина"))
-    cond_status = models.CharField(max_length=5, help_text="Выберите один из вариантов",
-                                   verbose_name="Сведения присутствия", choices=CHOICES_COND)
+        ("8", "Повний день 8"), ("7", "Повний день 7"), ("Б", "Лікарняний"), ("О", "Відпустка"),
+        ("Н", "Невідома причина"))
+    cond_status = models.CharField(max_length=5, help_text="Оберіть один з варіантів",
+                                   verbose_name="Свідчення присутності", choices=CHOICES_COND)
 
     def __str__(self):
         return self.cond_status
 
 
 class Timesheet(models.Model):
-    fio = models.ForeignKey('Staff', on_delete=models.CASCADE, verbose_name='ФИО', related_name='timesheet_fio')
-    condition = models.ForeignKey(Condition, on_delete=models.CASCADE, verbose_name="Сведения присутствия")
-    date = models.DateField(help_text='Выберите дату', verbose_name='Дата табелирования')
+    fio = models.ForeignKey('Staff', on_delete=models.CASCADE, verbose_name='ПІБ', related_name='timesheet_fio')
+    condition = models.ForeignKey(Condition, on_delete=models.CASCADE, verbose_name="Свідчення присутності")
+    date = models.DateField(help_text='Оберіть дату', verbose_name='Дата табелювання')
 
     class Meta:
         ordering = ['date']
@@ -52,21 +53,21 @@ class Timesheet(models.Model):
 
 
 class Documents(models.Model):
-    doc_name = models.CharField(max_length=200, help_text="Введите название документа",
-                                verbose_name="Название документа")
-    author = models.ManyToManyField('Staff', verbose_name='ФИО',
-                                    help_text="Введите автора документа")
+    doc_name = models.CharField(max_length=200, help_text="Введіть назву документу",
+                                verbose_name="Назва документа")
+    author = models.ManyToManyField("Staff", verbose_name='ПІБ',
+                                    help_text="Введіть автора документу")
 
     CHOICES_DOC_TYPE = (
-        ("М", "Методика"), ("П", "Паспорт"), ("РЭ", "Руководство по эксплуатации"), ("ТС", "Техническая справка"),
-        ("ОТ", "Технический отчет"), ("ТИ", "Технологическая инструкция"), ("Д", "Другое"),)
-    doc_type = models.CharField(max_length=50, help_text="Введите тип документа",
-                                verbose_name="Тип документа", choices=CHOICES_DOC_TYPE)
+        ("М", "Методика"), ("П", "Паспорт"), ("КЭ", "Керівництво з експлуатації"), ("ТД", "Технична довідка"),
+        ("ЗТ", "Техничний звіт"), ("ТІ", "Технологічна інструкция"), ("І", "Інше"),)
+    doc_type = models.CharField(max_length=50, help_text="Введіть тип документу",
+                                verbose_name="Тип документу", choices=CHOICES_DOC_TYPE)
 
-    CHOICES_STATUS = (("Р", "Разработка"), ("С", "Согласование"), ("В", "Внедрено"))
-    doc_status = models.CharField(max_length=50, help_text="Текущий статус документа",
-                                  verbose_name="Статус документа", choices=CHOICES_STATUS)
-    release_date = models.DateField(help_text="Введите дату внедрения", verbose_name="Дата внедрения",
+    CHOICES_STATUS = (("Р", "Розробка"), ("С", "Узгодження"), ("В", "Впроваджено"))
+    doc_status = models.CharField(max_length=50, help_text="Поточний статус документу",
+                                  verbose_name="Статус документу", choices=CHOICES_STATUS)
+    release_date = models.DateField(help_text="Введіть дату впровадження", verbose_name="Дата впровадження",
                                     blank=True, null=True)
 
     def display_author(self):

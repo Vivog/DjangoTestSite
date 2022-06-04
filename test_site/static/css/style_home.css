@@ -1,0 +1,8 @@
+/* static/css/style_home.css */
+body {
+    background-image: url(../images/kwnoledge_fon.jpg);
+    background: yellowgreen;
+}
+ul  {
+    list-style-type: square;
+}
