@@ -8,7 +8,7 @@ from django.urls import reverse
 class Divisions(models.Model):
     division_name = models.CharField(max_length=50, help_text='не більше ніж 50 символів',
                                      verbose_name='Назва підрозділу')
-
+    objects = models.Manager()
     def __str__(self):
         return self.division_name
 
@@ -21,6 +21,7 @@ class Staff(models.Model):
     tabel = models.IntegerField(verbose_name='Табельный номер')
     oklad = models.IntegerField(verbose_name='Оклад')
     birthday = models.DateField(verbose_name="Дата народження", blank=True, null=True)
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.fio}"
@@ -69,6 +70,7 @@ class Documents(models.Model):
                                   verbose_name="Статус документу", choices=CHOICES_STATUS)
     release_date = models.DateField(help_text="Введіть дату впровадження", verbose_name="Дата впровадження",
                                     blank=True, null=True)
+    objects = models.Manager()
 
     def display_author(self):
         return ', '.join([staff.fio.split()[0] for staff in self.author.all()])

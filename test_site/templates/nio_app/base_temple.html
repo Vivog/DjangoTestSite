@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=l">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>Портал НИО</title>
+    {% load static %}
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    {% block head %}
+    <img src="{% static 'images/logo.png' %}" style="width: 100px; height: 100px;">
+    <font size=7, color="#7fff00">"Портал НДВ"</font>
+    {% endblock %}
+</head>
+<body>
+<div class="container_fluid">
+    <div class="row">
+        <div class="col-sm-2">
+            {% block sidebar %}
+            <ul class="sidebar-nav">
+                <li>
+                    <link href="{% url 'home' %}">
+                    Головна сторінка
+                </li>
+                <li>
+                    <link href="">
+                    Всі підрозділи
+                </li>
+                <li>
+                    <link href="">
+                    Документація
+                </li>
+                 <li>
+                    <link href="admin/" style="color: red">
+                    Адміністрування сайту
+                </li>
+            </ul>
+            {% endblock %}
+        </div>
+        <div class="col-sm-10">
+            {% block content %}{% endblock %}
+            {% block footer %}
+            {% block copyright %}
+            <p>Copyright Vivog, 2022. Всі права захищенні</p>
+            {% endblock %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>NIO</title>
-    <link rel="stylesheet" href="{% static 'css/style_home.css' %}" type="text/css">
-</head>
-<body>
-<h3><a href = 'admin/'>Admin_home</a></h3>
-<pre>
-    dfdsfsd
-    fdssdfdsf
-    dsfdsfsfd
-    sdfsdffs
-    dsfdsfds
-</pre>
-<ul>
-    <li>Hello</li>
-    <li>Good</li>
-    <li>Bad</li>
-</ul>
-</body>
-</html>
+{% extends "nio_app/base_temple.html" %}
+
+{% block content %}
+<h1>Головна сторінка</h1>
+    <p>
+        Ласкаво просимо на <em>Портал НДВ</em>. Сайт стрворено для легкого пошуку необхідної інформації
+    </p>
+<h2>Динамічний контент</h2>
+    <p>
+        Портал НИО містить наступну кількість інформції:
+    </p>
+    <ul>
+        <li><strong>Кількість підрозділів:</strong> {{num_divisions}} </li>
+        <li><strong>Загальна кількість персоналу:</strong> {{num_staff}} </li>
+        <li><strong>Кількість персоналу НДЛ-6:</strong> {{num_staff_NDL_6}} </li>
+        <li><strong>Загальна кількість документації:</strong> {{num_doc}} </li>
+    </ul>
+{% endblock %}
