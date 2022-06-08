@@ -1,0 +1,28 @@
+/* static/css/style.css */
+body {
+        /*display: block;*/
+        /*box-sizing: border-box;*/
+        background: linear-gradient(blue, yellow);
+        /*background-image: url("/static/nio_app/images/fon_ukr_flag.jpg");*/
+}
+.sidebar-nav    {.
+        margin-top: 20px;
+        padding: 0;
+        list-style: square;
+}
+.black {
+        display:none;
+        width:30%;
+        top:0;
+        bottom:0;
+        height:100%;
+        background:#000;
+        position:absolute;
+}
+a{
+        font-size: medium;
+}
+a:link { color: cyan; text-decoration: underline }
+a:visited { color: cyan; text-decoration: underline }
+a:active { color: orangered; text-decoration: none }
+a:hover { color: lime; text-decoration: none }

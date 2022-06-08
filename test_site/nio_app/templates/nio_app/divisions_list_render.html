@@ -1,0 +1,18 @@
+{% extends "nio_app/base_temple.html" %}
+
+{% block content %}
+<h1><strong>Перелік підрозділів</strong></h1>
+    {% if divisions %}
+        <ul>
+            {% for division in divisions %}
+            <li>
+                <a href="{{ division.get_absolute_url }}">
+                    {{division.division_name}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Інформація відсутня</p>
+    {% endif %}
+{% endblock %}

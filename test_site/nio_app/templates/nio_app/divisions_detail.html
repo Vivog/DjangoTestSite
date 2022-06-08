@@ -1,0 +1,23 @@
+{% extends "nio_app/base_temple.html" %}
+
+{% block content %}
+<h1><strong><i>{{divisions.division_name}}</i></strong></h1>
+<h2><strong>Короткий опис сфери діяльності:</strong></h2>
+<p>
+    {{divisions.div_description}}
+</p>
+<h2><strong>Відомості про персонал:</strong></h2>
+    <p>Кількість: {{staff.divisions_get.all.count}}</p>
+    <p><a href="{% url 'staff' %}">Персонал "{{divisions.division_name}}"</a></p>
+
+<h2><strong>Відомості про документацію:</strong></h2>
+<ul>
+    <li>Методики: </li>
+    <li>Технологічні інструкції: </li>
+    <li>Технічні звіти: </li>
+    <li>Технічні довідки: </li>
+    <li>Паспорти: </li>
+    <li>Керівництва з експлуатації: </li>
+</ul>
+
+{% endblock %}
