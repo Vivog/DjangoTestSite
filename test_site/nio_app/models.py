@@ -6,13 +6,15 @@ from django.urls import reverse
 
 
 class Divisions(models.Model):
+
     division_name = models.CharField(max_length=50, help_text='не більше ніж 50 символів',
                                      verbose_name='Назва підрозділу')
     div_abr = models.CharField(max_length=10, help_text='не більше ніж 10 символів',
-                               verbose_name='Абрівіатура підрозділу', null=True)
+                               verbose_name='Абрівіатура підрозділу')
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
 
     div_description = models.TextField(max_length=1000, help_text='Введіть короткий опис підрозділу',
-                                       verbose_name='Опис підрозділу', null=True)
+                                       verbose_name='Опис підрозділу')
     objects = models.Manager()
 
     class Meta:
@@ -23,15 +25,17 @@ class Divisions(models.Model):
         return self.division_name
 
     def get_absolute_url(self):
-        return reverse('division-detail', kwargs={'div_id': self.pk})
+        return reverse('division-detail', kwargs={'div_slug': self.slug})
 
     # def get_absolute_url(self):
     #     return reverse('division-detail', kwargs={"staff_slug": self.division_name})
 
 
 class Staff(models.Model):
+
     fio = models.CharField(max_length=50, help_text='не більше ніж 30 символів',
                            verbose_name='ПІБ')
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
     division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не більше ніж 50 символів',
                                       verbose_name='Назва підрозділу')
     tabel = models.IntegerField(verbose_name='Табельный номер')
@@ -47,19 +51,19 @@ class Staff(models.Model):
         return f"{self.fio}"
 
     def get_absolute_url(self):
-        return reverse('staff-detail', args=[str(self.id)])
-
+        return reverse('staff-detail', kwargs={'staff_slug': self.slug})
 
 
 class Timesheet(models.Model):
-    fio = models.ForeignKey('Staff', on_delete=models.CASCADE, verbose_name='ПІБ', related_name='timesheet_fio')
-    date = models.DateField(help_text='Оберіть дату', verbose_name='Дата табелювання')
-    is_8 = models.BooleanField(verbose_name='8', null=True, default=True)
-    is_7 = models.BooleanField(verbose_name='7', null=True, default=False)
-    is_sick = models.BooleanField(verbose_name='Л', null=True, default=False)
-    is_vacation = models.BooleanField(verbose_name='В', null=True, default=False)
-    is_unknown = models.BooleanField(verbose_name='Н', null=True, default=False)
 
+    fio = models.ForeignKey('Staff', on_delete=models.CASCADE, verbose_name='ПІБ', related_name='timesheet_fio')
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
+    date = models.DateField(help_text='Оберіть дату', verbose_name='Дата табелювання')
+    is_8 = models.BooleanField(verbose_name='8',  default=True)
+    is_7 = models.BooleanField(verbose_name='7',  default=False)
+    is_sick = models.BooleanField(verbose_name='Л', default=False)
+    is_vacation = models.BooleanField(verbose_name='В',  default=False)
+    is_unknown = models.BooleanField(verbose_name='Н',  default=False)
 
     class Meta:
         ordering = ['date']
@@ -69,10 +73,19 @@ class Timesheet(models.Model):
     def __str__(self):
         return f"{self.date} | {self.fio}"
 
+    def get_absolute_url(self):
+        return reverse('timesheet-detail', kwargs={'timesheet_slug': self.slug})
+
 
 class Documents(models.Model):
+
     doc_name = models.CharField(max_length=200, help_text="Введіть назву документу",
                                 verbose_name="Назва документа")
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
+
+    division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не більше ніж 50 символів',
+                                      verbose_name='Назва підрозділу', null=True)
+
     author = models.ManyToManyField("Staff", verbose_name='ПІБ',
                                     help_text="Введіть автора документу")
 
@@ -100,3 +113,6 @@ class Documents(models.Model):
 
     def __str__(self):
         return f"{self.release_date} | {self.doc_status} |{self.doc_type} | {self.doc_name} | {self.author}"
+
+    def get_absolute_url(self):
+        return reverse('doc-detail', kwargs={'doc_slug': self.slug})

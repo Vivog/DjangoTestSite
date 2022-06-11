@@ -1,5 +1,4 @@
 {% extends "nio_app/base_temple.html" %}
-
 {% block content %}
 <h1><strong>Перелік підрозділів</strong></h1>
     {% if divisions %}
@@ -15,4 +14,6 @@
     {% else %}
         <p>Інформація відсутня</p>
     {% endif %}
+<hr>
+<div><a href="{% url 'add-division' %}"><h4><strong>Додати підрозділ</strong></h4></a></div>
 {% endblock %}
