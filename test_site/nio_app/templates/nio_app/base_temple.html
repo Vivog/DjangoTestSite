@@ -110,6 +110,7 @@
                         </a>
                     </li>
                     {% if request.user.is_authenticated %}
+                    {% if request.path == '/' %}
                     <li>
                         <a href="admin/" class="nav-link text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
@@ -119,6 +120,7 @@
                             </svg>
                         </a>
                     </li>
+                    {% endif %}
                     {% endif %}
                 </ul>
             </div>
