@@ -111,7 +111,7 @@ class Documents(models.Model):
         verbose_name_plural = 'Документація'
 
     def __str__(self):
-        return f"{self.release_date} | {self.doc_status} |{self.doc_type} | {self.doc_name} | {self.author}"
+        return self.doc_name
 
     def get_absolute_url(self):
         return reverse('doc-detail', kwargs={'doc_slug': self.slug})

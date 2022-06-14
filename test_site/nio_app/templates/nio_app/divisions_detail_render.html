@@ -11,7 +11,7 @@
         <td style="text-align: left; vertical-align: top; padding-right: 50px">
             <h2><strong>Відомості про персонал:</strong></h2>
             <p>Загальна кількість: {{num_staff}}</p>
-            <p><a href="-/staff/{{div_slug}}/">Персонал "{{div_name}}"</a></p>
+            <p><a href="{% url 'staff' %}{{div_slug}}">Персонал "{{div_name}}"</a></p>
         </td>
         <td style="text-align: left; vertical-align: top;">
             <h2><strong>Відомості про документацію:</strong></h2>

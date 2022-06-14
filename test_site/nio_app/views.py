@@ -112,10 +112,6 @@ class DivisionsList(ListView):
     context_object_name = 'divisions'
 
 
-def documents(request):
-    return HttpResponse('<h1>Уся документація</h1>')
-
-
 class DivisionsDetailList(ListView):
     model = Divisions
     template_name = 'nio_app/divisions_detail_render.html'
@@ -128,7 +124,6 @@ class DivisionsDetailList(ListView):
         context['div_slug'] = context["divisions"].slug
         context['num_staff'] = context["divisions"].staff_set.count()
         context['staff'] = context["divisions"].staff_set.all()
-        # context['staff_slug'] = resolve(f'staff/<slug:{self.get_queryset().slug}>/')
         context['doc_implemented'] = context["divisions"].documents_set.filter(doc_status='В').count()
         context['doc_develop'] = context["divisions"].documents_set.filter(doc_status='Р').count()
         context['doc_agreement'] = context["divisions"].documents_set.filter(doc_status='У').count()
@@ -156,6 +151,23 @@ class AddDivisionView(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Додати підрозділ'
         return context
+
+
+class DocList(ListView):
+    model = Documents
+    template_name = 'nio_app/doc_list_render.html'
+    context_object_name = 'docs'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["divisions"] = Divisions.objects.all()
+        return context
+
+    def get_queryset(self):
+        return Documents.objects.all()
+
+
+
 
 
 def pageNotFound(request, exception):

@@ -1,0 +1,19 @@
+{% extends "nio_app/base_temple.html" %}
+{% block content %}
+<h1><strong>Документація за підрозділами: </strong></h1>
+     {% if docs %}
+        <ul>
+            {% for doc in docs %}
+            <li>
+                <a href="{{ doc.division_mame }}">
+                    {{doc.division_name}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Інформація відсутня</p>
+    {% endif %}
+<hr>
+{% endblock %}
+<!--<div><a href="{% url 'add-person' %}"><h4><strong>Додати співробітника</strong></h4></a></div>-->
