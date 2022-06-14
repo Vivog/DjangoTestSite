@@ -75,11 +75,12 @@ class StaffDetailList(ListView):
     # paginate_by = 7
     model = Staff
     template_name = 'nio_app/staff_detail_render.html'
+    context_object_name = 'staff_detail'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['div'] = self.get_queryset().division_name
-        context['staff'] = self.get_queryset().staff_set.all()
+        context['div'] = context['staff_detail'].division_name
+        context['staff'] = context['staff_detail'].staff_set.all()
 
         return context
 
@@ -91,11 +92,12 @@ class StaffDetailList(ListView):
 class PersonDetailList(ListView):
     model = Staff
     template_name = 'nio_app/person_detail_render.html'
+    context_object_name = 'person_detail'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['fio'] = self.get_queryset().fio
-        context['photo'] = self.get_queryset().photo
+        context['fio'] = context['person_detail'].fio
+        context['photo'] = context['person_detail'].photo
         context['staff'] = Staff.objects.filter(slug=self.kwargs['staff_slug'])
 
         return context
@@ -117,25 +119,26 @@ def documents(request):
 class DivisionsDetailList(ListView):
     model = Divisions
     template_name = 'nio_app/divisions_detail_render.html'
+    context_object_name = 'divisions'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['div_name'] = context.division_name
-        context['div_description'] = self.get_queryset().div_description
-        context['div_slug'] = self.get_queryset().slug
-        context['num_staff'] = self.get_queryset().staff_set.count()
-        context['staff'] = self.get_queryset().staff_set.all()
+        context['div_name'] = context["divisions"].division_name
+        context['div_description'] = context["divisions"].div_description
+        context['div_slug'] = context["divisions"].slug
+        context['num_staff'] = context["divisions"].staff_set.count()
+        context['staff'] = context["divisions"].staff_set.all()
         # context['staff_slug'] = resolve(f'staff/<slug:{self.get_queryset().slug}>/')
-        context['doc_implemented'] = self.get_queryset().documents_set.filter(doc_status='В').count()
-        context['doc_develop'] = self.get_queryset().documents_set.filter(doc_status='Р').count()
-        context['doc_agreement'] = self.get_queryset().documents_set.filter(doc_status='У').count()
+        context['doc_implemented'] = context["divisions"].documents_set.filter(doc_status='В').count()
+        context['doc_develop'] = context["divisions"].documents_set.filter(doc_status='Р').count()
+        context['doc_agreement'] = context["divisions"].documents_set.filter(doc_status='У').count()
         docs = []
         d_type = (
             ("Методики", "М"), ("Паспорти", "П"), ("Керівництва з експлуатації", "КЕ"), ("Техничні довідки", "ТД"),
             ("Техничні звіти", "ТЗ"), ("Технологічні інструкції", "ТІ"), ("Інше", "І"))
         for d in range(0, 7):
             name = d_type[d][0]
-            count = self.get_queryset().documents_set.filter(doc_type=d_type[d][1]).count()
+            count = context["divisions"].documents_set.filter(doc_type=d_type[d][1]).count()
             docs.append((name, count))
         context['docs'] = docs
         return context
