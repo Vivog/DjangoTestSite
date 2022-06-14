@@ -1,0 +1,19 @@
+{% extends "nio_app/base_temple.html" %}
+{% block content %}
+<h2><strong>{{ div }}</strong></h2>
+     {% if staff %}
+        <ul>
+            {% for person in staff %}
+            <li>
+                <a href="{{ person.slug }}">
+                    {{person.tabel}} | {{person.fio}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Персонал відсутній</p>
+    {% endif %}
+<hr>
+{% endblock %}
+<!--<div><a href="{% url 'add-person' %}"><h4><strong>Додати співробітника</strong></h4></a></div>-->

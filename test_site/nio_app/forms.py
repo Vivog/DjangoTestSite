@@ -1,6 +1,8 @@
 import re
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from .models import *
@@ -36,3 +38,20 @@ class AddDivisionForm(forms.ModelForm):
             return division_name
         else:
             raise ValidationError('Введені недопустимі символи')
+
+
+class RegisterForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = "Логін користувача"
+        self.fields['password1'].label = "Пароль"
+        self.fields['password2'].label = "Підтвердження паролю"
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2')
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label='Логін')
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)

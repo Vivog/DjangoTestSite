@@ -1,10 +1,14 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, resolve
 from django.views.generic import ListView, CreateView
 
 from .forms import *
 from .models import *
+from .utilits import *
 
 
 # Create your views here.
@@ -19,17 +23,86 @@ def home(request):
         'num_doc': num_doc}
     return render(request, 'nio_app/home.html', context=context)
 
+class RegisterUser(CreateView):
+    form_class = RegisterForm
+    template_name = 'nio_app/register.html'
+    success_url = reverse_lazy('login')
 
-def staff(request):
-    return HttpResponse('Сторінка персоналу')
+    def get_context_data(self, object_list=None,  **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Реєстанція користувача'
+        return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+class LoginUser(LoginView):
+    form_class = LoginForm
+    template_name = 'nio_app/login.html'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(LoginUser, self).get_context_data(**kwargs)
+        context['title'] = 'Авторизація'
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('home')
 
 
-# def divisions(request):
-#     divisions = Divisions.objects.all()
-#     context = {
-#         'divisions': divisions
-#     }
-#     return render(request, 'nio_app/divisions_list_render.html', context=context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('home')
+
+
+class Staff_DivList(ListView):
+    model = Staff
+    template_name = 'nio_app/staff_list_render.html'
+    context_object_name = 'staff'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["divisions"] = Divisions.objects.all()
+        return context
+
+    def get_queryset(self):
+        return Staff.objects.all()
+
+
+class StaffDetailList(ListView):
+    # paginate_by = 7
+    model = Staff
+    template_name = 'nio_app/staff_detail_render.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['div'] = self.get_queryset().division_name
+        context['staff'] = self.get_queryset().staff_set.all()
+
+        return context
+
+    def get_queryset(self):
+        # return Divisions.objects.all()
+        return Divisions.objects.get(slug=self.kwargs['div_slug'])
+
+
+class PersonDetailList(ListView):
+    model = Staff
+    template_name = 'nio_app/person_detail_render.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fio'] = self.get_queryset().fio
+        context['photo'] = self.get_queryset().photo
+        context['staff'] = Staff.objects.filter(slug=self.kwargs['staff_slug'])
+
+        return context
+
+    def get_queryset(self):
+        return Staff.objects.get(slug=self.kwargs['staff_slug'])
+
 
 class DivisionsList(ListView):
     model = Divisions
@@ -40,6 +113,58 @@ class DivisionsList(ListView):
 def documents(request):
     return HttpResponse('<h1>Уся документація</h1>')
 
+
+class DivisionsDetailList(ListView):
+    model = Divisions
+    template_name = 'nio_app/divisions_detail_render.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['div_name'] = context.division_name
+        context['div_description'] = self.get_queryset().div_description
+        context['div_slug'] = self.get_queryset().slug
+        context['num_staff'] = self.get_queryset().staff_set.count()
+        context['staff'] = self.get_queryset().staff_set.all()
+        # context['staff_slug'] = resolve(f'staff/<slug:{self.get_queryset().slug}>/')
+        context['doc_implemented'] = self.get_queryset().documents_set.filter(doc_status='В').count()
+        context['doc_develop'] = self.get_queryset().documents_set.filter(doc_status='Р').count()
+        context['doc_agreement'] = self.get_queryset().documents_set.filter(doc_status='У').count()
+        docs = []
+        d_type = (
+            ("Методики", "М"), ("Паспорти", "П"), ("Керівництва з експлуатації", "КЕ"), ("Техничні довідки", "ТД"),
+            ("Техничні звіти", "ТЗ"), ("Технологічні інструкції", "ТІ"), ("Інше", "І"))
+        for d in range(0, 7):
+            name = d_type[d][0]
+            count = self.get_queryset().documents_set.filter(doc_type=d_type[d][1]).count()
+            docs.append((name, count))
+        context['docs'] = docs
+        return context
+
+    def get_queryset(self):
+        return Divisions.objects.get(slug=self.kwargs['div_slug'])
+
+
+class AddDivisionView(CreateView):
+    form_class = AddDivisionForm
+    template_name = 'nio_app/add_division.html'
+    success_url = reverse_lazy('divisions')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Додати підрозділ'
+        return context
+
+
+def pageNotFound(request, exception):
+    return HttpResponseNotFound("<h1>Друже нажаль такої сторінки не існує.</h1>"
+                                "<h2>Перевір адресу запиту</h2>")
+
+# def divisions(request):
+#     divisions = Divisions.objects.all()
+#     context = {
+#         'divisions': divisions
+#     }
+#     return render(request, 'nio_app/divisions_list_render.html', context=context)
 
 # def divisions_detail(request, div_slug):
 #     div_name = Divisions.objects.get(slug=div_slug).division_name
@@ -79,32 +204,6 @@ def documents(request):
 #     }
 #     return render(request, 'nio_app/divisions_detail_render.html', context=context)
 
-
-class DivisionsDetailList(ListView):
-    model = Divisions
-    template_name = 'nio_app/divisions_detail_render.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['div_name'] = self.get_queryset().division_name
-        context['div_description'] = self.get_queryset().div_description
-        context['num_staff'] = self.get_queryset().staff_set.count()
-        context['doc_implemented'] = self.get_queryset().documents_set.filter(doc_status='В').count()
-        context['doc_develop'] = self.get_queryset().documents_set.filter(doc_status='Р').count()
-        context['doc_agreement'] = self.get_queryset().documents_set.filter(doc_status='У').count()
-        context['doc_m'] = self.get_queryset().documents_set.filter(doc_type='М').count()
-        context['doc_ti'] = self.get_queryset().documents_set.filter(doc_type='ТІ').count()
-        context['doc_tz'] = self.get_queryset().documents_set.filter(doc_type='ЗТ').count()
-        context['doc_td'] = self.get_queryset().documents_set.filter(doc_type='ТД').count()
-        context['doc_p'] = self.get_queryset().documents_set.filter(doc_type='П').count()
-        context['doc_ke'] = self.get_queryset().documents_set.filter(doc_type='КЕ').count()
-        context['doc_i'] = self.get_queryset().documents_set.filter(doc_type='І').count()
-        return context
-
-    def get_queryset(self):
-        return Divisions.objects.get(slug=self.kwargs['div_slug'])
-
-
 # def add_division(request):
 #     if request.method == "POST":
 #         form = AddDivisionForm(request.POST)
@@ -121,18 +220,3 @@ class DivisionsDetailList(ListView):
 #     else:
 #         form = AddDivisionForm()
 #     return render(request, 'nio_app/add_division.html', context={'form': form, 'title': 'Додати підрозділ'})
-
-class AddDivisionView(CreateView):
-    form_class = AddDivisionForm
-    template_name = 'nio_app/add_division.html'
-    success_url = reverse_lazy('divisions')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Додати підрозділ'
-        return context
-
-
-def pageNotFound(request, exception):
-    return HttpResponseNotFound("<h1>Друже нажаль такої сторінки не існує.</h1>"
-                                "<h2>Перевір адресу запиту</h2>")

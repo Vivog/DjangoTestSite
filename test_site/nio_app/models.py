@@ -27,8 +27,6 @@ class Divisions(models.Model):
     def get_absolute_url(self):
         return reverse('division-detail', kwargs={'div_slug': self.slug})
 
-    # def get_absolute_url(self):
-    #     return reverse('division-detail', kwargs={"staff_slug": self.division_name})
 
 
 class Staff(models.Model):
@@ -41,6 +39,7 @@ class Staff(models.Model):
     tabel = models.IntegerField(verbose_name='Табельный номер')
     oklad = models.IntegerField(verbose_name='Оклад')
     birthday = models.DateField(verbose_name="Дата народження", blank=True, null=True)
+    photo = models.ImageField(upload_to="workers_foto/", verbose_name="Фото", null=True)
     objects = models.Manager()
 
     class Meta:
@@ -51,7 +50,7 @@ class Staff(models.Model):
         return f"{self.fio}"
 
     def get_absolute_url(self):
-        return reverse('staff-detail', kwargs={'staff_slug': self.slug})
+        return reverse('person-detail', kwargs={'staff_slug': self.slug})
 
 
 class Timesheet(models.Model):

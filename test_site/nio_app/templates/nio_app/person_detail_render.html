@@ -1,0 +1,24 @@
+{% extends "nio_app/base_temple.html" %}
+{% block content %}
+<h2><strong>{{ fio }}</strong></h2>
+<!--<table>-->
+<!--    <tr></tr>-->
+<!--</table>-->
+{% if photo %}
+<p><img class="img-article-left" src="{{photo.url}}"></p>
+{% endif %}
+{% if staff %}
+<ul>
+    {% for person in staff %}
+    <li>Табельний номер: {{person.tabel}}</li>
+    <li>Підрозділ: {{person.division_name}}</li>
+    <li>Оклад: {{person.oklad}}</li>
+    <li>Дата народження: {{person.birthday}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Дані відсутні</p>
+{% endif %}
+<hr>
+<div><a href="#"><h4><strong>Додати інформацію</strong></h4></a></div>
+{% endblock %}

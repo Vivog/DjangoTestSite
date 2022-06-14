@@ -52,7 +52,17 @@ a:visited { color: #444444; text-decoration: none }
 a:active { color: yellow; text-decoration: none }
 a:hover { color: yellowgreen; text-decoration: none }
 
+img.img-article-left {
+	width: 400px;
+	/*height: auto;*/
+	float: left;
+	padding: 0 20px 20px 0;
+}
 
+img.img-article-left.thumb {
+	max-width: 50px;
+	height: auto;
+}
 
 /*html, body {*/
 /*	font-family: 'Arial';*/

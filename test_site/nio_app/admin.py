@@ -22,7 +22,7 @@ class StaffAdmin(admin.ModelAdmin):
             "Загальні відомості", {'fields': ('tabel', 'fio', 'slug')}
         ),
         (
-            "Додатково", {'fields': ('division_name', 'oklad', 'birthday')}
+            "Додатково", {'fields': ('division_name', 'oklad', 'birthday', 'photo')}
         )
     )
     search_fields = ('tabel', 'fio')

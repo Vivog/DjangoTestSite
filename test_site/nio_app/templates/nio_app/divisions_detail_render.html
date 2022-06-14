@@ -11,7 +11,7 @@
         <td style="text-align: left; vertical-align: top; padding-right: 50px">
             <h2><strong>Відомості про персонал:</strong></h2>
             <p>Загальна кількість: {{num_staff}}</p>
-            <p><a href="">Персонал "{{div_name}}"</a></p>
+            <p><a href="-/staff/{{div_slug}}/">Персонал "{{div_name}}"</a></p>
         </td>
         <td style="text-align: left; vertical-align: top;">
             <h2><strong>Відомості про документацію:</strong></h2>
@@ -28,13 +28,16 @@
             </table>
             <hr>
             <table>
-                <tr><td>Методики: </td><td style="padding-left: 15px">{{doc_m}}</td></tr>
-                <tr><td>Технологічні інструкції:</td><td style="padding-left: 15px">{{doc_ti}}</td></tr>
-                <tr><td>Технічні звіти: </td><td style="padding-left: 15px">{{doc_tz}}</td></tr>
-                <tr><td>Технічні довідки:</td><td style="padding-left: 15px">{{doc_td}}</td></tr>
-                <tr><td>Паспорти: </td><td style="padding-left: 15px">{{doc_p}}</td></tr>
-                <tr><td>Керівництва з експлуатації: </td><td style="padding-left: 15px">{{doc_ke}}</td></tr>
-                <tr><td>Інше: </td><td style="padding-left: 15px">{{doc_i}}</td></tr>
+                {% if docs %}
+                {% for d in docs %}
+                {% if d.1 > 0 %}
+                <tr>
+                    <td>{{ d.0 }}</td>
+                    <td style="padding-left: 15px">{{ d.1 }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
             </table>
         </td>
     </tr>
