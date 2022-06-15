@@ -158,13 +158,13 @@ class DocList(ListView):
     template_name = 'nio_app/doc_list_render.html'
     context_object_name = 'docs'
 
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["divisions"] = Divisions.objects.all()
         return context
 
     def get_queryset(self):
-        return Documents.objects.all()
+        return Documents.objects.order_by('division_name')
 
 
 

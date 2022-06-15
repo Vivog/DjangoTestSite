@@ -2,10 +2,10 @@
 {% block content %}
 <h1><strong>Документація за підрозділами: </strong></h1>
      {% if docs %}
-        <ul>
+        <ul class="doc_ul">
             {% for doc in docs %}
             <li>
-                <a href="{{ doc.division_mame }}">
+                <a href="#">
                     {{doc.division_name}}
                 </a>
             </li>
