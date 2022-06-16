@@ -12,8 +12,11 @@
     {% for person in staff %}
     <li>Табельний номер: {{person.tabel}}</li>
     <li>Підрозділ: {{person.division_name | lower}}</li>
+    <li>Професія: {{person.prof}}</li>
     <li>Оклад: {{person.oklad}}</li>
     <li>Дата народження: {{person.birthday}}</li>
+    <li>Телефон: {{person.phone}}</li>
+    <li>Домашня адреса: {{person.adress}}</li>
     {% endfor %}
 </ul>
 {% else %}

@@ -20,10 +20,10 @@ class StaffAdmin(admin.ModelAdmin):
     # если название не нужно то пишим None
     fieldsets = (
         (
-            "Загальні відомості", {'fields': ('tabel', 'fio', 'slug')}
+            "Загальні відомості", {'fields': ('tabel', 'fio', 'slug', 'prof')}
         ),
         (
-            "Додатково", {'fields': ('division_name', 'oklad', 'birthday', 'photo')}
+            "Додатково", {'fields': ('division_name', 'oklad', 'birthday', 'phone', 'adress',  'photo')}
         )
     )
     search_fields = ('tabel', 'fio')
@@ -40,6 +40,7 @@ admin.site.register(Staff, StaffAdmin)
 
 @admin.register(Documents)
 class DocumentsAdmin(admin.ModelAdmin):
+    # fields = ('fio')
     list_display = ('release_date', "doc_status", "doc_type", "doc_name", "display_author")
     list_filter = ('doc_status', 'doc_type')
     search_fields = ('doc_name',)

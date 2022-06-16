@@ -37,9 +37,15 @@ class Staff(models.Model):
     division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не більше ніж 50 символів',
                                       verbose_name='Назва підрозділу')
     tabel = models.IntegerField(verbose_name='Табельный номер')
+    prof = models.CharField(max_length=50, help_text='не більше ніж 30 символів',
+                           verbose_name='Професія')
     oklad = models.IntegerField(verbose_name='Оклад')
-    birthday = models.DateField(verbose_name="Дата народження", blank=True, null=True)
-    photo = models.ImageField(upload_to="workers_foto/", verbose_name="Фото", null=True)
+    birthday = models.DateField(verbose_name="Дата народження", blank=True)
+    phone = models.CharField(max_length=18, help_text='формат +38(ХХХ)-ХХХ-ХХ-ХХ',
+                           verbose_name='Номер телефону')
+    adress = models.CharField(max_length=50, help_text='формат пр/вул/провулок ХХХХХ д.ХХ кв.ХХ',
+                           verbose_name='Домашня адреса')
+    photo = models.ImageField(upload_to="workers_foto/", verbose_name="Фото")
     objects = models.Manager()
 
     class Meta:
@@ -83,14 +89,14 @@ class Documents(models.Model):
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
 
     division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не більше ніж 50 символів',
-                                      verbose_name='Назва підрозділу', null=True)
+                                      verbose_name='Назва підрозділу')
 
-    author = models.ManyToManyField("Staff", verbose_name='ПІБ',
+    author = models.ManyToManyField("Staff", verbose_name='Автор',
                                     help_text="Введіть автора документу")
 
     CHOICES_DOC_TYPE = (
         ("М", "Методика"), ("П", "Паспорт"), ("КЕ", "Керівництво з експлуатації"), ("ТД", "Технична довідка"),
-        ("ЗТ", "Техничний звіт"), ("ТІ", "Технологічна інструкция"), ("І", "Інше"),)
+        ("ЗТ", "Технічний звіт"), ("ТІ", "Технологічна інструкция"), ("І", "Інше"),)
     doc_type = models.CharField(max_length=50, help_text="Введіть тип документу",
                                 verbose_name="Тип документу", choices=CHOICES_DOC_TYPE)
 
