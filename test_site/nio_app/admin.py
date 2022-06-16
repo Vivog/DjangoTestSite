@@ -62,6 +62,6 @@ class TimeSheetAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('date',)}
 
 
-
+# Изменяет название страницы административной панели и название заголовка административной панали
 admin.site.site_title = "Портал НДВ"
 admin.site.site_header = "Портал НДВ"

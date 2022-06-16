@@ -11,7 +11,7 @@
 <ul>
     {% for person in staff %}
     <li>Табельний номер: {{person.tabel}}</li>
-    <li>Підрозділ: {{person.division_name}}</li>
+    <li>Підрозділ: {{person.division_name | lower}}</li>
     <li>Оклад: {{person.oklad}}</li>
     <li>Дата народження: {{person.birthday}}</li>
     {% endfor %}
@@ -20,5 +20,6 @@
 <p>Дані відсутні</p>
 {% endif %}
 <hr>
-<div><a href="#"><h4><strong>Додати інформацію</strong></h4></a></div>
+<div><a href="{% url 'edit-info_person' slug %}"><h4><strong>Корегувати інформацію</strong></h4></a></div>
 {% endblock %}
+<!--<div><a href="{% url 'add-info_person' slug %}"><h4><strong>Корегувати інформацію</strong></h4></a></div>-->

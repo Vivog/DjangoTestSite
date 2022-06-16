@@ -1,14 +1,12 @@
 from django.contrib.auth import logout, login
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, resolve
-from django.views.generic import ListView, CreateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView
 
 from .forms import *
 from .models import *
-from .utilits import *
 
 
 # Create your views here.
@@ -23,12 +21,13 @@ def home(request):
         'num_doc': num_doc}
     return render(request, 'nio_app/home.html', context=context)
 
+
 class RegisterUser(CreateView):
     form_class = RegisterForm
     template_name = 'nio_app/register.html'
     success_url = reverse_lazy('login')
 
-    def get_context_data(self, object_list=None,  **kwargs):
+    def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Реєстанція користувача'
         return context
@@ -37,6 +36,7 @@ class RegisterUser(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('home')
+
 
 class LoginUser(LoginView):
     form_class = LoginForm
@@ -49,7 +49,6 @@ class LoginUser(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('home')
-
 
 
 def logout_user(request):
@@ -71,39 +70,95 @@ class Staff_DivList(ListView):
         return Staff.objects.all()
 
 
-class StaffDetailList(ListView):
+class StaffDetailList(DetailView):
     # paginate_by = 7
     model = Staff
     template_name = 'nio_app/staff_detail_render.html'
     context_object_name = 'staff_detail'
+    # если применяемый slug в urls.py не слово slug а что то другое, например div_slug, то обязательно!!!
+    slug_url_kwarg = 'div_slug'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['div'] = context['staff_detail'].division_name
         context['staff'] = context['staff_detail'].staff_set.all()
-
+        context['slug'] = context['staff_detail'].slug
         return context
 
+
     def get_queryset(self):
-        # return Divisions.objects.all()
-        return Divisions.objects.get(slug=self.kwargs['div_slug'])
+        # get() не применимо потому что нужно именно quertyset а не один елемент модели
+        return Divisions.objects.filter(slug=self.kwargs['div_slug'])
 
 
-class PersonDetailList(ListView):
+class AddPersonView(CreateView):
+    form_class = AddPersonForm
+    template_name = 'nio_app/add_person.html'
+    success_url = reverse_lazy('div_staff-detail')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Додати співробітника'
+        context['add'] = 'add_staff/'
+        return context
+
+
+class PersonDetailList(DetailView):
     model = Staff
     template_name = 'nio_app/person_detail_render.html'
     context_object_name = 'person_detail'
+    slug_url_kwarg = 'staff_slug'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fio'] = context['person_detail'].fio
         context['photo'] = context['person_detail'].photo
         context['staff'] = Staff.objects.filter(slug=self.kwargs['staff_slug'])
+        context['slug'] = context['person_detail'].slug
+        context['div_name'] = context['person_detail'].division_name
+        # Способ как все таки взять значение атрибута из quertyset
+        # values('имя атрибута') получаем словарь {'имя атрибута': 'значение'}
+        # потом указиваем ключ к словарю и получаем значение
+        context['div_slug'] = Divisions.objects.filter(division_name=context['div_name']).values('slug')[0]['slug']
 
         return context
 
     def get_queryset(self):
-        return Staff.objects.get(slug=self.kwargs['staff_slug'])
+        return Staff.objects.filter(slug=self.kwargs['staff_slug'])
+
+
+def add_p(request):
+    return HttpResponse('Add person')
+
+
+
+
+
+class EditInfoPersonView(CreateView):
+    form_class = EditInfoPersonForm
+    template_name = 'nio_app/edit_info_person.html'
+    success_url = reverse_lazy('divisions')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Корегування інформації про користувача'
+        return context
+    # template_name_suffix = '_update'
+    # success_url = reverse_lazy('person-detail')
+    # # context_object_name = 'staff'
+    # # slug_url_kwarg = 'staff_slug'
+    #
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = 'Корегування інформації про користувача'
+    #     # context['slug'] = context['staff'].slug
+    #     return context
+
+    # def get_queryset(self):
+    #     return Staff.objects.get(slug=self.kwargs['staff_slug'])
+
+    # def get_object(self):
+    #     return get_object_or_404(User, id=self.request.user.id)
 
 
 class DivisionsList(ListView):
@@ -158,16 +213,12 @@ class DocList(ListView):
     template_name = 'nio_app/doc_list_render.html'
     context_object_name = 'docs'
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
 
     def get_queryset(self):
         return Documents.objects.order_by('division_name')
-
-
-
 
 
 def pageNotFound(request, exception):

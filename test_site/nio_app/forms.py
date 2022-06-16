@@ -33,7 +33,66 @@ class AddDivisionForm(forms.ModelForm):
     # Створення власного валідатору
     def clean_division_name(self):  # така форма запису обов'язкова clean_поле_форми_до_якого_застосовують
         division_name = self.cleaned_data["division_name"]
-        pattern = "^[А-Яа-яЁё\s]+$"
+        pattern = "^[А-Яа-яёЁЇїІіЄєҐґ\s]+$"
+        if re.match(pattern, division_name) is not None:
+            return division_name
+        else:
+            raise ValidationError('Введені недопустимі символи')
+
+
+class AddPersonForm(forms.ModelForm):
+    # для визначення більш конкретних параметрів полів необходіно вказувати їх у констукторі класу
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['division_name'].value = Staff.division_name
+        # self.prepopulated_fields = {'slug': ('fio',)}
+        # self.fields['slug'].value = Staff.slug
+
+
+    class Meta:
+        model = Staff
+        exclude = ['division_name', 'slug']
+        widgets = {
+            'division_name': forms.Textarea(attrs={'cols': 70, 'rows': 1, }),
+        }
+
+    # Створення власного валідатору
+    # def clean_division_name(self):  # така форма запису обов'язкова clean_поле_форми_до_якого_застосовують
+    #     division_name = self.cleaned_data["division_name"]
+    #     pattern = "^[А-Яа-яЇїІіЄєҐґ\s]+$"
+    #     if re.match(pattern, division_name) is not None:
+    #         return division_name
+    #     else:
+    #         raise ValidationError('Введені недопустимі символи')
+
+    def clean_fio(self):  # така форма запису обов'язкова clean_поле_форми_до_якого_застосовують
+        fio = self.cleaned_data["fio"]
+        pattern = "^[А-Яа-яЇїІіЄєҐґ\s]+$"
+        if re.match(pattern, fio) is not None:
+            return fio
+        else:
+            raise ValidationError('Введені недопустимі символи')
+
+
+class EditInfoPersonForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tabel'].value = Staff.tabel
+        self.fields['oklad'].value = Staff.oklad
+        self.fields['division_name'].value = Staff.division_name
+        self.fields['photo'].value = Staff.photo
+
+    class Meta:
+        model = Staff
+        fields = ['tabel', 'division_name', 'oklad', 'photo']
+        widgets = {
+            'division_name': forms.Textarea(attrs={'cols': 70, 'rows': 1, }),
+        }
+
+    # Створення власного валідатору
+    def clean_division_name(self):  # така форма запису обов'язкова clean_поле_форми_до_якого_застосовують
+        division_name = self.cleaned_data["division_name"]
+        pattern = "^[А-Яа-яёЁЇїІіЄєҐґ\s]+$"
         if re.match(pattern, division_name) is not None:
             return division_name
         else:
