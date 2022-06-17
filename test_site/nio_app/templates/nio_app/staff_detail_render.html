@@ -16,5 +16,7 @@
     {% endif %}
 <hr>
 <!--Адрес должен быть уникальным и не повторять чать других адресов иначе запутывается что открывать-->
+{% if request.user.is_authenticated %}
 <div><a href="{% url 'addstaff' slug %}"><h4><strong>Додати співробітника</strong></h4></a></div>
+{% endif %}
 {% endblock %}
