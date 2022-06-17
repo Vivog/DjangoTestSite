@@ -1,9 +1,11 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import ListView, CreateView, DetailView
+from slugify import slugify
 
 from .forms import *
 from .models import *
@@ -71,7 +73,7 @@ class Staff_DivList(ListView):
 
 
 class StaffDetailList(DetailView):
-    # paginate_by = 7
+    paginate_by = 2
     model = Staff
     template_name = 'nio_app/staff_detail_render.html'
     context_object_name = 'staff_detail'
@@ -85,7 +87,6 @@ class StaffDetailList(DetailView):
         context['slug'] = context['staff_detail'].slug
         return context
 
-
     def get_queryset(self):
         # get() не применимо потому что нужно именно quertyset а не один елемент модели
         return Divisions.objects.filter(slug=self.kwargs['div_slug'])
@@ -94,13 +95,26 @@ class StaffDetailList(DetailView):
 class AddPersonView(CreateView):
     form_class = AddPersonForm
     template_name = 'nio_app/add_person.html'
-    success_url = reverse_lazy('div_staff-detail')
+    slug_url_kwarg = 'div_slug'
+    success_url = reverse_lazy('home')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Додати співробітника'
-        context['add'] = 'add_staff/'
+        context['slug'] = Divisions.objects.filter(slug=self.kwargs['div_slug']).values('slug')[0]['slug']
         return context
+
+    def form_valid(self, form):
+        # Если нужно ссылка на поле ForeignKey то нужно передавать не имя поля а его айди с учетом нужной фильтрации
+        div = Divisions.objects.filter(slug=self.kwargs['div_slug']).values('pk')[0]['pk']
+        instance = form.save(commit=False)  # приостанавливаем запись данных в форму
+        instance.division_name_id = div
+        instance.slug = slugify(form.cleaned_data['fio'])
+        instance.save()
+        return redirect('div_staff-detail', Divisions.objects.filter(slug=self.kwargs['div_slug']).values('slug')[0]['slug'])
+
+    def get_queryset(self):
+        return Divisions.objects.filter(slug=self.kwargs['div_slug'])
 
 
 class PersonDetailList(DetailView):
@@ -125,13 +139,6 @@ class PersonDetailList(DetailView):
 
     def get_queryset(self):
         return Staff.objects.filter(slug=self.kwargs['staff_slug'])
-
-
-def add_p(request):
-    return HttpResponse('Add person')
-
-
-
 
 
 class EditInfoPersonView(CreateView):

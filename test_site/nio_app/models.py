@@ -35,8 +35,8 @@ class Staff(models.Model):
                            verbose_name='ПІБ')
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
     division_name = models.ForeignKey("Divisions", on_delete=models.CASCADE, help_text='не більше ніж 50 символів',
-                                      verbose_name='Назва підрозділу')
-    tabel = models.IntegerField(verbose_name='Табельный номер')
+                                      verbose_name='Назва підрозділу', null=True)
+    tabel = models.IntegerField(verbose_name='Табельный номер', unique=True)
     prof = models.CharField(max_length=50, help_text='не більше ніж 30 символів',
                            verbose_name='Професія')
     oklad = models.IntegerField(verbose_name='Оклад')
