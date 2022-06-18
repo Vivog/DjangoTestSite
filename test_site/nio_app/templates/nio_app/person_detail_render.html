@@ -23,6 +23,8 @@
 <p>Дані відсутні</p>
 {% endif %}
 <hr>
+{% if request.user.is_authenticated %}
 <div><a href="{% url 'edit-info_person' slug %}"><h4><strong>Корегувати інформацію</strong></h4></a></div>
+{% endif %}
 {% endblock %}
 <!--<div><a href="{% url 'add-info_person' slug %}"><h4><strong>Корегувати інформацію</strong></h4></a></div>-->

@@ -3,7 +3,7 @@
 {% block content %}
 <h1><strong>{{title}}</strong></h1>
 <div class="input-group input-group-sm mb-3">
-    <form action="" method="post">
+    <form action="{% url 'edit-info_person' slug %}" method="post">
         {% csrf_token %}
 <!--        Для отображения ошибки в случае не возможности добаления записи в базу данних-->
          <div class="form-error">{{ form.non_field_errors }}</div>

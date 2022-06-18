@@ -4,7 +4,7 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.text import slugify
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from slugify import slugify
 
 from .forms import *
@@ -141,31 +141,31 @@ class PersonDetailList(DetailView):
         return Staff.objects.filter(slug=self.kwargs['staff_slug'])
 
 
-class EditInfoPersonView(CreateView):
+class EditInfoPersonView(UpdateView):
     form_class = EditInfoPersonForm
     template_name = 'nio_app/edit_info_person.html'
     success_url = reverse_lazy('divisions')
+    slug_url_kwarg = 'staff_slug'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Корегування інформації про користувача'
+        context['slug'] = context['staff'].slug
         return context
-    # template_name_suffix = '_update'
-    # success_url = reverse_lazy('person-detail')
-    # # context_object_name = 'staff'
-    # # slug_url_kwarg = 'staff_slug'
-    #
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['title'] = 'Корегування інформації про користувача'
-    #     # context['slug'] = context['staff'].slug
-    #     return context
 
-    # def get_queryset(self):
-    #     return Staff.objects.get(slug=self.kwargs['staff_slug'])
+    def form_valid(self, form):
+        # Если нужно ссылка на поле ForeignKey то нужно передавать не имя поля а его айди с учетом нужной фильтрации
+        # div = Divisions.objects.filter(slug=self.kwargs['div_slug']).values('pk')[0]['pk']
+        instance = form.save(commit=False)  # приостанавливаем запись данных в форму
+        instance.division_name = form.clean_division_name()
+        instance.save()
+        return redirect('staff')
 
-    # def get_object(self):
-    #     return get_object_or_404(User, id=self.request.user.id)
+    def get_queryset(self):
+        return Staff.objects.filter(slug=self.kwargs['staff_slug'])
+
+
+
 
 
 class DivisionsList(ListView):
