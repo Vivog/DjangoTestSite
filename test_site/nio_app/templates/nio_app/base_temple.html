@@ -7,7 +7,9 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <title>Портал НИО</title>
+    {% block title %}
+    <title>Портал НДВ - Головна</title>
+    {% endblock %}
     {% load static %}
     <link href="{% static 'nio_app/css/style.css' %}" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" type="image/png" href="{% static 'nio_app/images/logo.ico' %}"/>

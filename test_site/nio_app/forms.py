@@ -25,7 +25,7 @@ class AddDivisionForm(forms.ModelForm):
 
     class Meta:
         model = Divisions
-        fields = ['division_name', 'div_abr', 'slug', 'div_description']
+        fields = ['division_name', 'div_abr', 'div_description']
         widgets = {
             'division_name': forms.Textarea(attrs={'cols': 70, 'rows': 1, }),
         }
@@ -33,7 +33,7 @@ class AddDivisionForm(forms.ModelForm):
     # Створення власного валідатору
     def clean_division_name(self):  # така форма запису обов'язкова clean_поле_форми_до_якого_застосовують
         division_name = self.cleaned_data["division_name"]
-        pattern = "^[А-Яа-яёЁЇїІіЄєҐґ\s]+$"
+        pattern = "^[0-9-А-Яа-яёЁЇїІіЄєҐґ\s]+$"
         if re.match(pattern, division_name) is not None:
             return division_name
         else:

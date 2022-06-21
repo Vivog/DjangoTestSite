@@ -100,7 +100,7 @@ class Documents(models.Model):
     doc_type = models.CharField(max_length=50, help_text="Введіть тип документу",
                                 verbose_name="Тип документу", choices=CHOICES_DOC_TYPE)
 
-    CHOICES_STATUS = (("Р", "Розробка"), ("С", "Узгодження"), ("В", "Впроваджено"))
+    CHOICES_STATUS = (("Р", "Розробка"), ("У", "Узгодження"), ("В", "Впроваджено"))
     doc_status = models.CharField(max_length=50, help_text="Поточний статус документу",
                                   verbose_name="Статус документу", choices=CHOICES_STATUS)
     release_date = models.DateField(help_text="Введіть дату впровадження", verbose_name="Дата впровадження",
@@ -115,6 +115,7 @@ class Documents(models.Model):
     class Meta:
         verbose_name = 'Документація'
         verbose_name_plural = 'Документація'
+        ordering = ['division_name']
 
     def __str__(self):
         return f"{self.division_name}"

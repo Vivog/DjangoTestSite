@@ -1,11 +1,14 @@
 {% extends "nio_app/base_temple.html" %}
+{% block title %}
+    <title>{{title_head}}</title>
+    {% endblock %}
 {% block content %}
 <h1><strong>Документація за підрозділами: </strong></h1>
-     {% if docs %}
-        <ul class="doc_ul">
-            {% for doc in docs %}
+     {% if doc_list %}
+        <ul>
+            {% for doc in doc_list %}
             <li>
-                <a href="#">
+                <a href="{{doc.slug}}">
                     {{doc.division_name}}
                 </a>
             </li>

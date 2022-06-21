@@ -31,6 +31,7 @@ class RegisterUser(CreateView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Реєстрація користувача'
         context['title'] = 'Реєстанція користувача'
         return context
 
@@ -46,6 +47,7 @@ class LoginUser(LoginView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super(LoginUser, self).get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Авторизація'
         context['title'] = 'Авторизація'
         return context
 
@@ -65,6 +67,7 @@ class Staff_DivList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Персонал'
         context["divisions"] = Divisions.objects.all()
         return context
 
@@ -83,6 +86,7 @@ class StaffDetailList(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['div'] = context['staff_detail'].division_name
+        context['title_head'] = f"Портал НДВ - {context['div']}"
         context['staff'] = context['staff_detail'].staff_set.all()
         context['slug'] = context['staff_detail'].slug
         return context
@@ -100,6 +104,7 @@ class AddPersonView(CreateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Додати співробітника'
         context['title'] = 'Додати співробітника'
         context['slug'] = Divisions.objects.filter(slug=self.kwargs['div_slug']).values('slug')[0]['slug']
         return context
@@ -111,7 +116,8 @@ class AddPersonView(CreateView):
         instance.division_name_id = div
         instance.slug = slugify(form.cleaned_data['fio'])
         instance.save()
-        return redirect('div_staff-detail', Divisions.objects.filter(slug=self.kwargs['div_slug']).values('slug')[0]['slug'])
+        return redirect('div_staff-detail',
+                        Divisions.objects.filter(slug=self.kwargs['div_slug']).values('slug')[0]['slug'])
 
     def get_queryset(self):
         return Divisions.objects.filter(slug=self.kwargs['div_slug'])
@@ -125,6 +131,7 @@ class PersonDetailList(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Інфо користувача'
         context['fio'] = context['person_detail'].fio
         context['photo'] = context['person_detail'].photo
         context['staff'] = Staff.objects.filter(slug=self.kwargs['staff_slug'])
@@ -149,6 +156,7 @@ class EditInfoPersonView(UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Корегування інфо користувача'
         context['title'] = 'Корегування інформації про користувача'
         context['slug'] = context['staff'].slug
         return context
@@ -165,13 +173,15 @@ class EditInfoPersonView(UpdateView):
         return Staff.objects.filter(slug=self.kwargs['staff_slug'])
 
 
-
-
-
 class DivisionsList(ListView):
     model = Divisions
     template_name = 'nio_app/divisions_list_render.html'
     context_object_name = 'divisions'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Підрозділи'
+        return context
 
 
 class DivisionsDetailList(ListView):
@@ -182,6 +192,7 @@ class DivisionsDetailList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['div_name'] = context["divisions"].division_name
+        context['title_head'] = f"Портал НДВ - {context['div_name']}"
         context['div_description'] = context["divisions"].div_description
         context['div_slug'] = context["divisions"].slug
         context['num_staff'] = context["divisions"].staff_set.count()
@@ -211,8 +222,15 @@ class AddDivisionView(CreateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Додати підрозділ'
         context['title'] = 'Додати підрозділ'
         return context
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.slug = slugify(form.cleaned_data['div_abr'])
+        instance.save()
+        return redirect('divisions')
 
 
 class DocList(ListView):
@@ -222,10 +240,42 @@ class DocList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Документація'
+        context['doc_list'] = []
+        for d in context['docs']:
+            if d.division_name not in context['doc_list']:
+                context['doc_list'].append(d.division_name)
+            else:
+                continue
+        # context['div'] = context['docs'].filter(division_name=context['docs']).values('slug')[0]['slug']
+        context['slug'] = Divisions.objects.first().documents_set.all()
+        print(context['slug'])
         return context
 
     def get_queryset(self):
-        return Documents.objects.order_by('division_name')
+        print(Documents.objects.all())
+        return Documents.objects.all()
+
+
+class DocDetailList(DetailView):
+    paginate_by = 2
+    model = Documents
+    template_name = 'nio_app/doc_detail_render.html'
+    context_object_name = 'doc_detail'
+    # если применяемый slug в urls.py не слово slug а что то другое, например div_slug, то обязательно!!!
+    slug_url_kwarg = 'div_slug'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title_head'] = 'Портал НДВ - Документація'
+        context['div'] = context['doc_detail'].division_name
+        context['docs'] = context['doc_detail'].documents_set.all()
+        # context['slug'] = context['doc_detail'].documents_set.filter(doc_name=)
+        return context
+
+    def get_queryset(self):
+        # get() не применимо потому что нужно именно quertyset а не один елемент модели
+        return Divisions.objects.filter(slug=self.kwargs['div_slug'])
 
 
 def pageNotFound(request, exception):

@@ -3,12 +3,14 @@ from django.utils.safestring import mark_safe
 
 from .models import *
 
+
 # Register your models here.
 
 @admin.register(Divisions)
 class DivisionsAdmin(admin.ModelAdmin):
     list_display = ('div_abr', 'division_name')
     prepopulated_fields = {'slug': ('div_abr',)}
+
 
 class StaffAdmin(admin.ModelAdmin):
     list_display = ('tabel', 'fio', 'get_html_photo')
@@ -23,7 +25,7 @@ class StaffAdmin(admin.ModelAdmin):
             "Загальні відомості", {'fields': ('tabel', 'fio', 'slug', 'prof')}
         ),
         (
-            "Додатково", {'fields': ('division_name', 'oklad', 'birthday', 'phone', 'adress',  'photo')}
+            "Додатково", {'fields': ('division_name', 'oklad', 'birthday', 'phone', 'adress', 'photo')}
         )
     )
     search_fields = ('tabel', 'fio')
@@ -41,10 +43,10 @@ admin.site.register(Staff, StaffAdmin)
 @admin.register(Documents)
 class DocumentsAdmin(admin.ModelAdmin):
     # fields = ('fio')
-    list_display = ('release_date', "doc_status", "doc_type", "doc_name", "display_author")
-    list_filter = ('doc_status', 'doc_type')
+    list_display = ('division_name', 'release_date', "doc_status", "doc_type", "doc_name", "display_author")
+    list_filter = ('division_name', 'doc_status', 'doc_type')
     search_fields = ('doc_name',)
-    prepopulated_fields = {'slug': ('doc_name', )}
+    prepopulated_fields = {'slug': ('doc_name',)}
     # можно также поменять расположение полей выводимой информации
     # fields = ["doc_status", "doc_type", 'release_date'] это будет вывод полей по вертикали
     # если нужно довыести что то по горизонтали, то внутри этого же списка объединяем в кортеж те поля

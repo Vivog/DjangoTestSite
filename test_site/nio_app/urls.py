@@ -17,6 +17,7 @@ urlpatterns = [
     path('divisions/<slug:div_slug>/', DivisionsDetailList.as_view(), name='division-detail'),
     path('add_division/', AddDivisionView.as_view(), name='add-division'),
     path('documents/', DocList.as_view(), name='doc'),
+    path('documents/<slug:div_slug>/', DocDetailList.as_view(), name='div_doc-detail'),
     # re_path(r'^documents/$', views.documents, name='documents'),
     # path('staff/', views.staff, name='staff'),
     # re_path(r'^divisions/$', views.divisions, name='divisions'),
