@@ -17,7 +17,13 @@ def home(request):
     num_divisions = Divisions.objects.all().count()
     num_staff = Staff.objects.all().count()
     num_doc = Documents.objects.all().count()
+    divisions = 'divisions/'
+    staff = 'staff/'
+    docs = 'documents/'
     context = {
+        'divisions': divisions,
+        'staff': staff,
+        'docs': docs,
         'num_divisions': num_divisions,
         'num_staff': num_staff,
         'num_doc': num_doc}
@@ -270,7 +276,6 @@ class DocDetailList(DetailView):
         context['title_head'] = 'Портал НДВ - Документація'
         context['div'] = context['doc_detail'].division_name
         context['docs'] = context['doc_detail'].documents_set.all()
-        # context['slug'] = context['doc_detail'].documents_set.filter(doc_name=)
         return context
 
     def get_queryset(self):
