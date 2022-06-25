@@ -47,13 +47,7 @@ class DocumentsAdmin(admin.ModelAdmin):
     list_filter = ('division_name', 'doc_status', 'doc_type')
     search_fields = ('doc_name',)
     prepopulated_fields = {'slug': ('doc_name',)}
-    # можно также поменять расположение полей выводимой информации
-    # fields = ["doc_status", "doc_type", 'release_date'] это будет вывод полей по вертикали
-    # если нужно довыести что то по горизонтали, то внутри этого же списка объединяем в кортеж те поля
-    # которые необходимо выводить по горизонтали
-    # fields = ['release_date', ('doc_status', 'doc_type')]
-    # чтобы исключить какие-то поля из отображения, применяем
-    # exclude = ['doc_name']
+
 
 
 @admin.register(Timesheet)

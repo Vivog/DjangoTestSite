@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib import admin
 
 
 # Create your models here.
@@ -92,7 +93,10 @@ class Documents(models.Model):
                                       verbose_name='Назва підрозділу')
 
     author = models.ManyToManyField("Staff", verbose_name='Автор',
-                                    help_text="Введіть автора документу")
+                                    help_text="Введіть автора документу", related_name='authors')
+
+
+
 
     CHOICES_DOC_TYPE = (
         ("М", "Методика"), ("П", "Паспорт"), ("КЕ", "Керівництво з експлуатації"), ("ТД", "Технична довідка"),
@@ -111,6 +115,7 @@ class Documents(models.Model):
         return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
 
     display_author.short_description = 'Автори'
+
 
     class Meta:
         verbose_name = 'Документація'

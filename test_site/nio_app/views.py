@@ -255,11 +255,9 @@ class DocList(ListView):
                 continue
         # context['div'] = context['docs'].filter(division_name=context['docs']).values('slug')[0]['slug']
         context['slug'] = Divisions.objects.first().documents_set.all()
-        print(context['slug'])
         return context
 
     def get_queryset(self):
-        print(Documents.objects.all())
         return Documents.objects.all()
 
 
