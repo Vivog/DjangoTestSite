@@ -13,6 +13,12 @@ from .models import *
 
 # Create your views here.
 
+def index_portal(request):
+
+    return render(request, 'nio_app/index_portal.html')
+
+
+
 def home(request):
     num_divisions = Divisions.objects.all().count()
     num_staff = Staff.objects.all().count()

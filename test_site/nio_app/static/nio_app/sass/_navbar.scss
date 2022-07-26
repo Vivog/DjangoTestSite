@@ -205,14 +205,14 @@
 				@include clearfix;
 				> ul {
 					float: left;
-					width: 36%;
+					width: 100%;
 					list-style: none;
 					padding: 0 25px 0 0;
 				}
-				.content {
-					width: 64%;
-					float: left;
-				}
+				//.content {
+				//	width: 0%;
+				//	float: left;
+				//}
 			}
 			.mega-menu > ul > li,
 			.sub-menu > li {
@@ -418,10 +418,10 @@
 							width: 100%;
 							padding: 0 0 20px 0;
 						}
-						.content {
-							width: 100%;
-							float: none;
-						}
+						//.content {
+						//	width: 0%;
+						//	float: none;
+						//}
 					}
 					&:hover {
 						.sub-menu, .mega-menu {

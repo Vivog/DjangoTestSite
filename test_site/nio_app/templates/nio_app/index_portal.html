@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Nucleus | Hosting &amp; Cloud Services</title>
+  <title>Portal NDV</title>
 
   <!--SEO Meta Tags-->
   <meta name="description" content="Nucleus Multi-Purpose Technology Template" />
@@ -12,19 +12,19 @@
 
   <!--Mobile Specific Meta Tag-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  {% load static %}
 
   <!--Favicon-->
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'nio_app/favicon.ico' %}" type="image/x-icon">
+  <link rel="icon" href="{% static 'nio_app/favicon.ico' %}" type="image/x-icon">
 
   <!-- All Theme Styles including Bootstrap, FontAwesome, etc. compiled from styles.scss-->
-  <link href="css/styles.min.css" rel="stylesheet" media="screen">
+  <link href="{% static 'nio_app/css/styles.min.css' %}" rel="stylesheet" media="screen">
 
   <!--Modernizr / Detectizr-->
-  <script src="js/vendor/modernizr.custom.js"></script>
-  <script src="js/vendor/detectizr.min.js"></script>
+  <script src="{% static 'nio_app/js/vendor/modernizr.custom.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/detectizr.min.js' %}"></script>
 
-  {% load static %}
 
 </head>
 
@@ -69,8 +69,8 @@
       <!-- Toolbar -->
       <div class="topbar">
         <div class="container">
-          <a href="{% url 'index_portal' %}" class="site-logo">
-            <img src="img/logo.png" alt="Портал НДВ">
+          <a href="{% url 'nio_app:index_portal' %}" class="site-logo">
+            <img src="{% static 'nio_app/img/logo.png' %}" alt="Портал НДВ">
           </a><!-- .site-logo -->
 
           <!-- Mobile Menu Toggle -->
@@ -99,16 +99,13 @@
               <a href="#"><i class="flaticon-technology46"></i>Головна</a>
               <div class="mega-menu">
                 <ul>
-                  <li class="current-menu-item"><a href="{% url 'index_portal' %}">Головна</a></li>
+                  <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
                   <li><a href="#">Підрозділи</a></li>
                   <li><a href="#">Персонал</a></li>
                   <li><a href="#">Документація</a></li>
                   <li><a href="#">Публікації</a></li>
                   <li><a href="#">Новини</a></li>
                 </ul>
-                <div class="content">
-                  <img src="{% static 'nio_app/img/menu-banner.png' %}" alt="Image">
-                </div>
               </div>
             </li>
             <li class="menu-item-has-children">
@@ -125,7 +122,7 @@
               </ul>
             </li>
             <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-chatting"></i>Персонал</a>
+              <a href="#"><i class="flaticon-technological"></i>Персонал</a>
               <ul class="sub-menu"> 
                 <li><a href="#">НДВ</a></li>
                 <li><a href="#">КНДЛ-1</a></li>
@@ -138,7 +135,7 @@
               </ul>
             </li>
             <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-chatting"></i>Документація</a>
+              <a href="#"><i class="flaticon-writing50"></i>Документація</a>
               <ul class="sub-menu">
                 <li><a href="#">НДВ</a></li>
                 <li><a href="#">КНДЛ-1</a></li>
@@ -163,17 +160,17 @@
               </ul>
             </li>
             <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-wireless-internet6"></i>Допомога</a>
+              <a href="#"><i class="flaticon-positive"></i>Допомога</a>
               <ul class="sub-menu">
-                <li><a href="help-general.html">Загальна інформація</a></li>
-                <li><a href="help-topic.html">Категорії</a></li>
+                <li><a href="#">Загальна інформація</a></li>
+                <li><a href="#">Категорії</a></li>
               </ul>
             </li>
             <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-microphone121"></i>Інше</a>
+              <a href="#"><i class="flaticon-light129"></i>Інше</a>
               <ul class="sub-menu"> 
-                <li><a href="about.html">Про розробку</a></li>
-                <li><a href="contacts.html">Зв'язок</a></li>
+                <li><a href="#">Про розробку</a></li>
+                <li><a href="#">Зв'язок</a></li>
               </ul>
             </li>
           </ul><!-- .menu -->
@@ -182,10 +179,10 @@
     </header><!-- .navbar -->
 
     <!-- Create Account Section -->
-    <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url(img/home/hosting-bg-01.jpg);">
+    <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url({% static 'nio_app/img/home/hosting-bg-01.jpg'%})">
       <div class="container padding-bottom-3x">
         <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
-        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за<strong>30</strong> секунд</h4>
+        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за <strong>30</strong> секунд</h4>
         <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">
           <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
             <form method="post" autocomplete="off">
@@ -488,7 +485,7 @@
                 <img src="img/testimonials/03.png" alt="Author">
               </div>
               <h3 class="author-name">Чобенко В.М.</h3>
-              <p class="text-gray">Начальник констукторського управління</p>
+              <p class="text-gray">Начальник КУ</p>
               <div class="text">Побажання</div>
             </div>
           </div>
@@ -537,7 +534,7 @@
           <div class="row">
             <div class="col-md-3 col-sm-6">
               <section class="widget widget_text">
-                <a href="{% url 'index_portal' %}" class="site-logo">
+                <a href="{% url 'nio_app:index_portal' %}" class="site-logo">
                   <img src="img/logo.png" alt="Портал">
                 </a><!-- .site-logo -->
                 <p>Портал розроблено для ознайомлення з технічними можливостями НДВ. Будь-яка надана інформація не може бути використана без письмового дозволу керівника підрозділу.</p>
@@ -550,7 +547,7 @@
                   Портал НДВ
                 </h3>
                 <ul>
-                  <li><a href="{% url 'index_portal' %}">Головна</a></li>
+                  <li><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
                   <li><a href="#">Підрозділи</a></li>
                   <li><a href="home-hosting.html">Персонал</a></li>
                 </ul>
@@ -596,19 +593,19 @@
   </div><!-- .page-wrapper -->
 
   <!-- JavaScript (jQuery) libraries, plugins and custom scripts -->
-  <script src="js/vendor/jquery-2.1.4.min.js"></script>
-  <script src="js/vendor/preloader.min.js"></script>
-  <script src="js/vendor/bootstrap.min.js"></script>
-  <script src="js/vendor/waves.min.js"></script>
-  <script src="js/vendor/placeholder.js"></script>
-  <script src="js/vendor/smoothscroll.js"></script>
-  <script src="js/vendor/waypoints.min.js"></script>
-  <script src="js/vendor/icheck.min.js"></script>
-  <script src="js/vendor/velocity.min.js"></script>
-  <script src="js/vendor/magnific-popup.min.js"></script>
-  <script src="js/vendor/owl.carousel.min.js"></script>
-  <script src="js/vendor/scrollreveal.min.js"></script>
-  <script src="js/scripts.js"></script>
+  <script src="{% static 'nio_app/js/vendor/jquery-2.1.4.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/preloader.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/bootstrap.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/waves.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/placeholder.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/smoothscroll.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/waypoints.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/icheck.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/velocity.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/magnific-popup.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/vendor/scrollreveal.min.js' %}"></script>
+  <script src="{% static 'nio_app/js/scripts.js' %}"></script>
 
 </body><!-- <body> -->
 

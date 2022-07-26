@@ -8661,7 +8661,7 @@ input[type="button"].btn-block {
 }
 
 .main-navigation .menu > li .mega-menu {
-  width: 700px;
+  width: 265px;
 }
 
 .main-navigation .menu > li .mega-menu:before, .main-navigation .menu > li .mega-menu:after {
@@ -8674,16 +8674,16 @@ input[type="button"].btn-block {
 }
 
 .main-navigation .menu > li .mega-menu > ul {
-  float: left;
-  width: 36%;
+  /*float: left;*/
+  width: 100%;
   list-style: none;
   padding: 0 25px 0 0;
 }
 
-.main-navigation .menu > li .mega-menu .content {
-  width: 64%;
-  float: left;
-}
+/*.main-navigation .menu > li .mega-menu .content {*/
+/*  width: 64%;*/
+/*  float: left;*/
+/*}*/
 
 .main-navigation .menu > li .mega-menu > ul > li,
 .main-navigation .menu > li .sub-menu > li {
@@ -8961,10 +8961,10 @@ input[type="button"].btn-block {
     width: 100%;
     padding: 0 0 20px 0;
   }
-  .navbar .main-navigation .menu > li .mega-menu .content {
-    width: 100%;
-    float: none;
-  }
+  /*.navbar .main-navigation .menu > li .mega-menu .content {*/
+  /*  width: 100%;*/
+  /*  float: none;*/
+  /*}*/
   .navbar .main-navigation .menu > li:hover .sub-menu, .navbar .main-navigation .menu > li:hover .mega-menu {
     -webkit-animation: none;
     -o-animation: none;
