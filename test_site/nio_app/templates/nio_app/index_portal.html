@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Nucleus | Hosting &amp; Cloud Services</title>
+
+  <!--SEO Meta Tags-->
+  <meta name="description" content="Nucleus Multi-Purpose Technology Template" />
+  <meta name="keywords" content="multipurpose, technology, business, corporate, hosting, web, startup, app showcase, mobile, blog, portfolio, landing, shortcodes, html5, css3, jquery, js, gallery, slider, touch, creative" />
+  <meta name="author" content="8Guild" />
+
+  <!--Mobile Specific Meta Tag-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- All Theme Styles including Bootstrap, FontAwesome, etc. compiled from styles.scss-->
+  <link href="css/styles.min.css" rel="stylesheet" media="screen">
+
+  <!--Modernizr / Detectizr-->
+  <script src="js/vendor/modernizr.custom.js"></script>
+  <script src="js/vendor/detectizr.min.js"></script>
+
+  {% load static %}
+
+</head>
+
+<!-- Body -->
+<!-- "is-preloader preloading" is a helper classes if preloader is enabled. -->
+<body class="is-preloader preloading">
+  
+  <!-- Preloader -->
+  <!-- 
+      Data API:
+      data-spinner - Options: 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7'
+      data-screenbg - Screen background color. Hex, RGB or RGBA colors
+   -->
+  <div id="preloader" data-spinner="spinner1" data-screenbg="#fff"></div>
+
+  <!-- Page Wrapper -->
+  <div class="page-wrapper">
+
+    <!-- Окно регистрации -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="modal-content text-center">
+          <form method="post">
+            <input type="email" class="form-control" placeholder="Пошта" required>
+            <input type="password" class="form-control" placeholder="Пароль" required>
+            <div class="form-group">
+              <button type="submit" class="btn login-btn btn-default waves-effect waves-light">Увійти до свого акаунту<i class="icon-head"></i></button>
+            </div>
+            <div class="text-left">
+              <span class="text-sm text-semibold">Вперше на порталі?<a href="#">Реєстрація</a></span>
+            </div>
+          </form><!-- <form> -->
+        </div><!-- .modal-content -->
+      </div><!-- .modal-dialog -->
+    </div><!-- .modal.fade -->
+
+    <!-- Navbar -->
+    <!-- Add class ".navbar-sticky" to make navbar stuck when it hits the top of the page. Another modifier class is: "navbar-fullwidth" to stretch navbar and make it occupy 100% of the page width. The screen width at which navbar collapses can be controlled through the variable "$nav-collapse" in sass/variables.scss -->
+    <header class="navbar navbar-sticky">
+      
+      <!-- Toolbar -->
+      <div class="topbar">
+        <div class="container">
+          <a href="{% url 'index_portal' %}" class="site-logo">
+            <img src="img/logo.png" alt="Портал НДВ">
+          </a><!-- .site-logo -->
+
+          <!-- Mobile Menu Toggle -->
+          <div class="nav-toggle"><span></span></div>
+
+          <div class="toolbar">
+            <a href="#" class="text-sm" data-toggle="modal" data-target="#loginModal">Реєстрація</a>
+            <a href="#" class="btn btn-sm btn-default btn-icon-right waves-effect waves-light" data-toggle="modal" data-target="#loginModal">Увійти<i class="icon-head"></i></a>
+            <!-- <a href="shopping-cart.html" class="cart-btn"><i class="icon-bag"></i></a> -->
+            <div class="search-btn">
+              <i class="icon-search"></i>
+              <form method="post" class="search-box">
+                <input type="text" class="form-control input-sm" placeholder="Пошук">
+                <button type="submit"><i class="icon-search"></i></button>
+              </form>
+            </div><!-- .search-btn -->
+          </div><!-- .toolbar -->
+        </div><!-- .container -->
+      </div><!-- .topbar -->
+
+      <!-- Main Navigation -->
+      <div class="container">
+        <nav class="main-navigation">
+          <ul class="menu">
+            <li class="current-menu-item menu-item-has-children">
+              <a href="#"><i class="flaticon-technology46"></i>Головна</a>
+              <div class="mega-menu">
+                <ul>
+                  <li class="current-menu-item"><a href="{% url 'index_portal' %}">Головна</a></li>
+                  <li><a href="#">Підрозділи</a></li>
+                  <li><a href="#">Персонал</a></li>
+                  <li><a href="#">Документація</a></li>
+                  <li><a href="#">Публікації</a></li>
+                  <li><a href="#">Новини</a></li>
+                </ul>
+                <div class="content">
+                  <img src="{% static 'nio_app/img/menu-banner.png' %}" alt="Image">
+                </div>
+              </div>
+            </li>
+            <li class="menu-item-has-children">
+              <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
+              <ul class="sub-menu"> 
+                <li><a href="#">НДВ</a></li>
+                <li><a href="#">КНДЛ-1</a></li>
+                <li><a href="#">КНДЛ-2</a></li>
+                <li><a href="#">НДС-3</a></li>
+                <li><a href="#">НДЛ-6</a></li>
+                <li><a href="#">НДС-7</a></li>
+                <li><a href="#">СПНО</a></li>
+                <li><a href="#">СПЕ</a></li>
+              </ul>
+            </li>
+            <li class="menu-item-has-children">
+              <a href="#"><i class="flaticon-chatting"></i>Персонал</a>
+              <ul class="sub-menu"> 
+                <li><a href="#">НДВ</a></li>
+                <li><a href="#">КНДЛ-1</a></li>
+                <li><a href="#">КНДЛ-2</a></li>
+                <li><a href="#">НДС-3</a></li>
+                <li><a href="#">НДЛ-6</a></li>
+                <li><a href="#">НДС-7</a></li>
+                <li><a href="#">СПНО</a></li>
+                <li><a href="#">СПЕ</a></li>
+              </ul>
+            </li>
+            <li class="menu-item-has-children">
+              <a href="#"><i class="flaticon-chatting"></i>Документація</a>
+              <ul class="sub-menu">
+                <li><a href="#">НДВ</a></li>
+                <li><a href="#">КНДЛ-1</a></li>
+                <li><a href="#">КНДЛ-2</a></li>
+                <li><a href="#">НДС-3</a></li>
+                <li><a href="#">НДЛ-6</a></li>
+                <li><a href="#">НДС-7</a></li>
+                <li><a href="#">СПНО</a></li>
+                <li><a href="#">СПЕ</a></li>
+              </ul>
+            </li>
+            <li class="menu-item-has-children">
+              <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
+              <ul class="sub-menu">
+                <li><a href="#">Проект 1</a></li>
+                <li><a href="#">Проект 2</a></li>
+                <li><a href="#">Проект 3</a></li>
+                <li><a href="#">Проект 4</a></li>
+                <li><a href="#">Проект 5</a></li>
+                <li><a href="#">Проект 6</a></li>
+                <li><a href="#">Проект 7</a></li>
+              </ul>
+            </li>
+            <li class="menu-item-has-children">
+              <a href="#"><i class="flaticon-wireless-internet6"></i>Допомога</a>
+              <ul class="sub-menu">
+                <li><a href="help-general.html">Загальна інформація</a></li>
+                <li><a href="help-topic.html">Категорії</a></li>
+              </ul>
+            </li>
+            <li class="menu-item-has-children">
+              <a href="#"><i class="flaticon-microphone121"></i>Інше</a>
+              <ul class="sub-menu"> 
+                <li><a href="about.html">Про розробку</a></li>
+                <li><a href="contacts.html">Зв'язок</a></li>
+              </ul>
+            </li>
+          </ul><!-- .menu -->
+        </nav><!-- .main-navigation -->
+      </div><!-- .container -->
+    </header><!-- .navbar -->
+
+    <!-- Create Account Section -->
+    <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url(img/home/hosting-bg-01.jpg);">
+      <div class="container padding-bottom-3x">
+        <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
+        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за<strong>30</strong> секунд</h4>
+        <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">
+          <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+            <form method="post" autocomplete="off">
+              <div class="form-group">
+                <label for="ca_email" class="sr-only"></label>
+                <input type="email" class="form-control" id="ca_email" placeholder="Пошта" required>
+              </div>
+              <div class="form-group">
+                <label for="ca_password" class="sr-only"></label>
+                <input type="password" class="form-control" id="ca_password" placeholder="Пароль" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">Створи акаунт</button>
+            </form>
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </section><!-- .fw-section -->
+
+    <!-- Domain Search -->
+    <!-- Fullwidth section has bunch of modifier classes to alter its appearance: ".border-top, .border-bottom, .arrow-top, .arrow-bottom, .bg-gray, .bg-default, .bg-primary, .bg-parallax". They can be used separately or alltogether. -->
+    <section class="fw-section bg-default border-top border-bottom padding-top-3x padding-bottom-3x" style="z-index: 2;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-5 col-sm-6 mobile-center">
+            <h2 class="block-title">Пошук документа<small>Знайди те, що треба</small></h2>
+          </div>
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <form method="get" class="domain-search">
+              <input type="text" class="form-control" placeholder="Пошук документа">
+              <div class="domain-dropdown">
+                <span>Тип документа</span>
+                <div class="dropdown">
+                  <div>
+                    <label class="checkbox checkbox-inline">
+                      <input type="checkbox" checked> М
+                    </label>
+                    <label class="checkbox checkbox-inline">
+                      <input type="checkbox"> ПС
+                    </label>
+                  </div>
+                  <div>
+                    <label class="checkbox checkbox-inline">
+                      <input type="checkbox"> КЕ
+                    </label>
+                    <label class="checkbox checkbox-inline">
+                      <input type="checkbox"> ТІ
+                    </label>
+                  </div>
+                  <div>
+                    <label class="checkbox checkbox-inline">
+                      <input type="checkbox"> ЗТ
+                    </label>
+                    <label class="checkbox checkbox-inline">
+                      <input type="checkbox"> ТД
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="waves-effect waves-light"><i class="icon-search"></i></button>
+            </form><!-- .domain-search -->
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </section><!-- .fw-section.bg-default.border-top.border-bottom -->
+
+    <!-- Структура -->
+    <section class="fw-section padding-top-3x padding-bottom-3x scrollReveal sr-bottom sr-ease-in-out-quad">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-5 col-sm-6 mobile-center scrollReveal sr-bottom sr-ease-in-out-quad">
+            <h2 class="block-title">Структура НДВ<small>Порядок породжує злагодженість</small></h2>
+          </div>
+        </div><!-- .row -->
+
+        <!-- Таблиця структури -->
+        <div class="pricing-table space-top scrollReveal sr-bottom sr-delay-1 sr-ease-in-out-quad">
+          <table>
+            <colgroup>
+              <col>
+              <col>
+              <col class="featured">
+              <col>
+              <col>
+              <col>
+            </colgroup>
+            <tr>
+              <td>&nbsp;</td>
+              <td>
+                <span class="text-bold">НДВ</span>
+                <span class="text-gray space-top">Загальні відомості</span>
+                <a href="#" class="text-sm space-top">Відкрити</a>
+              </td>
+              <td>
+                <span class="text-bold">КНДЛ-1</span>
+                <span class="text-gray space-top">Загальні відомості</span>
+                <a href="#" class="text-sm space-top">Відкрити</a>
+              </td>
+              <td>
+                <span class="text-bold">КНДЛ-2</span>
+                <span class="text-gray space-top">Загальні відомості</span>
+                <a href="#" class="text-sm space-top">Відкрити</a>
+              </td>
+              <td>
+                <span class="text-bold">НДС-3</span>
+                <span class="text-gray space-top">Загальні відомості</span>
+                <a href="#" class="text-sm space-top">Відкрити</a>
+              </td>
+              <td>
+                <span class="text-bold">НДЛ-6</span>
+                <span class="text-gray space-top">Загальні відомості</span>
+                <a href="#" class="text-sm space-top">Відкрити</a>
+              </td>
+              <td>
+                <span class="text-bold">НДС-7</span>
+                <span class="text-gray space-top">Загальні відомості</span>
+                <a href="#" class="text-sm space-top">Відкрити</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-gray text-right">Чисельність</td>
+              <td class="text-bold">1</td>
+              <td class="text-bold">2</td>
+              <td class="text-bold">10</td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+            </tr>
+            <tr>
+              <td class="text-gray text-right">Кількість документації</td>
+              <td class="text-bold">2</td>
+              <td class="text-bold">5</td>
+              <td class="text-bold">30</td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+            </tr>
+            <tr>
+              <td class="text-gray text-right">Розташування</td>
+              <td class="text-bold">500 MB</td>
+              <td class="text-bold">1 GB</td>
+              <td class="text-bold">10 GB</td>
+              <td class="text-bold">30 GB</td>
+              <td class="text-bold">70 GB</td>
+              <td class="text-bold">70 GB</td>
+            </tr>
+            <tr>
+              <td class="text-gray text-right">Пов'язані підрозділи</td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+              <td class="text-bold"><span class="infinity"></span></td>
+            </tr>
+            <tr>
+              <td class="text-gray text-right">Керіники</td>
+              <td class="text-bold"><span class="not-available"></span></td>
+              <td class="text-bold"><span class="available"></span></td>
+              <td class="text-bold"><span class="available"></span></td>
+              <td class="text-bold"><span class="available"></span></td>
+              <td class="text-bold"><span class="available"></span></td>
+              <td class="text-bold"><span class="available"></span></td>
+            </tr>
+          </table><!-- table -->
+        </div><!-- .pricing-table -->
+      </div><!-- .container -->
+    </section><!-- .fw-section -->
+
+    <!-- Проекти -->
+    <!-- Fullwidth section has bunch of modifier classes to alter its appearance: ".border-top, .border-bottom, .arrow-top, .arrow-bottom, .bg-gray, .bg-default, .bg-primary, .bg-parallax". They can be used separately or alltogether. -->
+    <section class="fw-section bg-default border-top padding-top-3x padding-bottom-3x">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-5 mobile-center padding-bottom scrollReveal sr-left">
+            <h2 class="block-title">Голонвні проекти<small>Що виходить за межі твоєї уяви</small></h2>
+            <p class="text-gray text-lg">Ми маємо усі можливості для реалізації будь-яких технічних ідей, починаючи з розробки документації, та закінчуючи повноцінним впровадженням у сфері застосування</p>
+            <a href="#" class="btn btn-default waves-effect waves-light btn-icon-right">
+              Переглянути проекти
+              <i class="icon-arrow-right"></i>
+            </a>
+          </div>
+          <div class="col-lg-8 col-md-7 scrollReveal sr-right">
+            <img src="img/home/features.png" alt="Features">
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </section><!-- .fw-section.bg-default.border-top -->
+
+    <!-- Features -->
+    <!-- Fullwidth section has bunch of modifier classes to alter its appearance: ".border-top, .border-bottom, .arrow-top, .arrow-bottom, .bg-gray, .bg-default, .bg-primary, .bg-parallax". They can be used separately or alltogether. -->
+    <section class="fw-section arrow-top border-bottom padding-top-3x padding-bottom-3x">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <!-- Remove class ".bwi-expandable" to expand block and make it static. -->
+            <div class="box-with-icon bwi-expandable text-center">
+              <div class="bwi-inner">
+                <div class="bwi-icon">
+                  <img src="img/features/01.png" alt="Feature">
+                </div>
+                <h3 class="bwi-title">Персональний котроль</h3>
+                <p class="bwi-text">Кожен член нашої команди відчуває персональну відповідальність за усі операції, що виконує. Контроль якості персоналізовано та де можливо автоматизовано</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <!-- Remove class ".bwi-expandable" to expand block and make it static. -->
+            <div class="box-with-icon bwi-expandable text-center">
+              <div class="bwi-inner">
+                <div class="bwi-icon">
+                  <img src="img/features/02.png" alt="Feature">
+                </div>
+                <h3 class="bwi-title">Самостійне налогодження ПЗ</h3>
+                <p class="bwi-text">Наші спеціалісти самостійно налагоджують проекти програмного забезпечення. Розробляють програмні застосунки, тощо.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <!-- Remove class ".bwi-expandable" to expand block and make it static. -->
+            <div class="box-with-icon bwi-expandable text-center">
+              <div class="bwi-inner">
+                <div class="bwi-icon">
+                  <img src="img/features/03.png" alt="Feature">
+                </div>
+                <h3 class="bwi-title">Сучасно побудова обладнання</h3>
+                <p class="bwi-text">Ми маємо підрозділи з розробки сучасного обладнання з мікропроцесорною архітектурою</p>
+              </div>
+            </div>
+          </div>
+        </div><!-- .row -->
+        <div class="row">
+          <div class="col-sm-4">
+            <!-- Remove class ".bwi-expandable" to expand block and make it static. -->
+            <div class="box-with-icon bwi-expandable text-center">
+              <div class="bwi-inner">
+                <div class="bwi-icon">
+                  <img src="img/features/04.png" alt="Feature">
+                </div>
+                <h3 class="bwi-title">Випробувальна база</h3>
+                <p class="bwi-text">У складі підрозділів є розгорнута система випробувальних засобів: стендів, установок, приладів, тощо</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <!-- Remove class ".bwi-expandable" to expand block and make it static. -->
+            <div class="box-with-icon bwi-expandable text-center">
+              <div class="bwi-inner">
+                <div class="bwi-icon">
+                  <img src="img/features/05.png" alt="Feature">
+                </div>
+                <h3 class="bwi-title">Потужне обладнання</h3>
+                <p class="bwi-text">Задля виконання поставлених завдань, ми використовуємо усі можливі та наявні потужності, що значно прискорює технологічні та виробничі процеси</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <!-- Remove class ".bwi-expandable" to expand block and make it static. -->
+            <div class="box-with-icon bwi-expandable text-center">
+              <div class="bwi-inner">
+                <div class="bwi-icon">
+                  <img src="img/features/06.png" alt="Feature">
+                </div>
+                <h3 class="bwi-title">Обробка даних</h3>
+                <p class="bwi-text">Ми використовуємо усі можливі потужності для обробки даних, виконуємо різноманітні перетворювання, формуємо пакети графічного чи файлового відображення</p>
+              </div>
+            </div>
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </section><!-- .fw-section.arrow-top.border-bottom -->
+
+    <!-- Testimonials -->
+    <section class="fw-section next-to-footer padding-top-3x padding-bottom-3x" style="background-image: url(img/home/testimonials-bg.jpg);">
+      <div class="container">
+        <h2 class="block-title text-center">Over 150,000 Clients Have Deployed to Our Hosting<small>Read our customer success stories</small></h2>
+        <div class="row padding-top">
+          <div class="col-sm-4 scrollReveal sr-scaleDown sr-ease-in-out-back">
+            <div class="testimonial">
+              <div class="author-ava">
+                <img src="img/testimonials/01.png" alt="Author">
+              </div>
+              <h3 class="author-name">Adam Tomson</h3>
+              <p class="text-gray">Co-founder &amp; CEO</p>
+              <div class="text"> Molestiae, quas, magnam. Fuga dolorum praesentium temporibus.</div>
+              <a href="#" class="text-sm">Atom Software</a>
+            </div>
+          </div>
+          <div class="col-sm-4 scrollReveal sr-scaleDown sr-delay-1 sr-ease-in-out-back">
+            <div class="testimonial">
+              <div class="author-ava">
+                <img src="img/testimonials/02.png" alt="Author">
+              </div>
+              <h3 class="author-name">Frank Sinator</h3>
+              <p class="text-gray">Business Owner</p>
+              <div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate obcaecati.</div>
+              <a href="#" class="text-sm">Freelancer</a>
+            </div>
+          </div>
+          <div class="col-sm-4 scrollReveal sr-scaleDown sr-delay-2 sr-ease-in-out-back">
+            <div class="testimonial">
+              <div class="author-ava">
+                <img src="img/testimonials/03.png" alt="Author">
+              </div>
+              <h3 class="author-name">Abirvalg</h3>
+              <p class="text-gray">CTO</p>
+              <div class="text">Dolorem inventore dolores, tempore fugit ullam magni. Libero sint.</div>
+              <a href="#" class="text-sm">Melkosoft</a>
+            </div>
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </section><!-- .fw-section.next-to-footer -->
+
+    <!-- Scroll To Top Button -->
+    <a href="#" class="scroll-to-top-btn">
+      <i class="icon-arrow-up"></i> 
+    </a><!-- .scroll-to-top-btn -->
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="top-footer">
+        <div class="container">
+          <div class="tools">
+            <div class="cell">
+              <i><img src="img/footer/icons/help.png" alt="Email"></i>
+              <span><a href="mailto:info@email.com">info@email.com</a></span>
+            </div>
+            <div class="cell">
+              <i><img src="img/footer/icons/phone.png" alt="Phone"></i>
+              <span><a href="#">+10 (8) 555 333</a></span>
+            </div>
+            <div class="cell">
+              <i><img src="img/footer/icons/chat.png" alt="Chat"></i>
+              <span><a href="#">Live Chat</a></span>
+            </div>
+          </div>
+          <div class="subscribe">
+            <div class="subscribe-form">
+              <i><img src="img/footer/icons/envelope.png" alt="Subscribe"></i>
+              <form action="//8guild.us3.list-manage.com/subscribe/post?u=168a366a98d3248fbc35c0b67&amp;id=011a3332a0" method="post" target="_blank" novalidate autocomplete="off">
+                <label for="subscr_email" class="sr-only">Subscribe to latest news</label>
+                <input type="email" class="form-control" id="subscr_email" placeholder="Your Email">
+                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                <div style="position: absolute; left: -5000px;">
+                  <input type="text" name="b_168a366a98d3248fbc35c0b67_011a3332a0" tabindex="-1" value="">
+                </div>
+                <button type="submit"><i class="icon-mail"></i></button>
+              </form>
+            </div>
+          </div>
+        </div><!-- .container -->
+      </div><!-- .top-footer -->
+
+      <div class="bottom-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <section class="widget widget_text">
+                <a href="index.html" class="site-logo">
+                  <img src="img/logo.png" alt="Nucleus">
+                </a><!-- .site-logo -->
+                <p>Left your phone on the train? Your photos, and videos are safe. Just sign in  from any device, and your files will be there waiting for you.</p>
+              </section><!-- .widget.widget_text -->
+            </div><!-- .col-md-3 -->
+            <div class="col-md-3 col-sm-6">
+              <section class="widget widget_pages">
+                <h3 class="widget-title">
+                  <i class="icon-ribbon"></i>
+                  Nucleus
+                </h3>
+                <ul>
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="#">Domains</a></li>
+                  <li><a href="home-hosting.html">Hosting</a></li>
+                </ul>
+              </section><!-- .widget.widget_pages -->
+            </div><!-- .col-md-3 -->
+            <div class="clearfix visible-sm"></div>
+            <div class="col-md-3 col-sm-6">
+              <section class="widget widget_pages">
+                <h3 class="widget-title">
+                  <i class="icon-cog"></i>
+                  Support
+                </h3>
+                <ul>
+                  <li><a href="help-general.html">Help Center</a></li>
+                  <li><a href="about.html">About Us</a></li>
+                  <li><a href="contacts.html">Contacts</a></li>
+                </ul>
+              </section><!-- .widget.widget_pages -->
+            </div><!-- .col-md-3 -->
+            <div class="col-md-3 col-sm-6">
+              <section class="widget widget_pages">
+                <h3 class="widget-title">
+                  <i class="icon-globe"></i>
+                  Community
+                </h3>
+                <ul>
+                  <li><a href="#">Developers</a></li>
+                  <li><a href="#">Referrals</a></li>
+                  <li><a href="#">Forum</a></li>
+                </ul>
+              </section><!-- .widget.widget_pages -->
+            </div><!-- .col-md-3 -->
+          </div><!-- .row -->
+          <div class="copyright">
+            <div class="column">
+              <p>&copy; Nucleus 2015. Made by <a href="http://8guild.com/" target="_blank">8Guild</a> with <i class="fa fa-heart text-danger"></i> love.</p>
+            </div><!-- .column -->
+            <div class="column">
+              <div class="cards">
+                <img src="img/cards.png" alt="Credit Cards">
+              </div>
+            </div><!-- .column -->
+          </div><!-- .copyright -->
+        </div><!-- .container -->
+      </div><!-- .bottom-footer -->
+    </footer><!-- .footer -->
+
+  </div><!-- .page-wrapper -->
+
+  <!-- JavaScript (jQuery) libraries, plugins and custom scripts -->
+  <script src="js/vendor/jquery-2.1.4.min.js"></script>
+  <script src="js/vendor/preloader.min.js"></script>
+  <script src="js/vendor/bootstrap.min.js"></script>
+  <script src="js/vendor/waves.min.js"></script>
+  <script src="js/vendor/placeholder.js"></script>
+  <script src="js/vendor/smoothscroll.js"></script>
+  <script src="js/vendor/waypoints.min.js"></script>
+  <script src="js/vendor/icheck.min.js"></script>
+  <script src="js/vendor/velocity.min.js"></script>
+  <script src="js/vendor/magnific-popup.min.js"></script>
+  <script src="js/vendor/owl.carousel.min.js"></script>
+  <script src="js/vendor/scrollreveal.min.js"></script>
+  <script src="js/scripts.js"></script>
+
+</body><!-- <body> -->
+
+</html>
