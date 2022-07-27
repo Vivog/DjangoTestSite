@@ -18,6 +18,17 @@ class MainAdmin(admin.ModelAdmin):
 class DivisionsAdmin(admin.ModelAdmin):
     list_display = ('abr', 'num_staff', )
     prepopulated_fields = {'slug': ('abr',)}
+    fieldsets = (
+        (
+            "Загальні відомості", {'fields': ('name', 'abr', 'slug', 'description')}
+        ),
+        (
+            "Додатково", {'fields': ('num_staff', 'num_docs', 'num_projects', 'locs', 'coops',)}
+        ),
+        (
+            'Управління', {'fields': ('boss', 'photo')}
+        )
+    )
 
 
 @admin.register(Staff)
@@ -53,6 +64,14 @@ class DocumentsAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
 
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('loc',)
+
+
+@admin.register(Cooperation)
+class CooperationAdmin(admin.ModelAdmin):
+    list_display = ('name', )
 
 
 # Изменяет название страницы административной панели и название заголовка административной панали

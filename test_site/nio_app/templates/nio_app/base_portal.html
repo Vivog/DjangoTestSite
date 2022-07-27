@@ -91,6 +91,7 @@
       </div><!-- .topbar -->
 
       <!-- Main Navigation -->
+      {% for m in main %}
       <div class="container">
         <nav class="main-navigation">
           <ul class="menu">
@@ -110,40 +111,28 @@
             <li class="menu-item-has-children">
               <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
               <ul class="sub-menu"> 
-                <li><a href="#">НДВ</a></li>
-                <li><a href="#">КНДЛ-1</a></li>
-                <li><a href="#">КНДЛ-2</a></li>
-                <li><a href="#">НДС-3</a></li>
-                <li><a href="#">НДЛ-6</a></li>
-                <li><a href="#">НДС-7</a></li>
-                <li><a href="#">СПНО</a></li>
-                <li><a href="#">СПЕ</a></li>
+                <li><a href="#">{{m.abr}}</a></li>
+                {% for d in m.divisions.all %}
+                <li><a href="#">{{d.abr}}</a></li>
+                {% endfor %}
               </ul>
             </li>
             <li class="menu-item-has-children">
               <a href="#"><i class="flaticon-technological"></i>Персонал</a>
               <ul class="sub-menu"> 
-                <li><a href="#">НДВ</a></li>
-                <li><a href="#">КНДЛ-1</a></li>
-                <li><a href="#">КНДЛ-2</a></li>
-                <li><a href="#">НДС-3</a></li>
-                <li><a href="#">НДЛ-6</a></li>
-                <li><a href="#">НДС-7</a></li>
-                <li><a href="#">СПНО</a></li>
-                <li><a href="#">СПЕ</a></li>
+                <li><a href="#">{{m.abr}}</a></li>
+                {% for d in m.divisions.all %}
+                <li><a href="#">{{d.abr}}</a></li>
+                {% endfor %}
               </ul>
             </li>
             <li class="menu-item-has-children">
               <a href="#"><i class="flaticon-writing50"></i>Документація</a>
               <ul class="sub-menu">
-                <li><a href="#">НДВ</a></li>
-                <li><a href="#">КНДЛ-1</a></li>
-                <li><a href="#">КНДЛ-2</a></li>
-                <li><a href="#">НДС-3</a></li>
-                <li><a href="#">НДЛ-6</a></li>
-                <li><a href="#">НДС-7</a></li>
-                <li><a href="#">СПНО</a></li>
-                <li><a href="#">СПЕ</a></li>
+                <li><a href="#">{{m.abr}}</a></li>
+                {% for d in m.divisions.all %}
+                <li><a href="#">{{d.abr}}</a></li>
+                {% endfor %}
               </ul>
             </li>
             <li class="menu-item-has-children">
@@ -262,7 +251,7 @@
         </div><!-- .container -->
       </div><!-- .bottom-footer -->
     </footer><!-- .footer -->
-
+{% endfor %}
   </div><!-- .page-wrapper -->
 
   <!-- JavaScript (jQuery) libraries, plugins and custom scripts -->

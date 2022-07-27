@@ -13,9 +13,16 @@ from .models import *
 
 # Create your views here.
 
+
+CONTEXT = {}
+CONTEXT['main'] = Main.objects.all()
+CONTEXT['div'] = Divisions.objects.all()
+
 def index_portal(request):
 
-    return render(request, 'nio_app/index_portal.html')
+    context = {}
+    context.update(CONTEXT)
+    return render(request, 'nio_app/index_portal.html', context=context)
 
 
 

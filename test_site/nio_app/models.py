@@ -18,11 +18,11 @@ class Main(models.Model):
 
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис підрозділу',
                                        verbose_name='Опис підрозділу')
-    num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True)
+    num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True, blank=True)
 
-    num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True)
+    num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True, blank=True)
 
-    num_docs = models.IntegerField(verbose_name='Загальна кількість документації', null=True)
+    num_docs = models.IntegerField(verbose_name='Загальна кількість документації', null=True, blank=True)
 
     boss = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='ПІБ керівника')
@@ -34,6 +34,7 @@ class Main(models.Model):
     class Meta:
         verbose_name = 'Загальна інфо'
         verbose_name_plural = 'Загальна інфо'
+
 
     def __str__(self):
         return self.abr
@@ -57,11 +58,21 @@ class Divisions(models.Model):
 
     num_docs = models.IntegerField(verbose_name='Загальна кількість документації', null=True)
 
+    locs = models.ManyToManyField('Location', verbose_name='Розміщення')
+
+    coops = models.ManyToManyField('Cooperation', verbose_name='Підрозділи взаємодії')
+
+    boss = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
+                            verbose_name='ПІБ керівника', null=True, blank=True)
+
+    photo = models.ImageField(upload_to="workers_foto/", verbose_name="Фото", null=True, blank=True)
+
     objects = models.Manager()
 
     class Meta:
         verbose_name = 'Підрозділи'
         verbose_name_plural = 'Підрозділи'
+        ordering = ['name']
 
     def __str__(self):
         return self.abr
@@ -127,15 +138,6 @@ class Documents(models.Model):
     status = models.CharField(max_length=50, help_text="Поточний статус документу",
                                   verbose_name="Статус документу", choices=CHOICES_STATUS)
 
-    # @classmethod
-    # def file_load(cls):
-    #     str = 'archives/'
-    #     a = cls.div.get_pk_value_on_save('abr')
-    #     b = cls.type.get_choices()
-    #     str += f'{a}/'
-    #     str += f'{b}/'
-    #     return str
-
     doc = models.FileField(upload_to=f'archives/')
 
     release_date = models.DateField(help_text="Введіть дату впровадження", verbose_name="Дата впровадження",
@@ -157,3 +159,30 @@ class Documents(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Location(models.Model):
+    loc = models.CharField(max_length=100, help_text='Вкажіть приміщення або цех(приміщення)', verbose_name='Приміщення')
+
+    object = models.Manager()
+
+    def __str__(self):
+        return self.loc
+
+    class Meta:
+        verbose_name = 'Приміщення'
+        verbose_name_plural = 'Приміщення'
+
+
+class Cooperation(models.Model):
+    name = models.CharField(max_length=100, help_text='Вкажіть пов\'язаний підрозділ',
+                           verbose_name='Підрозділ')
+
+    object = models.Manager()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Підрозділ взаємодії'
+        verbose_name_plural = 'Підрозділи взаємодії'
