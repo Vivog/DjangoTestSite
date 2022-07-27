@@ -6,9 +6,16 @@ from .models import *
 
 # Register your models here.
 
+@admin.register(Main)
+class MainAdmin(admin.ModelAdmin):
+    list_display = ('abr', 'boss', 'num_staff', 'divisions')
+    prepopulated_fields = {'slug': ('abr',), 'num_staff': ('staff',), 'num_projects': ('projects',), 'num_docs': ('docs',)}
+
+
+
 @admin.register(Divisions)
 class DivisionsAdmin(admin.ModelAdmin):
-    list_display = ('div_abr', 'division_name')
+    list_display = ('abr', 'num_staff', )
     prepopulated_fields = {'slug': ('div_abr',)}
 
 

@@ -1,184 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
 
-<head>
-  <meta charset="utf-8">
-  <title>Portal NDV</title>
-
-  <!--SEO Meta Tags-->
-  <meta name="description" content="Nucleus Multi-Purpose Technology Template" />
-  <meta name="keywords" content="multipurpose, technology, business, corporate, hosting, web, startup, app showcase, mobile, blog, portfolio, landing, shortcodes, html5, css3, jquery, js, gallery, slider, touch, creative" />
-  <meta name="author" content="8Guild" />
-
-  <!--Mobile Specific Meta Tag-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  {% load static %}
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="{% static 'nio_app/favicon.ico' %}" type="image/x-icon">
-  <link rel="icon" href="{% static 'nio_app/favicon.ico' %}" type="image/x-icon">
-
-  <!-- All Theme Styles including Bootstrap, FontAwesome, etc. compiled from styles.scss-->
-  <link href="{% static 'nio_app/css/styles.min.css' %}" rel="stylesheet" media="screen">
-
-  <!--Modernizr / Detectizr-->
-  <script src="{% static 'nio_app/js/vendor/modernizr.custom.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/detectizr.min.js' %}"></script>
-
-
-</head>
-
-<!-- Body -->
-<!-- "is-preloader preloading" is a helper classes if preloader is enabled. -->
-<body class="is-preloader preloading">
-  
-  <!-- Preloader -->
-  <!-- 
-      Data API:
-      data-spinner - Options: 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7'
-      data-screenbg - Screen background color. Hex, RGB or RGBA colors
-   -->
-  <div id="preloader" data-spinner="spinner1" data-screenbg="#fff"></div>
-
-  <!-- Page Wrapper -->
-  <div class="page-wrapper">
-
-    <!-- Окно регистрации -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <div class="modal-content text-center">
-          <form method="post">
-            <input type="email" class="form-control" placeholder="Пошта" required>
-            <input type="password" class="form-control" placeholder="Пароль" required>
-            <div class="form-group">
-              <button type="submit" class="btn login-btn btn-default waves-effect waves-light">Увійти до свого акаунту<i class="icon-head"></i></button>
-            </div>
-            <div class="text-left">
-              <span class="text-sm text-semibold">Вперше на порталі?<a href="#">Реєстрація</a></span>
-            </div>
-          </form><!-- <form> -->
-        </div><!-- .modal-content -->
-      </div><!-- .modal-dialog -->
-    </div><!-- .modal.fade -->
-
-    <!-- Navbar -->
-    <!-- Add class ".navbar-sticky" to make navbar stuck when it hits the top of the page. Another modifier class is: "navbar-fullwidth" to stretch navbar and make it occupy 100% of the page width. The screen width at which navbar collapses can be controlled through the variable "$nav-collapse" in sass/variables.scss -->
-    <header class="navbar navbar-sticky">
-      
-      <!-- Toolbar -->
-      <div class="topbar">
-        <div class="container">
-          <a href="{% url 'nio_app:index_portal' %}" class="site-logo">
-            <img src="{% static 'nio_app/img/logo.png' %}" alt="Портал НДВ">
-          </a><!-- .site-logo -->
-
-          <!-- Mobile Menu Toggle -->
-          <div class="nav-toggle"><span></span></div>
-
-          <div class="toolbar">
-            <a href="#" class="text-sm" data-toggle="modal" data-target="#loginModal">Реєстрація</a>
-            <a href="#" class="btn btn-sm btn-default btn-icon-right waves-effect waves-light" data-toggle="modal" data-target="#loginModal">Увійти<i class="icon-head"></i></a>
-            <!-- <a href="shopping-cart.html" class="cart-btn"><i class="icon-bag"></i></a> -->
-            <div class="search-btn">
-              <i class="icon-search"></i>
-              <form method="post" class="search-box">
-                <input type="text" class="form-control input-sm" placeholder="Пошук">
-                <button type="submit"><i class="icon-search"></i></button>
-              </form>
-            </div><!-- .search-btn -->
-          </div><!-- .toolbar -->
-        </div><!-- .container -->
-      </div><!-- .topbar -->
-
-      <!-- Main Navigation -->
-      <div class="container">
-        <nav class="main-navigation">
-          <ul class="menu">
-            <li class="current-menu-item menu-item-has-children">
-              <a href="#"><i class="flaticon-technology46"></i>Головна</a>
-              <div class="mega-menu">
-                <ul>
-                  <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
-                  <li><a href="#">Підрозділи</a></li>
-                  <li><a href="#">Персонал</a></li>
-                  <li><a href="#">Документація</a></li>
-                  <li><a href="#">Публікації</a></li>
-                  <li><a href="#">Новини</a></li>
-                </ul>
-              </div>
-            </li>
-            <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
-              <ul class="sub-menu"> 
-                <li><a href="#">НДВ</a></li>
-                <li><a href="#">КНДЛ-1</a></li>
-                <li><a href="#">КНДЛ-2</a></li>
-                <li><a href="#">НДС-3</a></li>
-                <li><a href="#">НДЛ-6</a></li>
-                <li><a href="#">НДС-7</a></li>
-                <li><a href="#">СПНО</a></li>
-                <li><a href="#">СПЕ</a></li>
-              </ul>
-            </li>
-            <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-technological"></i>Персонал</a>
-              <ul class="sub-menu"> 
-                <li><a href="#">НДВ</a></li>
-                <li><a href="#">КНДЛ-1</a></li>
-                <li><a href="#">КНДЛ-2</a></li>
-                <li><a href="#">НДС-3</a></li>
-                <li><a href="#">НДЛ-6</a></li>
-                <li><a href="#">НДС-7</a></li>
-                <li><a href="#">СПНО</a></li>
-                <li><a href="#">СПЕ</a></li>
-              </ul>
-            </li>
-            <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-writing50"></i>Документація</a>
-              <ul class="sub-menu">
-                <li><a href="#">НДВ</a></li>
-                <li><a href="#">КНДЛ-1</a></li>
-                <li><a href="#">КНДЛ-2</a></li>
-                <li><a href="#">НДС-3</a></li>
-                <li><a href="#">НДЛ-6</a></li>
-                <li><a href="#">НДС-7</a></li>
-                <li><a href="#">СПНО</a></li>
-                <li><a href="#">СПЕ</a></li>
-              </ul>
-            </li>
-            <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
-              <ul class="sub-menu">
-                <li><a href="#">Проект 1</a></li>
-                <li><a href="#">Проект 2</a></li>
-                <li><a href="#">Проект 3</a></li>
-                <li><a href="#">Проект 4</a></li>
-                <li><a href="#">Проект 5</a></li>
-                <li><a href="#">Проект 6</a></li>
-                <li><a href="#">Проект 7</a></li>
-              </ul>
-            </li>
-            <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-positive"></i>Допомога</a>
-              <ul class="sub-menu">
-                <li><a href="#">Загальна інформація</a></li>
-                <li><a href="#">Категорії</a></li>
-              </ul>
-            </li>
-            <li class="menu-item-has-children">
-              <a href="#"><i class="flaticon-light129"></i>Інше</a>
-              <ul class="sub-menu"> 
-                <li><a href="#">Про розробку</a></li>
-                <li><a href="#">Зв'язок</a></li>
-              </ul>
-            </li>
-          </ul><!-- .menu -->
-        </nav><!-- .main-navigation -->
-      </div><!-- .container -->
-    </header><!-- .navbar -->
-
-    <!-- Create Account Section -->
+{% block content %}
+    <!-- Створи новий акаунт -->
     <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url({% static 'nio_app/img/home/hosting-bg-01.jpg'%})">
       <div class="container padding-bottom-3x">
         <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
@@ -188,11 +12,11 @@
             <form method="post" autocomplete="off">
               <div class="form-group">
                 <label for="ca_email" class="sr-only"></label>
-                <input type="email" class="form-control" id="ca_email" placeholder="Пошта" required>
+                <input type="email" class="form-control" id="ca_email" placeholder="Пошта" required readonly onfocus="this.removeAttribute('readonly')">
               </div>
               <div class="form-group">
                 <label for="ca_password" class="sr-only"></label>
-                <input type="password" class="form-control" id="ca_password" placeholder="Пароль" required>
+                <input type="password" class="form-control" id="ca_password" placeholder="Пароль" required autocomplete="off">
               </div>
               <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">Створи акаунт</button>
             </form>
@@ -201,8 +25,7 @@
       </div><!-- .container -->
     </section><!-- .fw-section -->
 
-    <!-- Domain Search -->
-    <!-- Fullwidth section has bunch of modifier classes to alter its appearance: ".border-top, .border-bottom, .arrow-top, .arrow-bottom, .bg-gray, .bg-default, .bg-primary, .bg-parallax". They can be used separately or alltogether. -->
+    <!-- Пошук документа -->
     <section class="fw-section bg-default border-top border-bottom padding-top-3x padding-bottom-3x" style="z-index: 2;">
       <div class="container">
         <div class="row">
@@ -213,7 +36,7 @@
             <form method="get" class="domain-search">
               <input type="text" class="form-control" placeholder="Пошук документа">
               <div class="domain-dropdown">
-                <span>Тип документа</span>
+                <span>Тип</span>
                 <div class="dropdown">
                   <div>
                     <label class="checkbox checkbox-inline">
@@ -272,32 +95,26 @@
               <td>&nbsp;</td>
               <td>
                 <span class="text-bold">НДВ</span>
-                <span class="text-gray space-top">Загальні відомості</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
               <td>
                 <span class="text-bold">КНДЛ-1</span>
-                <span class="text-gray space-top">Загальні відомості</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
               <td>
                 <span class="text-bold">КНДЛ-2</span>
-                <span class="text-gray space-top">Загальні відомості</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
               <td>
                 <span class="text-bold">НДС-3</span>
-                <span class="text-gray space-top">Загальні відомості</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
               <td>
                 <span class="text-bold">НДЛ-6</span>
-                <span class="text-gray space-top">Загальні відомості</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
               <td>
                 <span class="text-bold">НДС-7</span>
-                <span class="text-gray space-top">Загальні відомості</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
             </tr>
@@ -339,12 +156,13 @@
             </tr>
             <tr>
               <td class="text-gray text-right">Керіники</td>
-              <td class="text-bold"><span class="not-available"></span></td>
-              <td class="text-bold"><span class="available"></span></td>
-              <td class="text-bold"><span class="available"></span></td>
-              <td class="text-bold"><span class="available"></span></td>
-              <td class="text-bold"><span class="available"></span></td>
-              <td class="text-bold"><span class="available"></span></td>
+              <td class="text-bold">Сергій КРГУЛЯК<br>заст. Станіслав Свіржевський</td>
+              <td class="text-bold">Олексій Артамонов</td>
+              <td class="text-bold">Сергій Жихарев</td>
+              <td class="text-bold">Володимир Артамонов</td>
+              <td class="text-bold">Віталій Савушкін</td>
+              <td class="text-bold">Ігор Бабенко</td>
+
             </tr>
           </table><!-- table -->
         </div><!-- .pricing-table -->
@@ -352,12 +170,11 @@
     </section><!-- .fw-section -->
 
     <!-- Проекти -->
-    <!-- Fullwidth section has bunch of modifier classes to alter its appearance: ".border-top, .border-bottom, .arrow-top, .arrow-bottom, .bg-gray, .bg-default, .bg-primary, .bg-parallax". They can be used separately or alltogether. -->
     <section class="fw-section bg-default border-top padding-top-3x padding-bottom-3x">
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-5 mobile-center padding-bottom scrollReveal sr-left">
-            <h2 class="block-title">Голонвні проекти<small>Що виходить за межі твоєї уяви</small></h2>
+            <h2 class="block-title">Голонвні проекти<small>Що виходить за межі твоєї уяви?</small></h2>
             <p class="text-gray text-lg">Ми маємо усі можливості для реалізації будь-яких технічних ідей, починаючи з розробки документації, та закінчуючи повноцінним впровадженням у сфері застосування</p>
             <a href="#" class="btn btn-default waves-effect waves-light btn-icon-right">
               Переглянути проекти
@@ -365,14 +182,13 @@
             </a>
           </div>
           <div class="col-lg-8 col-md-7 scrollReveal sr-right">
-            <img src="img/home/features.png" alt="Features">
+            <img src="{% static 'nio_app/img/home/features.png' %}" alt="Features">
           </div>
         </div><!-- .row -->
       </div><!-- .container -->
     </section><!-- .fw-section.bg-default.border-top -->
 
-    <!-- Features -->
-    <!-- Fullwidth section has bunch of modifier classes to alter its appearance: ".border-top, .border-bottom, .arrow-top, .arrow-bottom, .bg-gray, .bg-default, .bg-primary, .bg-parallax". They can be used separately or alltogether. -->
+    <!-- Можливості -->
     <section class="fw-section arrow-top border-bottom padding-top-3x padding-bottom-3x">
       <div class="container">
         <div class="row">
@@ -381,10 +197,10 @@
             <div class="box-with-icon bwi-expandable text-center">
               <div class="bwi-inner">
                 <div class="bwi-icon">
-                  <img src="img/features/01.png" alt="Feature">
+                  <img src="{% static 'nio_app/img/features/01.png' %}" alt="Feature">
                 </div>
                 <h3 class="bwi-title">Персональний котроль</h3>
-                <p class="bwi-text">Кожен член нашої команди відчуває персональну відповідальність за усі операції, що виконує. Контроль якості персоналізовано та де можливо автоматизовано</p>
+                <p class="bwi-text">Кожен член нашої команди відчуває персональну відповідальність за усі операції, що виконує. Контроль якості персоналізовано та, де можливо, автоматизовано</p>
               </div>
             </div>
           </div>
@@ -393,7 +209,7 @@
             <div class="box-with-icon bwi-expandable text-center">
               <div class="bwi-inner">
                 <div class="bwi-icon">
-                  <img src="img/features/02.png" alt="Feature">
+                  <img src="{% static 'nio_app/img/features/02.png' %}" alt="Feature">
                 </div>
                 <h3 class="bwi-title">Самостійне налогодження ПЗ</h3>
                 <p class="bwi-text">Наші спеціалісти самостійно налагоджують проекти програмного забезпечення. Розробляють програмні застосунки, тощо.</p>
@@ -405,7 +221,7 @@
             <div class="box-with-icon bwi-expandable text-center">
               <div class="bwi-inner">
                 <div class="bwi-icon">
-                  <img src="img/features/03.png" alt="Feature">
+                  <img src="{% static 'nio_app/img/features/03.png' %}" alt="Feature">
                 </div>
                 <h3 class="bwi-title">Сучасно побудова обладнання</h3>
                 <p class="bwi-text">Ми маємо підрозділи з розробки сучасного обладнання з мікропроцесорною архітектурою</p>
@@ -419,7 +235,7 @@
             <div class="box-with-icon bwi-expandable text-center">
               <div class="bwi-inner">
                 <div class="bwi-icon">
-                  <img src="img/features/04.png" alt="Feature">
+                  <img src="{% static 'nio_app/img/features/04.png' %}" alt="Feature">
                 </div>
                 <h3 class="bwi-title">Випробувальна база</h3>
                 <p class="bwi-text">У складі підрозділів є розгорнута система випробувальних засобів: стендів, установок, приладів, тощо</p>
@@ -431,10 +247,10 @@
             <div class="box-with-icon bwi-expandable text-center">
               <div class="bwi-inner">
                 <div class="bwi-icon">
-                  <img src="img/features/05.png" alt="Feature">
+                  <img src="{% static 'nio_app/img/features/05.png' %}" alt="Feature">
                 </div>
                 <h3 class="bwi-title">Потужне обладнання</h3>
-                <p class="bwi-text">Задля виконання поставлених завдань, ми використовуємо усі можливі та наявні потужності, що значно прискорює технологічні та виробничі процеси</p>
+                <p class="bwi-text">Задля виконання поставлених завдань, ми використовуємо усі можливі та наявні потужності, що значно прискорюють технологічні та виробничі процеси</p>
               </div>
             </div>
           </div>
@@ -443,7 +259,7 @@
             <div class="box-with-icon bwi-expandable text-center">
               <div class="bwi-inner">
                 <div class="bwi-icon">
-                  <img src="img/features/06.png" alt="Feature">
+                  <img src="{% static 'nio_app/img/features/06.png' %}" alt="Feature">
                 </div>
                 <h3 class="bwi-title">Обробка даних</h3>
                 <p class="bwi-text">Ми використовуємо усі можливі потужності для обробки даних, виконуємо різноманітні перетворювання, формуємо пакети графічного чи файлового відображення</p>
@@ -454,17 +270,17 @@
       </div><!-- .container -->
     </section><!-- .fw-section.arrow-top.border-bottom -->
 
-    <!-- Testimonials -->
-    <section class="fw-section next-to-footer padding-top-3x padding-bottom-3x" style="background-image: url(img/home/testimonials-bg.jpg);">
+    <!-- Досягнення -->
+    <section class="fw-section next-to-footer padding-top-3x padding-bottom-3x" style="background-image: url({% static 'nio_app/img/home/testimonials-bg.jpg' %});">
       <div class="container">
         <h2 class="block-title text-center">Більше 10,000 експериментів та більше 20,000 документів різного ґатунку<small>Працюємо задля розвитку, стабільності та майбутнього</small></h2>
         <div class="row padding-top">
           <div class="col-sm-4 scrollReveal sr-scaleDown sr-ease-in-out-back">
             <div class="testimonial">
               <div class="author-ava">
-                <img src="img/testimonials/01.png" alt="Author">
+                <img src="{% static 'nio_app/img/testimonials/01.png' %}" alt="Author">
               </div>
-              <h3 class="author-name">Дерій Ю.І.</h3>
+              <h3 class="author-name">Юрій Дерій</h3>
               <p class="text-gray">Директор з маркетингу</p>
               <div class="text">Побажання</div>
             </div>
@@ -472,9 +288,9 @@
           <div class="col-sm-4 scrollReveal sr-scaleDown sr-delay-1 sr-ease-in-out-back">
             <div class="testimonial">
               <div class="author-ava">
-                <img src="img/testimonials/02.png" alt="Author">
+                <img src="{% static 'nio_app/img/testimonials/02.png' %}" alt="Author">
               </div>
-              <h3 class="author-name">Чорний Г.В.</h3>
+              <h3 class="author-name">Геннадій Чорний</h3>
               <p class="text-gray">Головний конструктор</p>
               <div class="text">Побажання</div>
             </div>
@@ -482,9 +298,9 @@
           <div class="col-sm-4 scrollReveal sr-scaleDown sr-delay-2 sr-ease-in-out-back">
             <div class="testimonial">
               <div class="author-ava">
-                <img src="img/testimonials/03.png" alt="Author">
+                <img src="{% static 'nio_app/img/testimonials/03.png' %}" alt="Author">
               </div>
-              <h3 class="author-name">Чобенко В.М.</h3>
+              <h3 class="author-name">Володимир Чобенко</h3>
               <p class="text-gray">Начальник КУ</p>
               <div class="text">Побажання</div>
             </div>
@@ -492,121 +308,4 @@
         </div><!-- .row -->
       </div><!-- .container -->
     </section><!-- .fw-section.next-to-footer -->
-
-    <!-- Scroll To Top Button -->
-    <a href="#" class="scroll-to-top-btn">
-      <i class="icon-arrow-up"></i> 
-    </a><!-- .scroll-to-top-btn -->
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="top-footer">
-        <div class="container">
-          <div class="tools">
-            <div class="cell">
-              <i><img src="img/footer/icons/help.png" alt="Email"></i>
-              <span><a href="mailto:info@email.com">пошта НДВ</a></span>
-            </div>
-            <div class="cell">
-              <i><img src="img/footer/icons/phone.png" alt="Phone"></i>
-              <span><a href="#"></a>тел НДВ</span>
-            </div>
-          </div>
-          <div class="subscribe">
-            <div class="subscribe-form">
-              <i><img src="img/footer/icons/envelope.png" alt="Subscribe"></i>
-              <form action="//8guild.us3.list-manage.com/subscribe/post?u=168a366a98d3248fbc35c0b67&amp;id=011a3332a0" method="post" target="_blank" novalidate autocomplete="off">
-                <label for="subscr_email" class="sr-only">Підпишися на останні новини</label>
-                <input type="email" class="form-control" id="subscr_email" placeholder="Ваша пошта">
-                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                <div style="position: absolute; left: -5000px;">
-                  <input type="text" name="b_168a366a98d3248fbc35c0b67_011a3332a0" tabindex="-1" value="">
-                </div>
-                <button type="submit"><i class="icon-mail"></i></button>
-              </form>
-            </div>
-          </div>
-        </div><!-- .container -->
-      </div><!-- .top-footer -->
-
-      <div class="bottom-footer">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-3 col-sm-6">
-              <section class="widget widget_text">
-                <a href="{% url 'nio_app:index_portal' %}" class="site-logo">
-                  <img src="img/logo.png" alt="Портал">
-                </a><!-- .site-logo -->
-                <p>Портал розроблено для ознайомлення з технічними можливостями НДВ. Будь-яка надана інформація не може бути використана без письмового дозволу керівника підрозділу.</p>
-              </section><!-- .widget.widget_text -->
-            </div><!-- .col-md-3 -->
-            <div class="col-md-3 col-sm-6">
-              <section class="widget widget_pages">
-                <h3 class="widget-title">
-                  <i class="icon-ribbon"></i>
-                  Портал НДВ
-                </h3>
-                <ul>
-                  <li><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
-                  <li><a href="#">Підрозділи</a></li>
-                  <li><a href="home-hosting.html">Персонал</a></li>
-                </ul>
-              </section><!-- .widget.widget_pages -->
-            </div><!-- .col-md-3 -->
-            <div class="clearfix visible-sm"></div>
-            <div class="col-md-3 col-sm-6">
-              <section class="widget widget_pages">
-                <h3 class="widget-title">
-                  <i class="icon-cog"></i>
-                  Допомога
-                </h3>
-                <ul>
-                  <li><a href="help-general.html">Загальна інформація</a></li>
-                  <li><a href="#">Категорії</a></li>
-                  <li><a href="#">Зв'язок</a></li>
-                </ul>
-              </section><!-- .widget.widget_pages -->
-            </div><!-- .col-md-3 -->
-            <div class="col-md-3 col-sm-6">
-              <section class="widget widget_pages">
-                <h3 class="widget-title">
-                  <i class="icon-globe"></i>
-                  Проекти
-                </h3>
-                <ul>
-                  <li><a href="#">Головні проекти</a></li>
-                  <li><a href="#">Новини</a></li>
-                  <li><a href="#">Публікації</a></li>
-                </ul>
-              </section><!-- .widget.widget_pages -->
-            </div><!-- .col-md-3 -->
-          </div><!-- .row -->
-          <div class="copyright">
-            <div class="column">
-              <p>&copy; Портал НДВ 2022. Розроблено Савушкін Віталій задля інформування. Усі права захищено.
-            </div><!-- .column -->
-          </div><!-- .copyright -->
-        </div><!-- .container -->
-      </div><!-- .bottom-footer -->
-    </footer><!-- .footer -->
-
-  </div><!-- .page-wrapper -->
-
-  <!-- JavaScript (jQuery) libraries, plugins and custom scripts -->
-  <script src="{% static 'nio_app/js/vendor/jquery-2.1.4.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/preloader.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/bootstrap.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/waves.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/placeholder.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/smoothscroll.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/waypoints.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/icheck.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/velocity.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/magnific-popup.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/owl.carousel.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/vendor/scrollreveal.min.js' %}"></script>
-  <script src="{% static 'nio_app/js/scripts.js' %}"></script>
-
-</body><!-- <body> -->
-
-</html>
+     {% endblock content %}
