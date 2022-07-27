@@ -8,21 +8,21 @@ from .models import *
 
 @admin.register(Main)
 class MainAdmin(admin.ModelAdmin):
-    list_display = ('abr', 'boss', 'num_staff', 'divisions')
-    prepopulated_fields = {'slug': ('abr',), 'num_staff': ('staff',), 'num_projects': ('projects',), 'num_docs': ('docs',)}
+    list_display = ('abr', 'boss', 'num_staff',)
+    prepopulated_fields = {'slug': ('abr',), }
+    # prepopulated_fields = {'slug': ('abr',), 'num_staff': ('staff',), 'num_projects': ('projects',), 'num_docs': ('docs',)}
 
 
 
 @admin.register(Divisions)
 class DivisionsAdmin(admin.ModelAdmin):
     list_display = ('abr', 'num_staff', )
-    prepopulated_fields = {'slug': ('div_abr',)}
+    prepopulated_fields = {'slug': ('abr',)}
 
 
+@admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ('tabel', 'fio', 'get_html_photo')
-    list_display_links = ('tabel', 'fio')
-    list_filter = ('division_name',)
+    list_display = ('div', 'tabel', 'fio', 'get_html_photo',)
     prepopulated_fields = {'slug': ('fio',)}
     # Разбиение подробной информации на секции
     # сначало название секции, потом поля для отображения
@@ -32,7 +32,7 @@ class StaffAdmin(admin.ModelAdmin):
             "Загальні відомості", {'fields': ('tabel', 'fio', 'slug', 'prof')}
         ),
         (
-            "Додатково", {'fields': ('division_name', 'oklad', 'birthday', 'phone', 'adress', 'photo')}
+            "Додатково", {'fields': ('div', 'oklad', 'birthday', 'phone', 'adress', 'photo')}
         )
     )
     search_fields = ('tabel', 'fio')
@@ -44,26 +44,15 @@ class StaffAdmin(admin.ModelAdmin):
     get_html_photo.short_description = 'Мініатюра'
 
 
-admin.site.register(Staff, StaffAdmin)
-
 
 @admin.register(Documents)
 class DocumentsAdmin(admin.ModelAdmin):
     # fields = ('fio')
-    list_display = ('division_name', 'release_date', "doc_status", "doc_type", "doc_name", "display_author")
-    list_filter = ('division_name', 'doc_status', 'doc_type')
-    search_fields = ('doc_name',)
-    prepopulated_fields = {'slug': ('doc_name',)}
+    list_display = ('div', 'release_date', "status", "type", "name", "display_author")
+    list_filter = ('div', 'status', 'type')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
 
-
-
-@admin.register(Timesheet)
-class TimeSheetAdmin(admin.ModelAdmin):
-    list_display = ('date', "fio", "is_8", "is_7", "is_sick", 'is_vacation', 'is_unknown')
-    list_filter = ('date', "fio", "is_8", "is_7", "is_sick", 'is_vacation', 'is_unknown')
-    search_fields = ('fio',)
-    list_editable = ("is_8", "is_7", "is_sick", 'is_vacation', 'is_unknown')
-    prepopulated_fields = {'slug': ('date',)}
 
 
 # Изменяет название страницы административной панели и название заголовка административной панали

@@ -14,15 +14,15 @@ class Main(models.Model):
 
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
 
+    divisions = models.ManyToManyField('Divisions', verbose_name='Підрозділи')
+
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис підрозділу',
                                        verbose_name='Опис підрозділу')
     num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True)
 
     num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True)
 
-    num_docs = models.IntegerField(verbose_name='Кількість проектів', null=True)
-
-    divisions = models.ManyToManyField('Divisions', verbose_name='Підрозділи', related_name=f'{slug}')
+    num_docs = models.IntegerField(verbose_name='Загальна кількість документації', null=True)
 
     boss = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='ПІБ керівника')
@@ -55,7 +55,7 @@ class Divisions(models.Model):
 
     num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True)
 
-    num_docs = models.IntegerField(verbose_name='Кількість проектів', null=True)
+    num_docs = models.IntegerField(verbose_name='Загальна кількість документації', null=True)
 
     objects = models.Manager()
 
@@ -73,7 +73,7 @@ class Staff(models.Model):
 
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
 
-    div_name = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True, related_name=f'{slug}')
+    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
 
     tabel = models.CharField(max_length=5, help_text='не більше ніж 5 символів', verbose_name='Табельный номер', unique=True)
 
@@ -108,6 +108,8 @@ class Documents(models.Model):
         ("М", "Методика"), ("П", "Паспорт"), ("КЕ", "Керівництво з експлуатації"), ("ТД", "Технична довідка"),
         ("ЗТ", "Технічний звіт"), ("ТІ", "Технологічна інструкция"), ("І", "Інше"), (None, "Тип"))
 
+
+
     CHOICES_STATUS = (("Р", "Розробка"), ("У", "Узгодження"), ("В", "Впроваджено"), (None, "Статус"))
 
     name = models.CharField(max_length=500, help_text="Введіть назву документу",
@@ -115,7 +117,7 @@ class Documents(models.Model):
 
     slug = models.SlugField(max_length=500, unique=True, verbose_name='URL', db_index=True)
 
-    div_name = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу')
+    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, null=True, verbose_name='Назва підрозділу', related_name='div')
 
     author = models.ManyToManyField(Staff, verbose_name='Автор', help_text="Оберіть автора/авторів документу", related_name='authors')
 
@@ -125,6 +127,17 @@ class Documents(models.Model):
     status = models.CharField(max_length=50, help_text="Поточний статус документу",
                                   verbose_name="Статус документу", choices=CHOICES_STATUS)
 
+    # @classmethod
+    # def file_load(cls):
+    #     str = 'archives/'
+    #     a = cls.div.get_pk_value_on_save('abr')
+    #     b = cls.type.get_choices()
+    #     str += f'{a}/'
+    #     str += f'{b}/'
+    #     return str
+
+    doc = models.FileField(upload_to=f'archives/')
+
     release_date = models.DateField(help_text="Введіть дату впровадження", verbose_name="Дата впровадження",
                                     blank=True, null=True)
     objects = models.Manager()
@@ -132,12 +145,15 @@ class Documents(models.Model):
     def display_author(self):
         return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
 
+
     display_author.short_description = 'Автори'
+
+
 
     class Meta:
         verbose_name = 'Документація'
         verbose_name_plural = 'Документація'
-        ordering = ['div_name']
+        ordering = ['div']
 
     def __str__(self):
         return self.name
