@@ -31,6 +31,15 @@ class Main(models.Model):
 
     objects = models.Manager()
 
+    def staff(self):
+        num = 0
+        for d in self.divisions.all():
+            num += d.num_staff
+            self.num_staff = num
+        return self.num_staff
+
+    staff.short_description = 'Загальна кількість персоналу'
+
     class Meta:
         verbose_name = 'Загальна інфо'
         verbose_name_plural = 'Загальна інфо'

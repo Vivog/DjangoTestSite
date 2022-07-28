@@ -8,15 +8,19 @@ from .models import *
 
 @admin.register(Main)
 class MainAdmin(admin.ModelAdmin):
-    list_display = ('abr', 'boss', 'num_staff',)
+    list_display = ('abr', 'boss', 'staff',)
     prepopulated_fields = {'slug': ('abr',), }
     # prepopulated_fields = {'slug': ('abr',), 'num_staff': ('staff',), 'num_projects': ('projects',), 'num_docs': ('docs',)}
 
 
 
+
+
+
+
 @admin.register(Divisions)
 class DivisionsAdmin(admin.ModelAdmin):
-    list_display = ('abr', 'num_staff', )
+    list_display = ('abr', 'boss', 'num_staff', )
     prepopulated_fields = {'slug': ('abr',)}
     fieldsets = (
         (
