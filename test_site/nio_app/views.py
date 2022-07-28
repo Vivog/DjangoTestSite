@@ -17,6 +17,12 @@ from .models import *
 CONTEXT = {}
 CONTEXT['main'] = Main.objects.all()
 CONTEXT['div'] = Divisions.objects.all()
+CONTEXT['doc'] = (("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
+        ("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
+CONTEXT['projects'] = Projects.objects.all()
+CONTEXT['publications'] = Publications.objects.all()
+CONTEXT['news'] = News.objects.all()
+
 
 def index_portal(request):
 

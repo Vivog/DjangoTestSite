@@ -18,6 +18,7 @@ class Main(models.Model):
 
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис підрозділу',
                                        verbose_name='Опис підрозділу')
+
     num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True, blank=True)
 
     num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True, blank=True)
@@ -34,8 +35,11 @@ class Main(models.Model):
     def staff(self):
         num = 0
         for d in self.divisions.all():
-            num += d.num_staff
-            self.num_staff = num
+            if d.num_staff:
+                num += d.num_staff
+                self.num_staff = num
+            else:
+                self.num_staff = 0
         return self.num_staff
 
     staff.short_description = 'Загальна кількість персоналу'
@@ -61,7 +65,16 @@ class Divisions(models.Model):
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис підрозділу',
                                        verbose_name='Опис підрозділу')
 
+    # def num():
+    #     if len(Staff.objects.filter(div_id=pk)) != 0:
+    #         num = len(Staff.objects.filter(div_id_abr=name))
+    #         print('This is yes cool ', num)
+    #         return 1
+    #     else:
+    #         return 0
+
     num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True)
+
 
     num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True)
 
@@ -77,6 +90,7 @@ class Divisions(models.Model):
     photo = models.ImageField(upload_to="workers_foto/", verbose_name="Фото", null=True, blank=True)
 
     objects = models.Manager()
+
 
     class Meta:
         verbose_name = 'Підрозділи'
@@ -126,7 +140,7 @@ class Staff(models.Model):
 class Documents(models.Model):
     CHOICES_DOC_TYPE = (
         ("М", "Методика"), ("П", "Паспорт"), ("КЕ", "Керівництво з експлуатації"), ("ТД", "Технична довідка"),
-        ("ЗТ", "Технічний звіт"), ("ТІ", "Технологічна інструкция"), ("І", "Інше"), (None, "Тип"))
+        ("ЗТ", "Технічний звіт"), ("ТІ", "Технологічна інструкція"), ("І", "Інше"), (None, "Тип"))
 
 
 
@@ -147,7 +161,12 @@ class Documents(models.Model):
     status = models.CharField(max_length=50, help_text="Поточний статус документу",
                                   verbose_name="Статус документу", choices=CHOICES_STATUS)
 
-    doc = models.FileField(upload_to=f'archives/')
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'archives/{instance.div.slug}/{instance.type}/{filename}'
+
+    doc = models.FileField(upload_to=directory_path)
+
 
     release_date = models.DateField(help_text="Введіть дату впровадження", verbose_name="Дата впровадження",
                                     blank=True, null=True)
@@ -156,8 +175,13 @@ class Documents(models.Model):
     def display_author(self):
         return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
 
-
     display_author.short_description = 'Автори'
+
+    def file_load(self):
+        self.doc.upload_to = f'archives/{self.div.slug}/{self.type}/'
+        return self.doc.upload_to
+
+    file_load.short_description = 'Розташування файлу'
 
 
 
@@ -195,3 +219,100 @@ class Cooperation(models.Model):
     class Meta:
         verbose_name = 'Підрозділ взаємодії'
         verbose_name_plural = 'Підрозділи взаємодії'
+
+
+class Projects(models.Model):
+    name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
+                                     verbose_name='Назва проекту')
+
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
+
+    description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети проекту',
+                                       verbose_name='Опис підрозділу')
+
+    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
+
+    author = models.ManyToManyField(Staff, verbose_name='Автор', help_text="Оберіть автора/авторів проекту",)
+
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'archives/{instance.div.slug}/projects/{instance.pk}/{filename}'
+
+    doc = models.FileField(upload_to=directory_path)
+
+    objects = models.Manager()
+
+    def file_load(self):
+        self.doc.upload_to = f'archives/{self.div.slug}/projects/{self.pk}/'
+        return self.doc.upload_to
+
+    file_load.short_description = 'Розташування файлів'
+
+    def display_author(self):
+        return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
+
+    display_author.short_description = 'Автори'
+
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекти'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Publications(models.Model):
+    name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
+                            verbose_name='Назва публікації')
+
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
+
+    description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети публікації',
+                                   verbose_name='Опис підрозділу')
+
+    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
+
+    author = models.ManyToManyField(Staff, verbose_name='Автор', help_text="Оберіть автора/авторів публікації",)
+
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'archives/{instance.div.slug}/publications/{filename}'
+
+    doc = models.FileField(upload_to=directory_path)
+
+    objects = models.Manager()
+
+    def file_load(self):
+        self.doc.upload_to = f'archives/{self.div.slug}/publications/'
+        return self.doc.upload_to
+
+    file_load.short_description = 'Розташування файлів'
+
+    def display_author(self):
+        return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
+
+    display_author.short_description = 'Автори'
+
+    class Meta:
+        verbose_name = 'Публікація'
+        verbose_name_plural = 'Публікації'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class News(models.Model):
+    name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
+                                     verbose_name='Назва новини')
+
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
+
+    class Meta:
+        verbose_name = 'Новина'
+        verbose_name_plural = 'Новини'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name

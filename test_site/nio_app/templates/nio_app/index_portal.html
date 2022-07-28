@@ -40,28 +40,18 @@
                 <div class="dropdown">
                   <div>
                     <label class="checkbox checkbox-inline">
-                      <input type="checkbox" checked> М
-                    </label>
-                    <label class="checkbox checkbox-inline">
-                      <input type="checkbox"> ПС
+                      <input type="checkbox" checked> {{doc.0.0}}
                     </label>
                   </div>
+                    {% for d in doc|slice:"1:-1" %}
+                    {% for i in d|slice:":1" %}
                   <div>
                     <label class="checkbox checkbox-inline">
-                      <input type="checkbox"> КЕ
-                    </label>
-                    <label class="checkbox checkbox-inline">
-                      <input type="checkbox"> ТІ
+                      <input type="checkbox"> {{i}}
                     </label>
                   </div>
-                  <div>
-                    <label class="checkbox checkbox-inline">
-                      <input type="checkbox"> ЗТ
-                    </label>
-                    <label class="checkbox checkbox-inline">
-                      <input type="checkbox"> ТД
-                    </label>
-                  </div>
+                    {% endfor %}
+                    {% endfor %}
                 </div>
               </div>
               <button type="submit" class="waves-effect waves-light"><i class="icon-search"></i></button>
@@ -86,85 +76,52 @@
             <colgroup>
               <col>
               <col>
-              <col class="featured">
+              <col>
               <col>
               <col>
               <col>
             </colgroup>
             <tr>
               <td>&nbsp;</td>
+              {% for d in div %}
               <td>
-                <span class="text-bold">НДВ</span>
+                <span class="text-bold" style="font-size: 20px">{{d.abr}}</span>
                 <a href="#" class="text-sm space-top">Відкрити</a>
               </td>
-              <td>
-                <span class="text-bold">КНДЛ-1</span>
-                <a href="#" class="text-sm space-top">Відкрити</a>
-              </td>
-              <td>
-                <span class="text-bold">КНДЛ-2</span>
-                <a href="#" class="text-sm space-top">Відкрити</a>
-              </td>
-              <td>
-                <span class="text-bold">НДС-3</span>
-                <a href="#" class="text-sm space-top">Відкрити</a>
-              </td>
-              <td>
-                <span class="text-bold">НДЛ-6</span>
-                <a href="#" class="text-sm space-top">Відкрити</a>
-              </td>
-              <td>
-                <span class="text-bold">НДС-7</span>
-                <a href="#" class="text-sm space-top">Відкрити</a>
-              </td>
+              {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Чисельність</td>
-              <td class="text-bold">1</td>
-              <td class="text-bold">2</td>
-              <td class="text-bold">10</td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
+              {% for d in div %}
+              <td class="text-bold">{{d.num_docs}}</td>
+              {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Кількість документації</td>
-              <td class="text-bold">2</td>
-              <td class="text-bold">5</td>
-              <td class="text-bold">30</td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
+              {% for d in div %}
+              <td class="text-bold">{{d.num_docs}}</td>
+              {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Розташування</td>
-              <td class="text-bold">500 MB</td>
-              <td class="text-bold">1 GB</td>
-              <td class="text-bold">10 GB</td>
-              <td class="text-bold">30 GB</td>
-              <td class="text-bold">70 GB</td>
-              <td class="text-bold">70 GB</td>
+              {% for d in div %}
+              <td class="text-normal">{% for l in d.locs.all %}{{l.loc}}<br>{% endfor %}</td>
+              {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Пов'язані підрозділи</td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
-              <td class="text-bold"><span class="infinity"></span></td>
+              {% for d in div %}
+              <td class="text-normal">{% for c in d.coops.all %}{{c.name}}<br>{% endfor %}</td>
+              {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Керіники</td>
-              <td class="text-bold">Сергій КРГУЛЯК<br>заст. Станіслав Свіржевський</td>
-              <td class="text-bold">Олексій Артамонов</td>
-              <td class="text-bold">Сергій Жихарев</td>
-              <td class="text-bold">Володимир Артамонов</td>
-              <td class="text-bold">Віталій Савушкін</td>
-              <td class="text-bold">Ігор Бабенко</td>
-
+              {% for d in div %}
+              <td class="text-bold">{{d.boss}}</td>
+              {% endfor %}
             </tr>
           </table><!-- table -->
+
         </div><!-- .pricing-table -->
       </div><!-- .container -->
     </section><!-- .fw-section -->

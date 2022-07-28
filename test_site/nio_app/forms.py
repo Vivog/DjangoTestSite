@@ -1,11 +1,15 @@
-# import re
-#
-# from django import forms
-# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-# from django.contrib.auth.models import User
-# from django.core.exceptions import ValidationError
-#
-# from .models import *
+import re
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+from .models import *
+
+
+# class ProjectForm(forms.Form):
+#     doc = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
 #
 #
 # # class AddDivisionForm(forms.Form):

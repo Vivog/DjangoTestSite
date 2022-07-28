@@ -6319,7 +6319,6 @@ label.hover {
 .shop-filter .domain-dropdown > .dropdown,
 .shop-filter .shop-filter-dropdown > .dropdown {
   position: absolute;
-  width: 175px;
   padding: 15px 15px 10px 15px;
   border: 1px solid #d9d9d9;
   background-color: #fff;

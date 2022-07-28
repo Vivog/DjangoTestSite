@@ -127,22 +127,20 @@
             <li class="menu-item-has-children">
               <a href="#"><i class="flaticon-writing50"></i>Документація</a>
               <ul class="sub-menu">
-                <li><a href="#">{{m.abr}}</a></li>
-                {% for d in m.divisions.all %}
-                <li><a href="#">{{d.abr}}</a></li>
+                {% for v in doc|slice:":-1" %}
+                  {% for i in v|slice:"1:" %}
+                <li><a href="#">{{i}}</a></li>
+                {% endfor %}
                 {% endfor %}
               </ul>
             </li>
             <li class="menu-item-has-children">
               <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
               <ul class="sub-menu">
-                <li><a href="#">Проект 1</a></li>
-                <li><a href="#">Проект 2</a></li>
-                <li><a href="#">Проект 3</a></li>
-                <li><a href="#">Проект 4</a></li>
-                <li><a href="#">Проект 5</a></li>
-                <li><a href="#">Проект 6</a></li>
-                <li><a href="#">Проект 7</a></li>
+                {% for pr in projects %}
+                <li><a href="#">{{pr.name|truncatewords:5}}</a></li>
+                {% endfor %}
+                <li><a href="#">Всі проекти</a></li>
               </ul>
             </li>
             <li class="menu-item-has-children">

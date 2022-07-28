@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
+
 from .models import *
 
 
@@ -63,7 +64,7 @@ class StaffAdmin(admin.ModelAdmin):
 @admin.register(Documents)
 class DocumentsAdmin(admin.ModelAdmin):
     # fields = ('fio')
-    list_display = ('div', 'release_date', "status", "type", "name", "display_author")
+    list_display = ('div', 'release_date', "status", "type", "name", "display_author", 'file_load')
     list_filter = ('div', 'status', 'type')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
@@ -77,6 +78,29 @@ class LocationAdmin(admin.ModelAdmin):
 class CooperationAdmin(admin.ModelAdmin):
     list_display = ('name', )
 
+
+@admin.register(Projects)
+class ProjectsAdmin(admin.ModelAdmin):
+    # fields = ('fio')
+    list_display = ('name', 'div', "display_author", 'file_load')
+    list_filter = ('div', )
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+
+@admin.register(Publications)
+class PublicationsAdmin(admin.ModelAdmin):
+    # fields = ('fio')
+    list_display = ('name', 'div', "display_author", 'file_load')
+    list_filter = ('div', )
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    # fields = ('fio')
+    list_display = ('name', )
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
 
 # Изменяет название страницы административной панели и название заголовка административной панали
 admin.site.site_title = "Портал НДВ"
