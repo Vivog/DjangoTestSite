@@ -73,7 +73,7 @@ class Divisions(models.Model):
     #     else:
     #         return 0
 
-    num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True)
+    num_staff = models.IntegerField(verbose_name='Кількість персоналу', null=True, blank=True)
 
 
     num_projects = models.IntegerField(verbose_name='Кількість проектів', null=True)
@@ -205,6 +205,7 @@ class Location(models.Model):
     class Meta:
         verbose_name = 'Приміщення'
         verbose_name_plural = 'Приміщення'
+        ordering = ['loc']
 
 
 class Cooperation(models.Model):
@@ -219,6 +220,7 @@ class Cooperation(models.Model):
     class Meta:
         verbose_name = 'Підрозділ взаємодії'
         verbose_name_plural = 'Підрозділи взаємодії'
+        ordering = ['name']
 
 
 class Projects(models.Model):
