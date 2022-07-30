@@ -22,14 +22,14 @@ class MainAdmin(admin.ModelAdmin):
 
 @admin.register(Divisions)
 class DivisionsAdmin(admin.ModelAdmin):
-    list_display = ('abr', 'boss', 'num_staff',)
+    list_display = ('abr', 'boss', 'num_staff', 'get_html_photo')
     prepopulated_fields = {'slug': ('abr',)}
     fieldsets = (
         (
             "Загальні відомості", {'fields': ('name', 'abr', 'slug', 'description')}
         ),
         (
-            "Додатково", {'fields': ('num_staff', 'num_docs', 'num_projects', 'locs', 'coops',)}
+            "Додатково", {'fields': ('num_staff', 'num_docs', 'num_projects', 'locs', 'coops', 'theses', )}
         ),
         (
             'Управління', {'fields': ('boss', 'photo')}
@@ -42,6 +42,12 @@ class DivisionsAdmin(admin.ModelAdmin):
         form.base_fields['num_projects'].initial = 0
         form.base_fields['num_docs'].initial = 0
         return form
+
+    def get_html_photo(self, object):
+        if object.photo:
+            return mark_safe(f"<img src='{object.photo.url}' width=50")
+
+    get_html_photo.short_description = 'Мініатюра'
 
 
 @admin.register(Staff)
@@ -111,6 +117,17 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+
+@admin.register(Theses)
+class ThesesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'get_html_photo')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+    def get_html_photo(self, object):
+        if object.photo:
+            return mark_safe(f"<img src='{object.photo.url}' width=50")
+
+    get_html_photo.short_description = 'Мініатюра'
 
 
 # Изменяет название страницы административной панели и название заголовка административной панали

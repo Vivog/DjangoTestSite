@@ -30,6 +30,16 @@ def index_portal(request):
     context.update(CONTEXT)
     return render(request, 'nio_app/index_portal.html', context=context)
 
+class DivisionList(DetailView):
+    model = Divisions
+    template_name = 'nio_app/division.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['div'] = Divisions.objects.get(slug=self.get_object().slug)
+        return context
+
 
 
 # def home(request):

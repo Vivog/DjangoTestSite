@@ -63,6 +63,7 @@
 
     <!-- Структура -->
     <section class="fw-section padding-top-3x padding-bottom-3x scrollReveal sr-bottom sr-ease-in-out-quad">
+      <a name="divs"></a>
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-5 col-sm-6 mobile-center scrollReveal sr-bottom sr-ease-in-out-quad">
@@ -86,14 +87,14 @@
               {% for d in div %}
               <td>
                 <span class="text-bold" style="font-size: 20px">{{d.abr}}</span>
-                <a href="#" class="text-sm space-top">Відкрити</a>
+                <a href="{% url 'nio_app:division' d.slug %}" class="text-sm space-top">Відкрити</a>
               </td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Чисельність</td>
               {% for d in div %}
-              <td class="text-bold">{{d.num_docs}}</td>
+              <td class="text-bold">{{d.num_staff}}</td>
               {% endfor %}
             </tr>
             <tr>

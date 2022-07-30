@@ -6,6 +6,8 @@ from nio_app.views import *
 app_name = 'nio_app'
 urlpatterns = [
     path('', index_portal, name='index_portal'),
+    path('#divs/', index_portal, name='divs'),
+    path('division/<slug:slug>/', DivisionList.as_view(), name='division')
     # path('', views.home, name='home'),
     # path('register/', RegisterUser.as_view(), name='register'),
     # path('login/', LoginUser.as_view(), name='login'),
