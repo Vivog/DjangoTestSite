@@ -11251,7 +11251,7 @@ a.image-box {
 .shop-tile .thumbnail > img {
   display: block;
   width: 100%;
-  max-width: 128px;
+  max-width: 256px;
   margin: auto;
 }
 
@@ -11306,7 +11306,7 @@ a.image-box {
 .shop-tile .description .price,
 .shop-tile .description .subtotal {
   color: #000 !important;
-  font-size: 18px !important;
+  font-size: 26px !important;
   font-weight: 600 !important;
   margin: 0 !important;
 }

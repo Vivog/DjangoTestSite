@@ -22,6 +22,7 @@ CONTEXT['doc'] = (("М", "Методики"), ("П", "Паспорти"), ("КЕ
 CONTEXT['projects'] = Projects.objects.all()
 CONTEXT['publications'] = Publications.objects.all()
 CONTEXT['news'] = News.objects.all()
+CONTEXT['staff'] = Staff.objects.all()
 
 
 def index_portal(request):
@@ -40,6 +41,25 @@ class DivisionList(DetailView):
         context['div'] = Divisions.objects.get(slug=self.get_object().slug)
         return context
 
+class StaffList(ListView):
+    model = Staff
+    template_name = 'nio_app/staff.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['staff_all'] = Staff.objects.all().count()
+        staff = [('Усі',len(Staff.objects.all())), ]
+        for s in Staff.objects.all():
+            if s.prof not in staff:
+                num = len(Staff.objects.filter(prof=s.prof))
+                staff.append((s.prof, num))
+            else:
+                continue
+        staff = set(staff)
+        context['staff_prof'] = staff
+
+        return context
 
 
 # def home(request):

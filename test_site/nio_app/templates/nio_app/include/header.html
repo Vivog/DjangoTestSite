@@ -31,7 +31,7 @@
             <ul>
               <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
               <li><a href="{% url 'nio_app:index_portal' %}#divs">Підрозділи</a></li>
-              <li><a href="#">Персонал</a></li>
+              <li><a href="{% url 'nio_app:staff' %}">Персонал</a></li>
               <li><a href="#">Документація</a></li>
               <li><a href="#">Публікації</a></li>
               <li><a href="#">Новини</a></li>
@@ -50,8 +50,7 @@
         <li class="menu-item-has-children">
           <a href="#"><i class="flaticon-technological"></i>Персонал</a>
           <ul class="sub-menu">
-            <li><a href="#">Табельні номери</a></li>
-            <li><a href="#">Професії</a></li>
+            <li><a href="{% url 'nio_app:staff' %}">Увесь персонал</a></li>
           </ul>
         </li>
         <li class="menu-item-has-children">

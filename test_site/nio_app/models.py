@@ -81,13 +81,35 @@ class Divisions(models.Model):
 
     objects = models.Manager()
 
+    __original_name = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_name = self.name
+
     def save(
-        self, force_insert=False, force_update=True, using=None, update_fields=None
+        self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
+        super().save()
         self.num_staff = len(Staff.objects.filter(div_id=self.pk))
         self.num_projects = len(Projects.objects.filter(div_id=self.pk))
         self.num_docs = len(Documents.objects.filter(div_id=self.pk))
-        super().save(force_insert=False, force_update=force_update, using=using, update_fields=update_fields)
+        super().save(force_insert=False, force_update=True, using=using, update_fields=update_fields)
+
+
+
+        # try:
+        #     self.num_staff = len(Staff.objects.filter(div_id=self.pk))
+        #     self.num_projects = len(Projects.objects.filter(div_id=self.pk))
+        #     self.num_docs = len(Documents.objects.filter(div_id=self.pk))
+        #     super().save(force_insert=False, force_update=True, using=using, update_fields=update_fields)
+        # except:
+        #     force_update = False
+        #     super().save(force_insert=True, force_update=force_update, using=using, update_fields=update_fields)
+        #     self.num_staff = len(Staff.objects.filter(div_id=self.pk))
+        #     self.num_projects = len(Projects.objects.filter(div_id=self.pk))
+        #     self.num_docs = len(Documents.objects.filter(div_id=self.pk))
+        #     # super().save(force_insert=False, forcee_update=force_update, using=using, update_fields=update_fields)
 
     class Meta:
         verbose_name = 'Підрозділи'
@@ -125,6 +147,11 @@ class Staff(models.Model):
     photo = models.ImageField(upload_to="workers_foto/", verbose_name="Фото")
 
     objects = models.Manager()
+
+    def save(
+            self, force_insert=True, force_update=False, using=None, update_fields=None
+    ):
+        super().save()
 
     class Meta:
         verbose_name = 'Персонал'
@@ -305,6 +332,8 @@ class News(models.Model):
                             verbose_name='Назва новини')
 
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
+
+    objects = models.Manager()
 
     class Meta:
         verbose_name = 'Новина'
