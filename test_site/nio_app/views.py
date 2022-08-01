@@ -45,6 +45,7 @@ class StaffList(ListView):
     model = Staff
     template_name = 'nio_app/staff.html'
 
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
@@ -58,8 +59,58 @@ class StaffList(ListView):
                 continue
         staff = set(staff)
         context['staff_prof'] = staff
-
+        # context['form'] = ChoiseStaffForm()
+        # print(context['staff'])
         return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST.get('divs'):
+            div = Divisions.objects.filter(abr=self.request.POST.get('divs'))
+            ch = self.request.POST.get('divs')
+            print('CH  ',ch)
+            CONTEXT['staff'] = Staff.objects.filter(div_id=div[0])
+            return render(request, 'nio_app/staff.html', context=CONTEXT)
+        elif self.request.POST.get('prof'):
+            staff = Staff.objects.filter(prof=self.request.POST.get('prof'))
+            CONTEXT['staff_prof'] = Staff.objects.filter(prof=staff[0])
+            return render(request, 'nio_app/staff.html', context=CONTEXT)
+        else:
+            CONTEXT['staff'] = Staff.objects.all()
+            staff = [('Усі', len(Staff.objects.all())), ]
+            for s in Staff.objects.all():
+                if s.prof not in staff:
+                    num = len(Staff.objects.filter(prof=s.prof))
+                    staff.append((s.prof, num))
+                else:
+                    continue
+            staff = set(staff)
+            CONTEXT['staff_prof'] = staff
+            return render(request, 'nio_app/staff.html', context=CONTEXT)
+
+
+    # def post(self, request):
+    #     div = Divisions.objects.all()
+    #     if request.method == '':
+    #     for d in div:
+    #         print(d)
+    #         if divs == d:
+    #             print('DIVS ', divs)
+    #
+    #     return render(request, 'nio_app/staff.html', context=CONTEXT)
+
+    # def post(self, request):
+    #     if request.method == 'POST':
+    #         form = ChoiseStaffForm(request.POST)
+    #         if form.is_valid():
+    #             divs = request.POST.get('by_divs')
+    #             print('DIVS ', divs)
+    #             # context =
+    #             div = Divisions.objects.filter(abr=form.by_divs)
+    #             CONTEXT['staff'] = Staff.objects.filter(div_id=div.id)
+    #             return redirect('nio_app:staff')
+    #     else:
+    #         form = ChoiseStaffForm
+    #     return render(request, 'nio_app/staff.html', {'form': form},)
 
 
 # def home(request):

@@ -29,11 +29,17 @@
           <div class="shop-filter-dropdown">
             <span>Підрозділи</span>
             <div class="dropdown">
+              <form method="post" name="check_div">
+                {% csrf_token %}
               {% for d in div %}
               <label class="radio radio-inline">
-                <input type="radio" name="divs" value="{{d.adr}}"> {{d.abr}}
+                <input type="radio" name="divs" value="{{d}}"> {{d.abr}}
               </label>
               {% endfor %}
+                <label class="radio radio-inline">
+                  <input class="btn" type="submit" value="Обрати">
+                </label>
+              </form>
             </div>
           </div>
         </div>
@@ -41,11 +47,17 @@
           <div class="shop-filter-dropdown">
             <span>Професії</span>
             <div class="dropdown">
-              {% for s in staff_prof %}
-              <label class="radio">
-                <input type="radio" name="price" value="{{s.0}}">{{s.0}}<span class="text-gray">({{s.1}})</span>
-              </label>
-              {% endfor %}
+              <form method="post">
+                {% csrf_token %}
+                {% for s in staff_prof %}
+                <label class="radio">
+                  <input type="radio" name="prof" value="{{s.0}}">{{s.0}}<span class="text-gray">({{s.1}})</span>
+                </label>
+                {% endfor %}
+                <label class="radio radio-inline">
+                  <input class="btn" type="submit" value="Обрати">
+                </label>
+              </form>
             </div>
           </div>
         </div>
@@ -53,18 +65,24 @@
           <div class="shop-filter-dropdown">
             <span>Сортування</span>
             <div class="dropdown">
-              <label class="radio">
-                <input type="radio" name="sort" checked>За табелем
-              </label>
-              <label class="radio">
-                <input type="radio" name="sort">За ПІБ
-              </label>
-              <label class="radio">
-                <input type="radio" name="sort">За віком
-              </label>
-              <label class="radio">
-                <input type="radio" name="sort">За окладом
-              </label>
+              <form method="post">
+                {% csrf_token %}
+                <label class="radio">
+                  <input type="radio" name="sort" checked>За табелем
+                </label>
+                <label class="radio">
+                  <input type="radio" name="sort">За ПІБ
+                </label>
+                <label class="radio">
+                  <input type="radio" name="sort">За віком
+                </label>
+                <label class="radio">
+                  <input type="radio" name="sort">За окладом
+                </label>
+                <label class="radio radio-inline">
+                  <input class="btn" type="submit" value="Обрати">
+                </label>
+              </form>
             </div>
           </div>
         </div>
