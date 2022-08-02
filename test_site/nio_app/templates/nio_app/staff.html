@@ -32,44 +32,33 @@
               <form method="post" name="check_div">
                 {% csrf_token %}
                 <div><strong>Підрозділи</strong><br>
-              {% for d in div %}
-              <label class="radio radio-inline">
-                <input type="radio" name="divs" value="{{d}}" id="divs_{{d}}"> {{d.abr}}
-              </label>
-              {% endfor %}
-              </div>
+                  {% for d in div %}
+                  <label class="radio radio-inline">
+                    <input type="radio" name="divs" value="{{d}}" id="divs_{{d}}"> {{d.abr}}
+                  </label>
+                  {% endfor %}
+                </div>
                 <div><strong>Посада</strong>
-              {% for s in staff_prof %}
-                <label class="radio">
-                  <input type="radio" name="prof" value="{{s.0}}">{{s.0}}<span class="text-gray">({{s.1}})</span>
-                </label>
-                {% endfor %}
-                  </div>
-                <label class="radio radio-inline">
-                  <input class="btn" type="submit" value="Обрати">
-                </label>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="shop-filter">
-          <div class="shop-filter-dropdown">
-            <span>Сортування</span>
-            <div class="dropdown">
-              <form method="post">
-                {% csrf_token %}
-                <label class="radio">
-                  <input type="radio" name="sort" checked>За табелем
-                </label>
-                <label class="radio">
-                  <input type="radio" name="sort">За ПІБ
-                </label>
-                <label class="radio">
-                  <input type="radio" name="sort">За віком
-                </label>
-                <label class="radio">
-                  <input type="radio" name="sort">За окладом
-                </label>
+                  {% for s in staff_prof %}
+                  <label class="radio">
+                    <input type="radio" name="prof" value="{{s.0}}">{{s.0}}<span class="text-gray"></span>
+                  </label>
+                  {% endfor %}
+                </div>
+                <div><strong>Додатково</strong>
+                  <label class="radio">
+                    <input type="radio" name="sort">За табелем
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort">За ПІБ
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort">За віком
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort">За окладом
+                  </label>
+                </div>
                 <label class="radio radio-inline">
                   <input class="btn" type="submit" value="Обрати">
                 </label>
@@ -125,7 +114,7 @@
           </td>
           <td>
             <h6 class="shop-title">Дата народження</h6>
-            <p style="margin:0 0 4px">{{s.birthday}}</p>
+            <p style="margin:0 0 4px">{{s.birthday}} <span class="text-gray">({{s.birthday|timesince|slice:":2"}} років)</span></p>
           </td>
         </tr>
         <tr>

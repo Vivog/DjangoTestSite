@@ -9,6 +9,7 @@ from slugify import slugify
 
 from .forms import *
 from .models import *
+from datetime import date
 
 
 # Create your views here.
@@ -24,7 +25,8 @@ CONTEXT['publications'] = Publications.objects.all()
 CONTEXT['news'] = News.objects.all()
 CONTEXT['staff'] = Staff.objects.all()
 STAFF = Staff.objects.all()
-PROF = [('Усі',len(STAFF)), ]
+# PROF = [('Усі',len(STAFF)), ]
+PROF = []
 for s in STAFF:
     if s.prof not in PROF:
         num = len(Staff.objects.filter(prof=s.prof))
@@ -68,8 +70,8 @@ class StaffList(ListView):
 
     def post(self, request, *args, **kwargs):
         if self.request.method == 'POST':
-            print('PROFF ', self.request.POST.get('prof'))
-            print('DIVS ', self.request.POST.get('divs'))
+            # print('PROFF ', self.request.POST.get('prof'))
+            # print('DIVS ', self.request.POST.get('divs'))
             sort = self.sort_by(self.request, divs=self.request.POST.get('divs'), prof=self.request.POST.get('prof'))
             CONTEXT['staff'] = sort
             # CONTEXT['staff'] = sort[0]
@@ -112,6 +114,20 @@ class StaffList(ListView):
                 # PROFS = sorted(set(PROF))
                 # return (STAFF, PROFS)
                 return STAFF
+
+
+    def calculate_age(self, born):
+            today = date.today()
+            try:
+                birthday = born.replace(year=today.year)
+            except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
+                birthday = born.replace(year=today.year, month=born.month + 1, day=1)
+            if birthday > today:
+                return today.year - born.year - 1
+            else:
+                return today.year - born.year
+
+
 
 
     # def post(self, request):
