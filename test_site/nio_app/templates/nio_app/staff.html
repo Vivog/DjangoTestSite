@@ -27,33 +27,24 @@
       <div class="inner">
         <div class="shop-filter">
           <div class="shop-filter-dropdown">
-            <span>Підрозділи</span>
+            <span>Сортування</span>
             <div class="dropdown">
               <form method="post" name="check_div">
                 {% csrf_token %}
+                <div><strong>Підрозділи</strong><br>
               {% for d in div %}
               <label class="radio radio-inline">
-                <input type="radio" name="divs" value="{{d}}"> {{d.abr}}
+                <input type="radio" name="divs" value="{{d}}" id="divs_{{d}}"> {{d.abr}}
               </label>
               {% endfor %}
-                <label class="radio radio-inline">
-                  <input class="btn" type="submit" value="Обрати">
-                </label>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="shop-filter">
-          <div class="shop-filter-dropdown">
-            <span>Професії</span>
-            <div class="dropdown">
-              <form method="post">
-                {% csrf_token %}
-                {% for s in staff_prof %}
+              </div>
+                <div><strong>Посада</strong>
+              {% for s in staff_prof %}
                 <label class="radio">
                   <input type="radio" name="prof" value="{{s.0}}">{{s.0}}<span class="text-gray">({{s.1}})</span>
                 </label>
                 {% endfor %}
+                  </div>
                 <label class="radio radio-inline">
                   <input class="btn" type="submit" value="Обрати">
                 </label>
@@ -110,7 +101,7 @@
         </div>
         <div class="column">
           <span class="hidden-xs">у</span>
-          <span>
+          <span id="div">
             <i class="icon-ribbon hidden-xs"></i>
             <a href="{% url 'nio_app:division' s.div.slug %}">{{s.div.abr}}</a>
           </span>
