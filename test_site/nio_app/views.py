@@ -1,16 +1,16 @@
-from django.contrib.auth import logout, login
-from django.contrib.auth.views import LoginView
-from django.http import HttpResponseNotFound, HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.utils.text import slugify
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
-from slugify import slugify
+from django.http import HttpResponseNotFound
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView
 
-from .forms import *
 from .models import *
 from datetime import date
+from datetime import date
 
+from django.http import HttpResponseNotFound
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+
+from .models import *
 
 # Create your views here.
 
@@ -70,62 +70,96 @@ class StaffList(ListView):
 
     def post(self, request, *args, **kwargs):
         if self.request.method == 'POST':
-            # print('PROFF ', self.request.POST.get('prof'))
-            # print('DIVS ', self.request.POST.get('divs'))
-            sort = self.sort_by(self.request, divs=self.request.POST.get('divs'), prof=self.request.POST.get('prof'))
+            sort = self.sort_by(self.request, divs=self.request.POST.get('divs'), prof=self.request.POST.get('prof'),
+                                sort=self.request.POST.get('sort'))
             CONTEXT['staff'] = sort
-            # CONTEXT['staff'] = sort[0]
-            # CONTEXT['staff_prof'] = sort[1]
             return render(request, 'nio_app/staff.html', context=CONTEXT)
         else:
             sort = self.sort_by(self.request)
-            CONTEXT['staff'] = sort[0]
-            # CONTEXT['staff_prof'] = sort[1]
+            CONTEXT['staff'] = sort
             return render(request, 'nio_app/staff.html', context=CONTEXT)
 
-    def sort_by(self, request, divs=None, prof=None):
+    def sort_by(self, request, divs=None, prof=None, sort=None):
         if divs == None and prof == None:
-            STAFF = Staff.objects.all()
-            # PROF = [('Усі', len(STAFF)), ]
-            # PROF += [(s.prof, len(STAFF.filter(prof=s.prof))) for s in STAFF if s.prof not in PROF]
-            # PROFS = sorted(set(PROF))
-            # return (STAFF, PROFS)
-            return STAFF
+            if sort == None:
+                STAFF = Staff.objects.all()
+                return STAFF
+            elif sort != None:
+                STAFF = Staff.objects.all()
+                if sort == 'tabel':
+                    STAFF = STAFF.order_by('tabel')
+                    return STAFF
+                elif sort == 'fio':
+                    STAFF = STAFF.order_by('fio')
+                    return STAFF
+                elif sort == 'age':
+                    STAFF = STAFF.order_by('birthday')
+                    return STAFF
+                elif sort == 'oklad':
+                    STAFF = STAFF.order_by('oklad')
+                    return STAFF
         else:
             if prof == None and divs != None:
-                div = Divisions.objects.filter(abr=divs)
-                STAFF = Staff.objects.filter(div_id=div[0])
-                # PROF = [('Усі', len(STAFF)), ]
-                # PROF += [(s.prof, len(STAFF.filter(prof=s.prof))) for s in STAFF if s.prof not in PROF]
-                # PROFS = sorted(set(PROF))
-                # return (STAFF, PROFS)
-                return STAFF
+                if sort == None:
+                    div = Divisions.objects.filter(abr=divs)
+                    STAFF = Staff.objects.filter(div_id=div[0])
+                    return STAFF
+                elif sort != None:
+                    div = Divisions.objects.filter(abr=divs)
+                    STAFF = Staff.objects.filter(div_id=div[0])
+                    if sort == 'tabel':
+                        STAFF = STAFF.order_by('tabel')
+                        return STAFF
+                    elif sort == 'fio':
+                        STAFF = STAFF.order_by('fio')
+                        return STAFF
+                    elif sort == 'age':
+                        STAFF = STAFF.order_by('birthday')
+                        return STAFF
+                    elif sort == 'oklad':
+                        STAFF = STAFF.order_by('oklad')
+                        return STAFF
             elif divs == None and prof != None:
-                STAFF = Staff.objects.filter(prof=prof)
-                # PROF = [('Усі', len(STAFF)), ]
-                # PROF += [(s.prof, len(STAFF.filter(prof=s.prof))) for s in STAFF if s.prof not in PROF]
-                # PROFS = sorted(set(PROF))
-                # return (STAFF, PROFS)
-                return STAFF
+                if sort == None:
+                    STAFF = Staff.objects.filter(prof=prof)
+                    return STAFF
+                elif sort != None:
+                    STAFF = Staff.objects.filter(prof=prof)
+                    if sort == 'tabel':
+                        STAFF = STAFF.order_by('tabel')
+                        return STAFF
+                    elif sort == 'fio':
+                        STAFF = STAFF.order_by('fio')
+                        return STAFF
+                    elif sort == 'age':
+                        STAFF = STAFF.order_by('birthday')
+                        return STAFF
+                    elif sort == 'oklad':
+                        STAFF = STAFF.order_by('oklad')
+                        return STAFF
             elif divs != None and prof != None:
-                div = Divisions.objects.filter(abr=divs)
-                STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
-                # PROF = [('Усі', len(STAFF)), (STAFF[0].prof, len(STAFF))]
-                # PROFS = sorted(set(PROF))
-                # return (STAFF, PROFS)
-                return STAFF
+                if sort == None:
+                    div = Divisions.objects.filter(abr=divs)
+                    STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
+                    return STAFF
+                elif sort != None:
+                    div = Divisions.objects.filter(abr=divs)
+                    STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
+                    if sort == 'tabel':
+                        STAFF = STAFF.order_by('tabel')
+                        return STAFF
+                    elif sort == 'fio':
+                        STAFF = STAFF.order_by('fio')
+                        return STAFF
+                    elif sort == 'age':
+                        STAFF = STAFF.order_by('birthday')
+                        return STAFF
+                    elif sort == 'oklad':
+                        STAFF = STAFF.order_by('oklad')
+                        return STAFF
 
 
-    def calculate_age(self, born):
-            today = date.today()
-            try:
-                birthday = born.replace(year=today.year)
-            except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
-                birthday = born.replace(year=today.year, month=born.month + 1, day=1)
-            if birthday > today:
-                return today.year - born.year - 1
-            else:
-                return today.year - born.year
+
 
 
 
