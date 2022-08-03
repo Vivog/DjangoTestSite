@@ -51,6 +51,9 @@
           <a href="#"><i class="flaticon-technological"></i>Персонал</a>
           <ul class="sub-menu">
             <li><a href="{% url 'nio_app:staff' %}">Увесь персонал</a></li>
+            <li><a href="{% url 'nio_app:staff' %}">За табелем</a></li>
+            <li><a href="{% url 'nio_app:staff' %}">За віком</a></li>
+            <li><a href="{% url 'nio_app:staff' %}">За окладом</a></li>
           </ul>
         </li>
         <li class="menu-item-has-children">
@@ -83,7 +86,7 @@
           <a href="#"><i class="flaticon-light129"></i>Інше</a>
           <ul class="sub-menu">
             <li><a href="#">Про розробку</a></li>
-            <li><a href="#">Зв'язок</a></li>
+            <li><a href="{% url 'nio_app:contacts' %}">Зв'язок</a></li>
           </ul>
         </li>
       </ul><!-- .menu -->

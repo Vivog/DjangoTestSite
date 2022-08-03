@@ -29,7 +29,7 @@
           <div class="shop-filter-dropdown">
             <span>Сортування</span>
             <div class="dropdown">
-              <form method="post" name="check_div">
+              <form method="post" id="staff_sort">
                 {% csrf_token %}
                 <div><strong>Підрозділи</strong><br>
                   {% for d in div %}
@@ -60,7 +60,7 @@
                   </label>
                 </div>
                 <label class="radio radio-inline">
-                  <input class="btn" type="submit" value="Обрати">
+                  <input class="btn" type="submit" value="Обрати" id="btn">
                 </label>
               </form>
             </div>

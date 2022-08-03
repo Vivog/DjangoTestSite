@@ -1,0 +1,136 @@
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+{% block content %}
+<!-- Слайдер фонів -->
+<section class="master-slider ms-skin-default space-bottom-3x" id="contact-slider">
+  <div class="ms-slide">
+    <img src="{% static 'nio_app/masterslider/style/blank.gif' %}" data-src="{% static 'nio_app/img/sliders/contacts/01.jpg' %}" alt="lorem ipsum dolor sit"/>
+  </div>
+  <div class="ms-slide">
+    <img src="{% static 'nio_app/masterslider/style/blank.gif' %}" data-src="{% static 'nio_app/img/sliders/contacts/02.jpg' %}" alt="lorem ipsum dolor sit"/>
+  </div>
+  <div class="ms-slide">
+    <img src="{% static 'nio_app/masterslider/style/blank.gif' %}" data-src="{% static 'nio_app/img/sliders/contacts/03.jpg' %}" alt="lorem ipsum dolor sit"/>
+  </div>
+</section><!-- .master-slider.ms-skin-default -->
+
+<!-- Напрямки контакту -->
+<section class="container padding-bottom-3x">
+  <h2 class="block-title text-center">
+    Зв'язок в один рух
+    <small>Є питання? Надішли нам повідомлення, використовуючи надану форму</small>
+  </h2>
+  <div class="tile-tabs padding-top padding-bottom">
+    <div class="row">
+      <div class="col-sm-4">
+        <a href="#ndv" class="tab active" data-toggle="tab">
+          <h3 class="tab-title">Питання до начальника НДВ?</h3>
+          <p>Можливо задати питання з цієї форми, не використовуючи вбудовану на підприємстві систему листування</p>
+        </a>
+      </div>
+      <div class="col-sm-4">
+        <a href="#dev" class="tab" data-toggle="tab">
+          <h3 class="tab-title">Питання до розробника порталу?</h3>
+          <p>Побачив помилку? Є пропозиції щодо покращення роботи сервісу?<br>Чекаємо на повідомлення</p>
+        </a>
+      </div>
+      <div class="col-sm-4">
+        <a href="#doc" class="tab" data-toggle="tab">
+          <h3 class="tab-title">Запит до архіву?</h3>
+          <p>Бажаєш отримати документ у електронній або паперовій формі.<br>Звертайся до архіву!</p>
+        </a>
+      </div>
+    </div><!-- .row -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane transition fade scale in active" id="ndv">
+        <h4>Питання до керівника</h4>
+        <form method="post" class="row" autocomplete="off">
+          <div class="col-sm-6">
+            <input type="text" class="form-control" placeholder="Ім'я*" required>
+          </div>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" placeholder="Поштова скринька*" required>
+          </div>
+          <div class="col-sm-12">
+            <textarea class="form-control" rows="7" placeholder="Повідомлення"></textarea>
+          </div>
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary btn-block space-top-none space-bottom-none">Відправити</button>
+          </div>
+        </form>
+      </div><!-- .tab-pane -->
+      <div role="tabpanel" class="tab-pane transition fade scale" id="dev">
+        <h4>Пропонуй чи повідомляй</h4>
+        <form method="post" class="row" autocomplete="off">
+          <div class="col-sm-6">
+            <input type="text" class="form-control" placeholder="Ім'я*" required>
+          </div>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" placeholder="Поштова скринька*" required>
+          </div>
+          <div class="col-sm-12">
+            <textarea class="form-control" rows="7" placeholder="Пропозиція/помилка"></textarea>
+          </div>
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary btn-block space-top-none space-bottom-none">Відправити</button>
+          </div>
+        </form>
+      </div><!-- .tab-pane -->
+      <div role="tabpanel" class="tab-pane transition fade scale" id="doc">
+        <h4>Запит до архіву</h4>
+        <form method="post" class="row" autocomplete="off">
+          <div class="col-sm-6">
+            <input type="text" class="form-control" placeholder="Ім'я*" required>
+          </div>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" placeholder="Поштова скринька*" required>
+          </div>
+          <div class="col-sm-12">
+            <textarea class="form-control" rows="7" placeholder="Запит"></textarea>
+          </div>
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary btn-block space-top-none space-bottom-none">Відправити</button>
+          </div>
+        </form>
+      </div><!-- .tab-pane -->
+    </div><!-- .tab-content -->
+  </div><!-- .tile-tabs -->
+</section><!-- .container -->
+<!-- Загальні контакти -->
+<section class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <h6 class="text-normal text-muted">Допомога та підтримка</h6>
+      <hr class="space-bottom">
+      <ul class="list-featured">
+        <li><a href="mailto:info@email.com"><a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!" class="text-sm space-top">vvsav@zorya.com</a></li>
+        <li class="text-semibold">{{dev.phone}}</li>
+      </ul>
+    </div>
+    <div class="col-sm-3">
+      <h6 class="text-normal text-muted">Приймальня</h6>
+      <hr class="space-bottom">
+      <ul class="list-featured">
+        <li><a href=mailto:savolk@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20дня">savolk@zorya.com</a></li>
+        <li class="text-semibold">{{sec.phone}}</li>
+      </ul>
+    </div>
+    <div class="col-sm-3">
+      <h6 class="text-normal text-muted">Архів</h6>
+      <hr class="space-bottom">
+      <ul class="list-featured">
+        <li class="text-semibold">{{arh.phone}}</li>
+      </ul>
+    </div>
+    <div class="col-sm-3">
+      <h6 class="text-normal text-muted">Співробітництво</h6>
+      <hr class="space-bottom">
+      <ul class="list-featured">
+        <li><a href="mailto:info@email.com"><a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!" class="text-sm space-top">vvsav@zorya.com</a></li>
+        <li class="text-semibold">{{dev.phone}}</li>
+      </ul>
+    </div>
+  </div><!-- .row -->
+</section><!-- .container -->
+{% endblock content %}
+

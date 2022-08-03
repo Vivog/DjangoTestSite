@@ -9,6 +9,7 @@ urlpatterns = [
     path('#divs/', index_portal, name='divs'),
     path('division/<slug:slug>/', DivisionList.as_view(), name='division'),
     path('staff/', StaffList.as_view(), name='staff'),
+    path('contacts/', contacts, name='contacts'),
     # path('', views.home, name='home'),
     # path('register/', RegisterUser.as_view(), name='register'),
     # path('login/', LoginUser.as_view(), name='login'),

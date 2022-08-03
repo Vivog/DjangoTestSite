@@ -15,6 +15,7 @@ from .models import *
 # Create your views here.
 
 
+
 CONTEXT = {}
 CONTEXT['main'] = Main.objects.all()
 CONTEXT['div'] = Divisions.objects.all()
@@ -36,6 +37,19 @@ for s in STAFF:
 PROFS = sorted(set(PROF))
 CONTEXT['staff_prof'] = PROFS
 
+
+def pageNotFound(request, exception):
+    context = {}
+    context.update(CONTEXT)
+    return render(request, 'nio_app/404.html', context=context)
+
+def contacts(request):
+    context = {}
+    context.update(CONTEXT)
+    context['dev'] = Staff.objects.get(tabel='654')
+    context['sec'] = Staff.objects.get(tabel='633')
+    context['arh'] = Staff.objects.get(tabel='672')
+    return render(request, 'nio_app/contacts.html', context=context)
 
 def index_portal(request):
 
@@ -157,7 +171,6 @@ class StaffList(ListView):
                     elif sort == 'oklad':
                         STAFF = STAFF.order_by('oklad')
                         return STAFF
-
 
 
 
@@ -457,9 +470,7 @@ class StaffList(ListView):
 #         return Divisions.objects.filter(slug=self.kwargs['div_slug'])
 
 
-def pageNotFound(request, exception):
-    return HttpResponseNotFound("<h1>Друже нажаль такої сторінки не існує.</h1>"
-                                "<h2>Перевір адресу запиту</h2>")
+
 
 # def divisions(request):
 #     divisions = Divisions.objects.all()
