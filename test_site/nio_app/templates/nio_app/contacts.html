@@ -1,6 +1,27 @@
 {% extends 'nio_app/base_portal.html' %}
 {% load static %}
 {% block content %}
+    <!-- Page Title -->
+    <!--Add modifier class : "pt-fullwidth" to stretch page title and make it occupy 100% of the page width. -->
+    <section class="page-title">
+      <div class="container">
+        <div class="inner">
+          <div class="column">
+            <div class="title">
+              <h1>Зв'язок</h1>
+            </div><!-- .title -->
+          </div><!-- .column -->
+          <div class="column">
+            <div class="breadcrumbs">
+              <a href="{% url 'nio_app:index_portal' %}">Головна</a>
+              <span class="delimiter"><i class="icon-arrow-right"></i></span>
+              <span>Зв'язок</span>
+            </div><!-- .breadcrumbs -->
+          </div><!-- .column -->
+        </div><!-- .inner -->
+      </div><!-- .container -->
+    </section><!-- .page-title -->
+
 <!-- Слайдер фонів -->
 <section class="master-slider ms-skin-default space-bottom-3x" id="contact-slider">
   <div class="ms-slide">
@@ -13,6 +34,8 @@
     <img src="{% static 'nio_app/masterslider/style/blank.gif' %}" data-src="{% static 'nio_app/img/sliders/contacts/03.jpg' %}" alt="lorem ipsum dolor sit"/>
   </div>
 </section><!-- .master-slider.ms-skin-default -->
+
+
 
 <!-- Напрямки контакту -->
 <section class="container padding-bottom-3x">
