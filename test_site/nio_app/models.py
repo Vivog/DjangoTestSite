@@ -77,7 +77,13 @@ class Divisions(models.Model):
     boss = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='ПІБ керівника', null=True, blank=True)
 
-    photo = models.ImageField(upload_to="boss_foto/", verbose_name="Фото",)
+    photo_boss = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
+
+    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", null=True)
+    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
+    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
+    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
+    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
 
     objects = models.Manager()
 
@@ -96,21 +102,6 @@ class Divisions(models.Model):
         self.num_docs = len(Documents.objects.filter(div_id=self.pk))
         super().save(force_insert=False, force_update=True, using=using, update_fields=update_fields)
 
-
-
-        # try:
-        #     self.num_staff = len(Staff.objects.filter(div_id=self.pk))
-        #     self.num_projects = len(Projects.objects.filter(div_id=self.pk))
-        #     self.num_docs = len(Documents.objects.filter(div_id=self.pk))
-        #     super().save(force_insert=False, force_update=True, using=using, update_fields=update_fields)
-        # except:
-        #     force_update = False
-        #     super().save(force_insert=True, force_update=force_update, using=using, update_fields=update_fields)
-        #     self.num_staff = len(Staff.objects.filter(div_id=self.pk))
-        #     self.num_projects = len(Projects.objects.filter(div_id=self.pk))
-        #     self.num_docs = len(Documents.objects.filter(div_id=self.pk))
-        #     # super().save(force_insert=False, forcee_update=force_update, using=using, update_fields=update_fields)
-
     class Meta:
         verbose_name = 'Підрозділи'
         verbose_name_plural = 'Підрозділи'
@@ -126,13 +117,13 @@ class Staff(models.Model):
 
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
 
-    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
+    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Підрозділ', null=True)
 
     tabel = models.CharField(max_length=5, help_text='не більше ніж 5 символів', verbose_name='Табельный номер',
                              unique=True)
 
     prof = models.CharField(max_length=100, help_text='не більше ніж 100 символів',
-                            verbose_name='Професія')
+                            verbose_name='Посада')
 
     oklad = models.IntegerField(verbose_name='Оклад')
 
@@ -258,11 +249,30 @@ class Projects(models.Model):
 
     author = models.ManyToManyField(Staff, verbose_name='Автор', help_text="Оберіть автора/авторів проекту", )
 
+    category = models.ManyToManyField('Categories', help_text='оберіть категорію/категорії',
+                            verbose_name='Оберіть категорію')
+
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
         return f'archives/{instance.div.slug}/projects/{instance.pk}/{filename}'
 
-    doc = models.FileField(upload_to=directory_path)
+    doc_1 = models.FileField(upload_to=directory_path, null=True)
+    doc_2 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_3 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_4 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_5 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_6 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_7 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_8 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_9 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_10 = models.FileField(upload_to=directory_path, blank=False, null=True)
+
+    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", null=True)
+    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
+    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
+    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
+    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
+
 
     objects = models.Manager()
 
@@ -293,11 +303,25 @@ class Publications(models.Model):
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
 
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети публікації',
-                                   verbose_name='Опис підрозділу')
+                                   verbose_name='Короткий опис', null=True)
+
+    text = models.TextField(max_length=25000, help_text='Введіть короткий опис мети публікації',
+                                   verbose_name='Текст публікації', null=True)
 
     div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
 
     author = models.ManyToManyField(Staff, verbose_name='Автор', help_text="Оберіть автора/авторів публікації", )
+
+    category = models.ManyToManyField('Categories', help_text='оберіть категорію/категорії',
+                            verbose_name='Оберіть категорію')
+
+    pub_date = models.DateField(verbose_name='Дата піблікації', null=True)
+
+    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", null=True)
+    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
+    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
+    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
+    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
 
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -333,7 +357,24 @@ class News(models.Model):
 
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
 
+    description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети публікації',
+                                   verbose_name='Короткий опис', null=True)
+
+    text = models.TextField(max_length=15000, help_text='Введіть короткий опис мети публікації',
+                                   verbose_name='Текст новини', null=True)
+
+    category = models.ManyToManyField('Categories', help_text='оберіть категорію/категорії',
+                            verbose_name='Оберіть категорію')
+
+    pub_date = models.DateField(verbose_name='Дата піблікації', null=True)
+
+    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", null=True)
+    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
+    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
+    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
+    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
     objects = models.Manager()
+
 
     class Meta:
         verbose_name = 'Новина'
@@ -356,6 +397,22 @@ class Theses(models.Model):
     class Meta:
         verbose_name = 'Теза'
         verbose_name_plural = 'Тези'
+
+    def __str__(self):
+        return self.name
+
+
+class Categories(models.Model):
+    name = models.CharField(max_length=100, help_text='не більше ніж 100 символів',
+                           verbose_name='Теза')
+
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = 'Категорія'
+        verbose_name_plural = 'Категорії'
 
     def __str__(self):
         return self.name

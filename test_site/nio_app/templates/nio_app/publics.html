@@ -1,0 +1,236 @@
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+{% block content %}
+<section class="page-title">
+  <div class="container">
+    <div class="inner">
+      <div class="column">
+        <div class="title">
+          <h1>Публікації</h1>
+        </div><!-- .title -->
+      </div><!-- .column -->
+      <div class="column">
+        <div class="breadcrumbs">
+          <a href="index.html">Головна</a>
+          <span class="delimiter"><i class="icon-arrow-right"></i></span>
+          <span>Публікації</span>
+        </div><!-- .breadcrumbs -->
+      </div><!-- .column -->
+    </div>
+  </div>
+</section><!-- .page-title -->
+<!-- Container -->
+<div class="container">
+  <div class="row">
+    <!-- Content -->
+    <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
+      <h1>How to Build a Network Without Touching Anything</h1>
+      <div class="post-meta">
+        <div class="column">
+          <span>
+            <i class="icon-head"></i>
+            <a href="#">Bedismo</a>
+          </span>
+          <span>in</span>
+          <span>
+            <i class="icon-ribbon"></i>
+            <a href="#">Support</a>
+          </span>
+          <span class="post-comments">
+            <i class="icon-speech-bubble"></i>
+            <a href="#">12</a>
+          </span>
+        </div>
+        <div class="column"><span>24.12.2015</span></div>
+      </div><!-- .post-meta -->
+      <!-- Image Carousel -->
+      <!-- Data API:
+           data-loop="true/false" enable/disable looping
+           data-autoplay="true/false" enable/disable carousel autoplay
+           data-interval="3000" autoplay interval timeout in miliseconds
+           data-autoheight="true/false" enable/disable autoheight with transition
+           Simply add necessary data attribute to the ".image-carousel" with appropriate value to adjust carousel functionality.
+          -->
+      <div class="image-carousel space-bottom-2x">
+        <div class="inner">
+          <img src="img/blog/single/slide01.jpg" alt="Image">
+          <img src="img/blog/single/slide02.jpg" alt="Image">
+          <img src="img/blog/single/slide03.jpg" alt="Image">
+        </div>
+      </div><!-- .image-carousel -->
+      <h4>Subheading</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</p>
+      <blockquote class="quote-shareable space-top-2x space-bottom-2x">
+        <span class="share-btn"><i class="fa fa-twitter"></i></span>
+        <p>There's no conclusion here. No lesson for you to take away and nothing to help you build a start-up or create a product. In that, this piece is unusual for me. And keeping our thoughts fixed on the work that people did, the good and great work, we can reach a different point.</p>
+        <cite>Bedismo, CEO Bedismo Global INC</cite>
+      </blockquote><!-- .quote-shareable -->
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <div class="post-tools space-top-2x">
+        <div class="column">
+          <div class="tags-links">
+            <a href="#">Design</a>
+            <a href="#">Development</a>
+            <a href="#">Hosting</a>
+            <a href="#">Domains</a>
+          </div>
+        </div><!-- .column -->
+        <div class="column">
+          <div class="social-bar">
+            <a href="#" class="sb-skype" data-toggle="tooltip" data-placement="top" title="Skype">
+              <i class="fa fa-skype"></i>
+            </a>
+            <a href="#" class="sb-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+            <a href="#" class="sb-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </div><!-- .social-bar -->
+        </div><!-- .column -->
+      </div><!-- .post-tools -->
+      <!-- Comments -->
+      <div class="comments-area space-top-3x">
+        <h4 class="comments-count">Comments</h4>
+        <!-- Parent Comment -->
+        <div class="comment">
+          <div class="comment-meta">
+            <div class="column">
+              <span class="comment-autor"><i class="icon-head"></i><a href="#">Bedismo</a></span>
+              <span class="comment-reply"><i class="icon-reply"></i><a href="#" rel="nofollow">Reply</a></span>
+            </div>
+            <div class="column">
+              <span class="comment-date">24.12.2015</span>
+            </div>
+          </div><!-- .comment-meta -->
+          <div class="comment-body">
+            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+          </div><!-- .comment-body -->
+          <!-- Comment Reply -->
+          <div class="comment depth-2">
+            <div class="comment-meta">
+              <div class="column">
+                <span class="comment-autor"><i class="icon-head"></i><a href="#">Susanna Davis</a></span>
+                <span class="comment-reply"><i class="icon-reply"></i><a href="#" rel="nofollow">Reply</a></span>
+              </div>
+              <div class="column">
+                <span class="comment-date">18.12.2015</span>
+              </div>
+            </div><!-- .comment-meta -->
+            <div class="comment-body">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, eum! Illo soluta ipsa totam temporibus aperiam. Aut, id. Corporis vitae quis debitis, ipsum provident! Asperiores a sunt dolore quod fugiat.</p>
+            </div><!-- .comment-body -->
+          </div><!-- .comment.depth-2 -->
+        </div><!-- .comment -->
+        <!-- Comment -->
+        <div class="comment">
+          <div class="comment-meta">
+            <div class="column">
+              <span class="comment-autor"><i class="icon-head"></i><a href="#">Terry Mitchell</a></span>
+              <span class="comment-reply"><i class="icon-reply"></i><a href="#" rel="nofollow">Reply</a></span>
+            </div>
+            <div class="column">
+              <span class="comment-date">25.11.2015</span>
+            </div>
+          </div><!-- .comment-meta -->
+          <div class="comment-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, eum! Illo soluta ipsa totam temporibus aperiam. Aut, id. Corporis vitae quis debitis, ipsum provident! Asperiores a sunt dolore quod fugiat.</p>
+          </div><!-- .comment-body -->
+        </div><!-- .comment -->
+
+        <!-- Comment Form -->
+        <div class="comment-respond">
+          <h4 class="comment-reply-title">Leave a comment</h4>
+          <form method="post" id="comment-form" class="comment-form">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="cf_name" class="sr-only">Name</label>
+                  <input type="text" class="form-control input-alt" name="author" id="cf_name" placeholder="Name">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="cf_email" class="sr-only">Email</label>
+                  <input type="email" class="form-control input-alt" name="email" id="cf_email" placeholder="Email">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cf_comment" class="sr-only">Comment</label>
+              <textarea name="comment" id="cf_comment" class="form-control input-alt" rows="7" placeholder="Enter your comment"></textarea>
+            </div>
+            <p class="form-submit">
+              <input name="submit" type="submit" id="submit" class="btn btn-primary btn-block" value="Post a comment">
+            </p>
+          </form>
+        </div><!-- .comment-respond -->
+      </div><!-- .comments-area -->
+    </div><!-- .col-lg-9.col-md-8 -->
+    <!-- Sidebar -->
+    <div class="col-lg-3 col-md-4 col-lg-pull-9 col-md-pull-8">
+      <div class="space-top-3x visible-sm visible-xs"></div>
+      <aside class="sidebar">
+        <section class="widget widget_search">
+          <form method="post" class="search-box">
+            <input type="text" class="form-control" placeholder="Search Blog">
+            <button type="submit"><i class="icon-search"></i></button>
+          </form>
+        </section>
+        <section class="widget widget_categories">
+          <h3 class="widget-title">
+            <i class="icon-ribbon"></i>
+            Categories
+          </h3>
+          <ul>
+            <li><a href="#">Support<span>3</span></a></li>
+            <li><a href="#">Design<span>4</span></a></li>
+            <li><a href="#">Hosting<span>11</span></a></li>
+            <li><a href="#">Development<span>6</span></a></li>
+          </ul>
+        </section><!-- .widget.widget_categories -->
+        <section class="widget widget_recent_posts">
+          <h3 class="widget-title">
+            <i class="icon-paper"></i>
+            Recent Blog Posts
+          </h3>
+          <div class="item">
+            <div class="thumb">
+              <a href="post-right-sidebar.html"><img src="img/blog/sidebar/post01.jpg" alt="Post01"></a>
+            </div>
+            <div class="info">
+              <h4><a href="post-right-sidebar.html">Fast and Easy Prototyping App</a></h4>
+            </div>
+          </div><!-- .item -->
+          <div class="item">
+            <div class="thumb">
+              <a href="post-right-sidebar.html"><img src="img/blog/sidebar/post02.jpg" alt="Post02"></a>
+            </div>
+            <div class="info">
+              <h4><a href="post-right-sidebar.html">Resize Your Server in a Single Click</a></h4>
+            </div>
+          </div><!-- .item -->
+          <div class="item">
+            <div class="thumb">
+              <a href="post-right-sidebar.html"><img src="img/blog/sidebar/post03.jpg" alt="Post03"></a>
+            </div>
+            <div class="info">
+              <h4><a href="post-right-sidebar.html">Advanced Mobile App Development</a></h4>
+            </div>
+          </div><!-- .item -->
+        </section><!-- .widget.widget_recent_posts -->
+        <section class="widget widget_tag_cloud">
+          <h3 class="widget-title">
+            <i class="icon-tag"></i>
+            Featured Tags
+          </h3>
+          <a href="#">Design</a>
+          <a href="#">Development</a>
+          <a href="#">Hosting</a>
+          <a href="#">Domains</a>
+        </section><!-- .widget.widget_tag_cloud -->
+      </aside><!-- .sidebar -->
+    </div><!-- .col-lg-3.col-md-4 -->
+  </div><!-- .row -->
+</div><!-- .container -->
+{% endblock content %}
