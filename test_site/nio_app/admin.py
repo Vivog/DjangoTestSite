@@ -129,6 +129,13 @@ class ThesesAdmin(admin.ModelAdmin):
 
     get_html_photo.short_description = 'Мініатюра'
 
+@admin.register(Categories)
+class CategoriesAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+    list_filter = ('name',)
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+
 
 # Изменяет название страницы административной панели и название заголовка административной панали
 admin.site.site_title = "Портал НДВ"

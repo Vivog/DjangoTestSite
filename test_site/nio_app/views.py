@@ -22,7 +22,7 @@ CONTEXT['div'] = Divisions.objects.all()
 CONTEXT['doc'] = (("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
         ("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
 CONTEXT['projects'] = Projects.objects.all()
-CONTEXT['publications'] = Publications.objects.all()
+CONTEXT['pubs'] = Publications.objects.all()
 CONTEXT['news'] = News.objects.all()
 CONTEXT['staff'] = Staff.objects.all()
 STAFF = Staff.objects.all()
@@ -36,6 +36,7 @@ for s in STAFF:
         continue
 PROFS = sorted(set(PROF))
 CONTEXT['staff_prof'] = PROFS
+CONTEXT['cats'] = Categories.objects.all()
 
 
 def pageNotFound(request, exception):
@@ -172,8 +173,24 @@ class StaffList(ListView):
                         STAFF = STAFF.order_by('oklad')
                         return STAFF
 
+class PubsList(ListView):
+    model = Publications
+    template_name = 'nio_app/publics.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['last'] = Publications.objects.all().order_by('-pub_date')
+        return context
 
+class PubsDetail(DetailView):
+    model = Publications
+    template_name = 'nio_app/public_single.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        return context
 
 
 

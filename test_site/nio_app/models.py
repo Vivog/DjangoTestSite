@@ -80,10 +80,10 @@ class Divisions(models.Model):
     photo_boss = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
 
     photo_1 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", null=True)
-    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
-    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
-    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
-    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=False, null=True)
+    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
+    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
+    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
+    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
 
     objects = models.Manager()
 
@@ -254,24 +254,24 @@ class Projects(models.Model):
 
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-        return f'archives/{instance.div.slug}/projects/{instance.pk}/{filename}'
+        return f'archives/{instance.div.slug}/projects/{instance.pk}/{instance.slug}/{filename}'
 
-    doc_1 = models.FileField(upload_to=directory_path, null=True)
-    doc_2 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_3 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_4 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_5 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_6 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_7 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_8 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_9 = models.FileField(upload_to=directory_path, blank=False, null=True)
-    doc_10 = models.FileField(upload_to=directory_path, blank=False, null=True)
+    doc_1 = models.FileField(upload_to=directory_path, null=True, max_length=500)
+    doc_2 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_3 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_4 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_5 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_6 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_7 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_8 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_9 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc_10 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
 
-    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", null=True)
-    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
-    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
-    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
-    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Картинка проекту", blank=False, null=True)
+    photo_1 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", null=True, max_length=500)
+    photo_2 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True, max_length=500)
+    photo_3 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True, max_length=500)
+    photo_4 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True, max_length=500)
+    photo_5 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True, max_length=500)
 
 
     objects = models.Manager()
@@ -305,7 +305,7 @@ class Publications(models.Model):
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети публікації',
                                    verbose_name='Короткий опис', null=True)
 
-    text = models.TextField(max_length=25000, help_text='Введіть короткий опис мети публікації',
+    text = models.TextField(max_length=50000, help_text='Введіть короткий опис мети публікації',
                                    verbose_name='Текст публікації', null=True)
 
     div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
@@ -317,22 +317,23 @@ class Publications(models.Model):
 
     pub_date = models.DateField(verbose_name='Дата піблікації', null=True)
 
-    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", null=True)
-    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
-    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
-    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
-    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Картинка публікації", blank=False, null=True)
-
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-        return f'archives/{instance.div.slug}/publications/{filename}'
+        return f'archives/{instance.div.slug}/publications/{instance.pub_date}/{instance.slug}/{filename}'
 
-    doc = models.FileField(upload_to=directory_path)
+    photo_1 = models.ImageField(upload_to=directory_path, verbose_name="Картинка публікації", null=True, max_length=500)
+    photo_2 = models.ImageField(upload_to=directory_path, verbose_name="Картинка публікації", blank=True, null=True, max_length=500)
+    photo_3 = models.ImageField(upload_to=directory_path, verbose_name="Картинка публікації", blank=True, null=True, max_length=500)
+    photo_4 = models.ImageField(upload_to=directory_path, verbose_name="Картинка публікації", blank=True, null=True, max_length=500)
+    photo_5 = models.ImageField(upload_to=directory_path, verbose_name="Картинка публікації", blank=True, null=True, max_length=500)
+
+
+    doc = models.FileField(upload_to=directory_path, blank=True, null=True, verbose_name='Файл публікації', max_length=500)
 
     objects = models.Manager()
 
     def file_load(self):
-        self.doc.upload_to = f'archives/{self.div.slug}/publications/'
+        self.doc.upload_to = f'archives/{self.div.slug}/publications/{self.pub_date}/{self.slug}/'
         return self.doc.upload_to
 
     file_load.short_description = 'Розташування файлів'
@@ -368,11 +369,15 @@ class News(models.Model):
 
     pub_date = models.DateField(verbose_name='Дата піблікації', null=True)
 
-    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", null=True)
-    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
-    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
-    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
-    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Картинка новини", blank=False, null=True)
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'archives/news/{instance.pub_date}/{instance.slug}/{filename}'
+
+    photo_1 = models.ImageField(upload_to=directory_path, verbose_name="Картинка новини", null=True, max_length=500)
+    photo_2 = models.ImageField(upload_to=directory_path, verbose_name="Картинка новини", blank=True, null=True, max_length=500)
+    photo_3 = models.ImageField(upload_to=directory_path, verbose_name="Картинка новини", blank=True, null=True, max_length=500)
+    photo_4 = models.ImageField(upload_to=directory_path, verbose_name="Картинка новини", blank=True, null=True, max_length=500)
+    photo_5 = models.ImageField(upload_to=directory_path, verbose_name="Картинка новини", blank=True, null=True, max_length=500)
     objects = models.Manager()
 
 
@@ -404,7 +409,7 @@ class Theses(models.Model):
 
 class Categories(models.Model):
     name = models.CharField(max_length=100, help_text='не більше ніж 100 символів',
-                           verbose_name='Теза')
+                           verbose_name='Категорія')
 
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL', db_index=True)
 
