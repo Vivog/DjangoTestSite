@@ -9,6 +9,7 @@ from .models import *
 @admin.register(Main)
 class MainAdmin(admin.ModelAdmin):
     list_display = ('abr', 'boss', 'staff',)
+    list_display_links = ('abr',)
     prepopulated_fields = {'slug': ('abr',), }
 
     # prepopulated_fields = {'slug': ('abr',), 'num_staff': ('staff',), 'num_projects': ('projects',), 'num_docs': ('docs',)}
@@ -54,6 +55,7 @@ class DivisionsAdmin(admin.ModelAdmin):
 class StaffAdmin(admin.ModelAdmin):
     list_display = ('div', 'tabel', 'fio', 'get_html_photo',)
     prepopulated_fields = {'slug': ('fio',)}
+    list_display_links = ('fio',)
     # Разбиение подробной информации на секции
     # сначало название секции, потом поля для отображения
     # если название не нужно то пишим None
@@ -78,6 +80,7 @@ class StaffAdmin(admin.ModelAdmin):
 class DocumentsAdmin(admin.ModelAdmin):
     # fields = ('fio')
     list_display = ('div', 'release_date', "status", "type", "name", "display_author", 'file_load')
+    list_display_links = ('name',)
     list_filter = ('div', 'status', 'type')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
@@ -97,6 +100,7 @@ class CooperationAdmin(admin.ModelAdmin):
 class ProjectsAdmin(admin.ModelAdmin):
     # fields = ('fio')
     list_display = ('name', 'div', "display_author", 'file_load')
+    list_display_links = ('name',)
     list_filter = ('div',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
@@ -109,6 +113,13 @@ class PublicationsAdmin(admin.ModelAdmin):
     list_filter = ('div',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    save_on_top = True
+
+@admin.register(ReviewsPubs)
+class ReviewPubsAdmin(admin.ModelAdmin):
+    """Відгуки до публікації"""
+    list_display = ("name", "email", "parent", "pub")
+    readonly_fields = ("name", "email")
 
 
 @admin.register(News)
@@ -117,6 +128,13 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    save_on_top = True
+
+@admin.register(ReviewsNews)
+class ReviewNewsAdmin(admin.ModelAdmin):
+    """Відгуки до новини"""
+    list_display = ("name", "email", "parent", "news")
+    readonly_fields = ("name", "email")
 
 @admin.register(Theses)
 class ThesesAdmin(admin.ModelAdmin):

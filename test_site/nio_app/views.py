@@ -192,6 +192,11 @@ class PubsDetail(DetailView):
         context.update(CONTEXT)
         return context
 
+    def get_queryset(self):
+        return Publications.objects.filter(slug=self.kwargs['slug'])
+
+
+
 
 
     # def post(self, request):
