@@ -11,9 +11,9 @@
       </div><!-- .column -->
       <div class="column">
         <div class="breadcrumbs">
-          <a href="{% url 'nio_app:index_portal' %}">Головна</a>
+          <a href="{% url 'nio_app:publics' %}">Публікації</a>
           <span class="delimiter"><i class="icon-arrow-right"></i></span>
-          <span>Публікації</span>
+          <span>{{ categories.name }}</span>
         </div><!-- .breadcrumbs -->
       </div><!-- .column -->
     </div>
@@ -23,12 +23,12 @@
 <!-- Container -->
 <div class="container">
   <div class="row">
-
+  <h1>Обрана категорія: {{categories.name }}</h1>
     <!-- Content -->
     <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
 
       <!-- Post -->
-      {% for p in pubs %}
+      {% for p in categories.publications_set.all %}
       <article class="post-item">
         <a href="{% url 'nio_app:public_single' p.slug %}" class="post-thumb waves-effect">
           <img src="{{ p.photo_1.url }}" alt="Post01" style="width: 100%; height: auto; object-fit: cover;">
@@ -46,7 +46,7 @@
               {% for c in p.category.all %}
               <span>
                 <i class="icon-ribbon"></i>
-                <a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}</a>
+                <a href="#">{{ c.name }}</a>
               </span>
               {% endfor %}
               <span class="post-comments">

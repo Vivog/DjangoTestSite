@@ -71,10 +71,6 @@ class DivisionList(DetailView):
         context['div'] = Divisions.objects.get(slug=self.get_object().slug)
         return context
 
-
-
-
-
 class StaffList(ListView):
     model = Staff
     template_name = 'nio_app/staff.html'
@@ -176,6 +172,14 @@ class StaffList(ListView):
                         STAFF = STAFF.order_by('oklad')
                         return STAFF
 
+class StaffSort(StaffList, ListView):
+    model = Staff
+    template_name = 'nio_app/staff_sort.html'
+
+    def get_queryset(self):
+        return Staff.objects.all().order_by('tabel')
+
+
 class PubsList(ListView):
     model = Publications
     template_name = 'nio_app/publics.html'
@@ -197,6 +201,18 @@ class PubsDetail(DetailView):
 
     def get_queryset(self):
         return Publications.objects.filter(slug=self.kwargs['slug'])
+
+class PubsCatsDetail(DetailView):
+    model = Categories
+    template_name = 'nio_app/publics_category.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        return context
+
+    def get_queryset(self):
+        return Categories.objects.filter(slug=self.kwargs['slug'])
 
 
 class AddReviewPub(View):

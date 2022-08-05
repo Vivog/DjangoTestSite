@@ -147,6 +147,7 @@ class Staff(models.Model):
     class Meta:
         verbose_name = 'Персонал'
         verbose_name_plural = 'Персонал'
+        ordering = ['fio']
 
     def __str__(self):
         return self.fio

@@ -37,7 +37,7 @@
           {% for c in publications.category.all %}
           <span>
                 <i class="icon-ribbon"></i>
-                <a href="#">{{ c.name }}</a>
+                <a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}</a>
               </span>
           {% endfor %}
           <span class="post-comments">
@@ -58,19 +58,19 @@
       <div class="image-carousel space-bottom-2x">
         <div class="inner">
           {% if publications.photo_1 %}
-          <img src="{{publications.photo_1.url}}" alt="Image" style="width: 100%; height: auto; object-fit: cover;">
+          <img src="{{publications.photo_1.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
           {% endif %}
           {% if publications.photo_2 %}
-          <img src="{{publications.photo_2.url}}" alt="Image" style="width: 100%; height: auto; object-fit: cover;">
+          <img src="{{publications.photo_2.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
           {% endif %}
           {% if publications.photo_3 %}
-          <img src="{{publications.photo_3.url}}" alt="Image" style="width: 100%; height: auto; object-fit: cover;">
+          <img src="{{publications.photo_3.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
           {% endif %}
           {% if publications.photo_4 %}
-          <img src="{{publications.photo_4.url}}" alt="Image" style="width: 100%; height: auto; object-fit: cover;">
+          <img src="{{publications.photo_4.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
           {% endif %}
           {% if publications.photo_5 %}
-          <img src="{{publications.photo_5.url}}" alt="Image" style="width: 100%; height: auto; object-fit: cover;">
+          <img src="{{publications.photo_5.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
           {% endif %}
         </div>
       </div><!-- .image-carousel -->
@@ -79,7 +79,7 @@
         <div class="column">
           <div class="tags-links">
             {% for c in publications.category.all %}
-            <a href="#">{{c.name}}</a>
+            <a href="{% url 'nio_app:publics_category' c.slug %}">{{c.name}}</a>
             {% endfor %}
           </div>
         </div><!-- .column -->
@@ -175,7 +175,7 @@
         <ul>
           {% for c in cats %}
           {% if c.publications_set.count %}
-          <li><a href="#">{{ c.name }}<span>{{ c.publications_set.count }}</span></a></li>
+          <li><a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}<span>{{ c.publications_set.count }}</span></a></li>
           {% endif %}
           {% endfor %}
         </ul>
@@ -185,7 +185,7 @@
           <i class="icon-paper"></i>
           Останні публікації
         </h3>
-        {% for p in publications|slice:":3" %}
+        {% for p in pubs|slice:":3" %}
         <div class="item">
           <div class="thumb">
             <a href="{% url 'nio_app:public_single' p.slug %}">
@@ -204,7 +204,7 @@
         </h3>
         {% for c in cats %}
         {% if c.publications_set.count %}
-        <a href="#">{{ c.name }}</a>
+        <a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}</a>
         {% endif %}
         {% endfor %}
         </section><!-- .widget.widget_tag_cloud -->
