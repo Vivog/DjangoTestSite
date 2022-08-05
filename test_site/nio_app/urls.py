@@ -11,6 +11,7 @@ urlpatterns = [
     path('staff/', StaffList.as_view(), name='staff'),
     path('publics/', PubsList.as_view(), name='publics'),
     path('publics/<slug:slug>/', PubsDetail.as_view(), name='public_single'),
+    path('publics/<slug:slug>/review/', AddReviewPub.as_view(), name='add_review_pub'),
     path('contacts/', contacts, name='contacts'),
     # path('', views.home, name='home'),
     # path('register/', RegisterUser.as_view(), name='register'),

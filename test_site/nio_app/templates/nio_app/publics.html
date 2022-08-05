@@ -51,7 +51,7 @@
               {% endfor %}
               <span class="post-comments">
                 <i class="icon-speech-bubble"></i>
-                <a href="#">12</a>
+                <a href="#">{{ p.reviewspubs_set.count }}</a>
               </span>
             </div>
             <div class="column"><span>{{ p.pub_date }}</span></div>
@@ -94,10 +94,10 @@
             Категорії
           </h3>
           <ul>
-            {% for p in pubs %}
-              {% for c in p.category.all %}
+            {% for c in cats %}
+            {% if c.publications_set.count %}
                 <li><a href="#">{{ c.name }}<span>{{ c.publications_set.count }}</span></a></li>
-              {% endfor %}
+            {% endif %}
             {% endfor %}
           </ul>
         </section><!-- .widget.widget_categories -->
@@ -123,9 +123,11 @@
             <i class="icon-tag"></i>
             Посилання
           </h3>
-          {% for c in cats %}
-          <a href="#">{{ c.name }}</a>
-          {% endfor %}
+            {% for c in cats %}
+            {% if c.publications_set.count %}
+            <a href="#">{{ c.name }}</a>
+            {% endif %}
+            {% endfor %}
         </section><!-- .widget.widget_tag_cloud -->
       </aside><!-- .sidebar -->
     </div><!-- .col-lg-3.col-md-4 -->

@@ -1,14 +1,15 @@
 from django.http import HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 
+from .forms import ReviewPubForm
 from .models import *
 from datetime import date
 from datetime import date
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 
 from .models import *
 
@@ -23,7 +24,9 @@ CONTEXT['doc'] = (("М", "Методики"), ("П", "Паспорти"), ("КЕ
         ("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
 CONTEXT['projects'] = Projects.objects.all()
 CONTEXT['pubs'] = Publications.objects.all()
+CONTEXT['pubs_rev'] = ReviewsPubs.objects.all()
 CONTEXT['news'] = News.objects.all()
+CONTEXT['news_rev'] = ReviewsNews.objects.all()
 CONTEXT['staff'] = Staff.objects.all()
 STAFF = Staff.objects.all()
 # PROF = [('Усі',len(STAFF)), ]
@@ -194,6 +197,21 @@ class PubsDetail(DetailView):
 
     def get_queryset(self):
         return Publications.objects.filter(slug=self.kwargs['slug'])
+
+
+class AddReviewPub(View):
+
+    def post(self, request, slug):
+        form = ReviewPubForm(request.POST)
+        pub = Publications.objects.get(slug=slug)
+        if form.is_valid():
+            form = form.save(commit=False)
+            if request.POST.get("parent", None):
+                form.parent_id = int(request.POST.get("parent"))
+                print(form.parent_id)
+            form.pub = pub
+            form.save()
+        return redirect(pub.get_absolute_url())
 
 
 

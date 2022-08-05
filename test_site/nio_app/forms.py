@@ -7,8 +7,12 @@ from django.core.exceptions import ValidationError
 
 from .models import *
 
+class ReviewPubForm(forms.ModelForm):
+    class Meta:
+        model = ReviewsPubs
+        fields = ('name', 'email', 'text')
 
 
 
 
-#
+

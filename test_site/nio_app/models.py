@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse
 
 # Create your models here.
 
@@ -358,6 +358,12 @@ class Publications(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("nio_app:public_single", kwargs={"slug": self.slug})
+
+    def get_review(self):
+        return self.reviewspubs_set.filter(parent__isnull=True)
+
 
 class ReviewsPubs(models.Model):
     """Відгуки на публікацію"""
@@ -369,12 +375,17 @@ class ReviewsPubs(models.Model):
     )
     pub = models.ForeignKey(Publications, verbose_name="Публікація", on_delete=models.CASCADE)
 
+    pub_date = models.DateTimeField(verbose_name='Дата коментарія', null=True, auto_now=True)
+
+    objects = models.Manager()
+
     def __str__(self):
         return f"{self.name} - {self.pub}"
 
     class Meta:
         verbose_name = "Відгук на публікацію"
         verbose_name_plural = "Відгуки на публікацію"
+        ordering = ['-pub_date']
 
 
 class News(models.Model):
@@ -392,7 +403,7 @@ class News(models.Model):
     category = models.ManyToManyField('Categories', help_text='оберіть категорію/категорії',
                                       verbose_name='Оберіть категорію')
 
-    pub_date = models.DateField(verbose_name='Дата піблікації', null=True)
+    pub_date = models.DateField(verbose_name='Дата новини', null=True)
 
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -418,6 +429,12 @@ class News(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("nio_app:news_single", kwargs={"slug": self.slug})
+
+    def get_review(self):
+        return self.reviewsnews_set.filter(parent__isnull=True)
+
 
 class ReviewsNews(models.Model):
     """Відгуки на новину"""
@@ -428,6 +445,10 @@ class ReviewsNews(models.Model):
         'self', verbose_name="До кого", on_delete=models.SET_NULL, blank=True, null=True
     )
     news = models.ForeignKey(Publications, verbose_name="Новина", on_delete=models.CASCADE)
+
+    pub_date = models.DateTimeField(verbose_name='Дата коментарія', null=True, auto_now=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.name} - {self.news}"
