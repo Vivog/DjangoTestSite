@@ -12,7 +12,6 @@ class MainAdmin(admin.ModelAdmin):
     list_display_links = ('abr',)
     prepopulated_fields = {'slug': ('abr',), }
 
-    # prepopulated_fields = {'slug': ('abr',), 'num_staff': ('staff',), 'num_projects': ('projects',), 'num_docs': ('docs',)}
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['num_staff'].initial = 0
@@ -27,14 +26,17 @@ class DivisionsAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('abr',)}
     fieldsets = (
         (
-            "Загальні відомості", {'fields': ('name', 'abr', 'slug', 'description')}
+            "Загальні відомості", {'fields': (('name', 'abr', 'slug'), 'description')}
         ),
         (
-            "Додатково", {'fields': ('num_staff', 'num_docs', 'num_projects', 'locs', 'coops', 'theses', )}
+            "Додатково", {'fields': (('num_staff', 'num_docs', 'num_projects'), 'locs', 'coops', 'theses', )}
         ),
         (
             'Управління', {'fields': ('boss', 'photo')}
-        )
+        ),
+        (
+            'Додаткові фото', {'fields': ('photo_1', 'photo_2', 'photo_3', 'photo_4', 'photo_5')}
+        ),
     )
 
     def get_form(self, request, obj=None, **kwargs):
@@ -106,6 +108,12 @@ class ProjectsAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+class ReviewPubsInline(admin.TabularInline):
+    model = ReviewsPubs
+    extra = 1
+    readonly_fields = ('name', 'email')
+
+
 @admin.register(Publications)
 class PublicationsAdmin(admin.ModelAdmin):
     # fields = ('fio')
@@ -114,6 +122,7 @@ class PublicationsAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     save_on_top = True
+    inlines = [ReviewPubsInline]
 
 @admin.register(ReviewsPubs)
 class ReviewPubsAdmin(admin.ModelAdmin):

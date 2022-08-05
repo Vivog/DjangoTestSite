@@ -77,13 +77,17 @@ class Divisions(models.Model):
     boss = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='ПІБ керівника', null=True, blank=True)
 
-    photo_boss = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
+    photo = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
 
-    photo_1 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", null=True)
-    photo_2 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
-    photo_3 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
-    photo_4 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
-    photo_5 = models.ImageField(upload_to="theses/", verbose_name="Фото підрозділу", blank=True, null=True)
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'divs/{instance.slug}/photo/{filename}'
+
+    photo_1 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", null=True)
+    photo_2 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
+    photo_3 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
+    photo_4 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
+    photo_5 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
 
     objects = models.Manager()
 
