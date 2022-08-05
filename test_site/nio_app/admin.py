@@ -24,15 +24,16 @@ class MainAdmin(admin.ModelAdmin):
 class DivisionsAdmin(admin.ModelAdmin):
     list_display = ('abr', 'boss', 'num_staff', 'get_html_photo')
     prepopulated_fields = {'slug': ('abr',)}
+    readonly_fields = ('get_html_photo', )
     fieldsets = (
         (
-            "Загальні відомості", {'fields': (('name', 'abr', 'slug'), 'description')}
+            "Загальні відомості", {'fields': ('name', ('abr', 'slug'), 'description')}
         ),
         (
-            "Додатково", {'fields': (('num_staff', 'num_docs', 'num_projects'), 'locs', 'coops', 'theses', )}
+            "Додатково", {'fields': (('num_staff', 'num_docs', 'num_projects'), ('locs', 'coops', 'theses',) )}
         ),
         (
-            'Управління', {'fields': ('boss', 'photo')}
+            'Управління', {'fields': ('boss', 'photo', 'get_html_photo')}
         ),
         (
             'Додаткові фото', {'fields': ('photo_1', 'photo_2', 'photo_3', 'photo_4', 'photo_5')}
@@ -48,7 +49,7 @@ class DivisionsAdmin(admin.ModelAdmin):
 
     def get_html_photo(self, object):
         if object.photo:
-            return mark_safe(f"<img src='{object.photo.url}' width=50")
+            return mark_safe(f"<img src='{object.photo.url}' width=100")
 
     get_html_photo.short_description = 'Мініатюра'
 
@@ -58,22 +59,23 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = ('div', 'tabel', 'fio', 'get_html_photo',)
     prepopulated_fields = {'slug': ('fio',)}
     list_display_links = ('fio',)
+    readonly_fields = ('get_html_photo', )
     # Разбиение подробной информации на секции
     # сначало название секции, потом поля для отображения
     # если название не нужно то пишим None
     fieldsets = (
         (
-            "Загальні відомості", {'fields': ('tabel', 'fio', 'slug', 'prof')}
+            "Загальні відомості", {'fields': ('tabel', ('fio', 'slug'), 'prof')}
         ),
         (
-            "Додатково", {'fields': ('div', 'oklad', 'birthday', 'phone', 'adress', 'photo')}
+            "Додатково", {'fields': ('div', 'oklad', ('birthday', 'phone', 'adress'), 'photo', 'get_html_photo')}
         )
     )
     search_fields = ('tabel', 'fio')
 
     def get_html_photo(self, object):
         if object.photo:
-            return mark_safe(f"<img src='{object.photo.url}' width=50")
+            return mark_safe(f"<img src='{object.photo.url}' width=100")
 
     get_html_photo.short_description = 'Мініатюра'
 

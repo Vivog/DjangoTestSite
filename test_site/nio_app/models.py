@@ -74,7 +74,7 @@ class Divisions(models.Model):
 
     theses = models.ManyToManyField('Theses', verbose_name='Тези')
 
-    boss = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
+    boss = models.CharField(max_length=50, help_text='Призвище Ім\'я',
                             verbose_name='ПІБ керівника', null=True, blank=True)
 
     photo = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
