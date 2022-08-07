@@ -1,0 +1,215 @@
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+{% block content %}
+<section class="page-title">
+  <div class="container">
+    <div class="inner">
+      <div class="column">
+        <div class="title">
+          <a href="{% url 'nio_app:news' %}"><h1>Новини</h1></a>
+        </div><!-- .title -->
+      </div><!-- .column -->
+      <div class="column">
+        <div class="breadcrumbs">
+          <a href="{% url 'nio_app:index_portal' %}">Головна</a>
+          <span class="delimiter"><i class="icon-arrow-right"></i></span>
+          <span>Новини</span>
+        </div><!-- .breadcrumbs -->
+      </div><!-- .column -->
+    </div>
+  </div>
+</section><!-- .page-title -->
+<!-- Container -->
+<div class="container">
+  <div class="row">
+    <!-- Content -->
+    <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
+      <h1>{{news.name}}</h1>
+      <div class="post-meta">
+        <div class="column">
+          {% for c in news.category.all %}
+          <span>
+                <i class="icon-ribbon"></i>
+                <a href="{% url 'nio_app:news_category' c.slug %}">{{ c.name }}</a>
+              </span>
+          {% endfor %}
+          <span class="post-comments">
+            <i class="icon-speech-bubble"></i>
+            <a href="#coments">{{news.reviewsnews_set.count}}</a>
+          </span>
+        </div>
+        <div class="column"><span>{{ news.pub_date }}</span></div>
+      </div><!-- .post-meta -->
+      <!-- Image Carousel -->
+      <!-- Data API:
+           data-loop="true/false" enable/disable looping
+           data-autoplay="true/false" enable/disable carousel autoplay
+           data-interval="3000" autoplay interval timeout in miliseconds
+           data-autoheight="true/false" enable/disable autoheight with transition
+           Simply add necessary data attribute to the ".image-carousel" with appropriate value to adjust carousel functionality.
+          -->
+      <div class="image-carousel space-bottom-2x">
+        <div class="inner">
+          {% if news.photo_1 %}
+          <img src="{{news.photo_1.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          {% endif %}
+          {% if news.photo_2 %}
+          <img src="{{news.photo_2.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          {% endif %}
+          {% if news.photo_3 %}
+          <img src="{{news.photo_3.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          {% endif %}
+          {% if news.photo_4 %}
+          <img src="{{news.photo_4.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          {% endif %}
+          {% if news.photo_5 %}
+          <img src="{{news.photo_5.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          {% endif %}
+        </div>
+      </div><!-- .image-carousel -->
+      <p>{{ news.text|safe }}</p>
+      <div class="post-tools space-top-2x">
+        <div class="column">
+          <div class="tags-links">
+            {% for c in news.category.all %}
+            <a href="{% url 'nio_app:news_category' c.slug %}">{{c.name}}</a>
+            {% endfor %}
+          </div>
+        </div><!-- .column -->
+      </div><!-- .post-tools -->
+      <!-- Comment Form -->
+      <div class="comments-area space-top-3x">
+        <div class="comment-respond">
+          <h4 class="comment-reply-title">Залиште коментарій</h4>
+          <form method="post" id="comment-form" class="comment-form"
+              action="{% url 'nio_app:add_review_news' news.slug %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent" id="contactparent" value="">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="cf_name" class="sr-only">Ім'я</label>
+                  <input type="text" class="form-control input-alt" name="name" id="cf_name" placeholder="Ім'я"
+                         required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="cf_email" class="sr-only">Пошта</label>
+                  <input type="email" class="form-control input-alt" name="email" id="cf_email" placeholder="Пошта">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cf_comment" class="sr-only">Коментарій</label>
+              <textarea name="text" id="cf_comment" class="form-control input-alt" rows="7"
+                        placeholder="Ваш коментарій"></textarea>
+            </div>
+            <p class="form-submit">
+              <input name="submit" type="submit" id="submit" class="btn btn-primary btn-block" value="Опублікувати">
+            </p>
+          </form>
+        </div><!-- .comment-respond -->
+        <!-- Коментарії -->
+        <a name="coments"></a>
+        <h4 class="comments-count">Коментарії</h4>
+        {% for r in news.get_review %}
+        <!-- Parent Comment -->
+        <div class="comment">
+          <div class="comment-meta">
+            <div class="column">
+              <span class="comment-autor"><i class="icon-head"></i><a href="#">{{ r.name }}</a></span>
+              <span class="comment-reply"><i class="icon-reply"></i><a href="#comment-form"
+                                                                       onclick="addReview('{{ r.name }}', '{{ r.id }}')">Відповісти</a></span>
+            </div>
+            <div class="column">
+              <span class="comment-date">{{r.pub_date}}</span>
+            </div>
+          </div><!-- .comment-meta -->
+          <div class="comment-body">
+            <p>{{r.text}}</p>
+          </div><!-- .comment-body -->
+        </div><!-- .comment -->
+        {% for rev in r.reviewsnews_set.all %}
+        <!-- Comment Reply -->
+        <div class="comment depth-2">
+          <div class="comment-meta">
+            <div class="column">
+              <span class="comment-autor"><i class="icon-head"></i><a href="#">{{ rev.name }}</a></span>
+            </div>
+            <div class="column">
+              <span class="comment-date">{{ rev.pub_date }}</span>
+            </div>
+          </div><!-- .comment-meta -->
+          <div class="comment-body">
+            <p>{{ rev.text }}</p>
+          </div><!-- .comment-body -->
+        </div><!-- .comment.depth-2 -->
+        {% endfor %}
+      {% endfor %}
+    </div><!-- .comments-area -->
+  </div><!-- .col-lg-9.col-md-8 -->
+
+  <!-- Sidebar -->
+  <div class="col-lg-3 col-md-4 col-lg-pull-9 col-md-pull-8">
+    <div class="space-top-2x visible-sm visible-xs"></div>
+    <aside class="sidebar">
+      <section class="widget widget_search">
+        <form method="post" class="search-box">
+          <input type="text" class="form-control" placeholder="Пошук новини">
+          <button type="submit"><i class="icon-search"></i></button>
+        </form>
+      </section>
+      <section class="widget widget_categories">
+        <h3 class="widget-title">
+          <i class="icon-ribbon"></i>
+          Категорії
+        </h3>
+        <ul>
+          {% for c in cats %}
+          {% if c.news_set.count %}
+          <li><a href="{% url 'nio_app:news_category' c.slug %}">{{ c.name }}<span>{{ c.news_set.count }}</span></a></li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </section><!-- .widget.widget_categories -->
+      <section class="widget widget_recent_posts">
+        <h3 class="widget-title">
+          <i class="icon-paper"></i>
+          Останні новини
+        </h3>
+        {% for n in new|slice:":3" %}
+        <div class="item">
+          <div class="thumb">
+            <a href="{% url 'nio_app:news_single' n.slug %}">
+              <img src="{{n.photo_1.url}}" alt="Post01" style="width: 60px; height: 60px; object-fit: cover;"></a>
+          </div>
+          <div class="info">
+            <h4><a href="{% url 'nio_app:news_single' n.slug %}">{{ n.name|truncatewords:3}}</a></h4>
+          </div>
+        </div><!-- .item -->
+        {% endfor %}
+      </section><!-- .widget.widget_recent_posts -->
+      <section class="widget widget_tag_cloud">
+        <h3 class="widget-title">
+          <i class="icon-tag"></i>
+          Посилання
+        </h3>
+        {% for c in cats %}
+        {% if c.news_set.count %}
+        <a href="{% url 'nio_app:news_category' c.slug %}">{{ c.name }}</a>
+        {% endif %}
+        {% endfor %}
+        </section><!-- .widget.widget_tag_cloud -->
+      </aside><!-- .sidebar -->
+    </div><!-- .col-lg-3.col-md-4 -->
+  </div><!-- .row -->
+</div><!-- .container -->
+    <script>
+        function addReview(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("cf_comment").innerText = `${name}, `
+        }
+
+    </script>
+{% endblock content %}

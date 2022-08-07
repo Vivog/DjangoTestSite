@@ -313,7 +313,7 @@ class Publications(models.Model):
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети публікації',
                                    verbose_name='Короткий опис', null=True)
 
-    text = models.TextField(max_length=50000, help_text='Введіть короткий опис мети публікації',
+    text = models.TextField(max_length=50000, help_text='не більше 50 000 символів',
                             verbose_name='Текст публікації', null=True)
 
     div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
@@ -399,10 +399,10 @@ class News(models.Model):
 
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
 
-    description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети публікації',
+    description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети новини',
                                    verbose_name='Короткий опис', null=True)
 
-    text = models.TextField(max_length=15000, help_text='Введіть короткий опис мети публікації',
+    text = models.TextField(max_length=15000, help_text='не більше 15 000 символів',
                             verbose_name='Текст новини', null=True)
 
     category = models.ManyToManyField('Categories', help_text='оберіть категорію/категорії',
@@ -449,7 +449,7 @@ class ReviewsNews(models.Model):
     parent = models.ForeignKey(
         'self', verbose_name="До кого", on_delete=models.SET_NULL, blank=True, null=True
     )
-    news = models.ForeignKey(Publications, verbose_name="Новина", on_delete=models.CASCADE)
+    news = models.ForeignKey(News, verbose_name="Новина", on_delete=models.CASCADE)
 
     pub_date = models.DateTimeField(verbose_name='Дата коментарія', null=True, auto_now=True)
 
@@ -461,6 +461,7 @@ class ReviewsNews(models.Model):
     class Meta:
         verbose_name = "Відгук на новину"
         verbose_name_plural = "Відгуки на новину"
+        ordering = ['-pub_date']
 
 
 class Theses(models.Model):

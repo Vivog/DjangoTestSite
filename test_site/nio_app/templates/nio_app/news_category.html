@@ -1,0 +1,129 @@
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+{% block content %}
+<section class="page-title">
+  <div class="container">
+    <div class="inner">
+      <div class="column">
+        <div class="title">
+          <a href="{% url 'nio_app:news' %}"><h1>Новини</h1></a>
+        </div><!-- .title -->
+      </div><!-- .column -->
+      <div class="column">
+        <div class="breadcrumbs">
+          <a href="{% url 'nio_app:news' %}">Новини</a>
+          <span class="delimiter"><i class="icon-arrow-right"></i></span>
+          <span>{{ categories.name }}</span>
+        </div><!-- .breadcrumbs -->
+      </div><!-- .column -->
+    </div>
+  </div>
+</section><!-- .page-title -->
+
+<!-- Container -->
+<div class="container">
+  <div class="row">
+  <h1>Обрана категорія: {{categories.name }}</h1>
+    <!-- Content -->
+    <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
+
+      <!-- Post -->
+      {% for n in categories.news_set.all %}
+      <article class="post-item">
+        <a href="{% url 'nio_app:news_single' n.slug %}" class="post-thumb waves-effect">
+          <img src="{{ n.photo_1.url }}" alt="Post01" style="width: 100%; height: auto; object-fit: cover;">
+        </a><!-- .post-thumb -->
+        <div class="post-body">
+          <div class="post-meta">
+            <div class="column">
+              {% for c in n.category.all %}
+              <span>
+                <i class="icon-ribbon"></i>
+                <a href="#">{{ c.name }}</a>
+              </span>
+              {% endfor %}
+              <span class="post-comments">
+                <i class="icon-speech-bubble"></i>
+                <a href="#">{{ n.reviewsnews_set.count }}</a>
+              </span>
+            </div>
+            <div class="column"><span>{{ n.pub_date }}</span></div>
+          </div><!-- .post-meta -->
+          <a href="{% url 'nio_app:news_single' n.slug %}" class="post-title">
+            <h3>{{ n.name }}</h3>
+          </a>
+          <p>{{ n.description }}</p>
+          <a href="{% url 'nio_app:news_single' n.slug %}">Читати далі</a>
+        </div><!-- .post-body -->
+      </article><!-- .post-item -->
+      {% endfor %}
+
+      <!-- Pagination -->
+      <section class="pagination space-top-2x">
+        <div class="nav-links">
+          <span class="current">1</span>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <span>...</span>
+          <a href="#">12</a>
+        </div>
+      </section><!-- .pagination -->
+    </div><!-- .col-lg-9.col-md-8 -->
+
+    <!-- Sidebar -->
+    <div class="col-lg-3 col-md-4 col-lg-pull-9 col-md-pull-8">
+      <div class="space-top-2x visible-sm visible-xs"></div>
+      <aside class="sidebar">
+        <section class="widget widget_search">
+          <form method="post" class="search-box">
+            <input type="text" class="form-control" placeholder="Пошук новини">
+            <button type="submit"><i class="icon-search"></i></button>
+          </form>
+        </section>
+        <section class="widget widget_categories">
+          <h3 class="widget-title">
+            <i class="icon-ribbon"></i>
+            Категорії
+          </h3>
+          <ul>
+            {% for c in cats %}
+            {% if c.news_set.count %}
+                <li><a href="{% url 'nio_app:news_category' c.slug %}">{{ c.name }}<span>{{ c.news_set.count }}</span></a></li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </section><!-- .widget.widget_categories -->
+        <section class="widget widget_recent_posts">
+          <h3 class="widget-title">
+            <i class="icon-paper"></i>
+            Останні новини
+          </h3>
+          {% for n in new|slice:":3" %}
+          <div class="item">
+            <div class="thumb">
+              <a href="{% url 'nio_app:news_single' n.slug %}">
+                <img src="{{n.photo_1.url}}" alt="Post01" style="width: 60px; height: 60px; object-fit: cover;"></a>
+            </div>
+            <div class="info">
+              <h4><a href="{% url 'nio_app:news_single' n.slug %}">{{ n.name|truncatewords:3}}</a></h4>
+            </div>
+          </div><!-- .item -->
+          {% endfor %}
+        </section><!-- .widget.widget_recent_posts -->
+        <section class="widget widget_tag_cloud">
+          <h3 class="widget-title">
+            <i class="icon-tag"></i>
+            Посилання
+          </h3>
+            {% for c in cats %}
+            {% if c.news_set.count %}
+            <a href="{% url 'nio_app:news_category' c.slug %}">{{ c.name }}</a>
+            {% endif %}
+            {% endfor %}
+        </section><!-- .widget.widget_tag_cloud -->
+      </aside><!-- .sidebar -->
+    </div><!-- .col-lg-3.col-md-4 -->
+  </div><!-- .row -->
+</div><!-- .container -->
+{% endblock content %}

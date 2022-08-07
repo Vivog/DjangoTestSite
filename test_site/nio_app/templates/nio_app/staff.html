@@ -29,31 +29,30 @@
           <div class="shop-filter-dropdown">
             <span>Сортування</span>
             <div class="dropdown">
-              <form method="post" id="staff_sort">
-                {% csrf_token %}
+              <form method="get" id="staff_sort"  action="{% url 'nio_app:filter' %}">
                 <div><strong>Підрозділи</strong><br>
-                  {% for d in div %}
+                  {% for d in view.get_div %}
                   <label class="radio radio-inline">
-                    <input type="radio" name="divs" value="{{d}}" id="divs_{{d}}"> {{d.abr}}
+                    <input type="radio" name="divs" value="{{d.pk}}" id="divs_{{d.abr}}"> {{d.abr}}
                   </label>
                   {% endfor %}
                 </div>
                 <div><strong>Посада</strong>
-                  {% for s in staff_prof %}
+                  {% for p in staff_prof %}
                   <label class="radio">
-                    <input type="radio" name="prof" value="{{s.0}}">{{s.0}}<span class="text-gray"></span>
+                    <input type="radio" name="prof" value="{{p}}">{{p}}<span class="text-gray"></span>
                   </label>
                   {% endfor %}
                 </div>
                 <div><strong>Додатково</strong>
                   <label class="radio">
-                    <input type="radio" name="sort" value="tabel">За табелем
-                  </label>
-                  <label class="radio">
                     <input type="radio" name="sort" value="fio">За ПІБ
                   </label>
                   <label class="radio">
-                    <input type="radio" name="sort" value="age">За віком
+                    <input type="radio" name="sort" value="tabel">За табелем
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort" value="birthday">За віком
                   </label>
                   <label class="radio">
                     <input type="radio" name="sort" value="oklad">За окладом
@@ -78,7 +77,7 @@
     </div><!-- .shop-search -->
   </div><!-- .shop-fiters-wrap -->
   <!-- Shop Items -->
-  {% for s in staff %}
+  {% for s in filter %}
   <a name="{{s.slug}}"></a>
   <div class="shop-tile">
     <a href="#" class="thumbnail">

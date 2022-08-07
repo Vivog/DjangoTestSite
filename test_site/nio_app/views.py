@@ -1,8 +1,8 @@
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
-
-from .forms import ReviewPubForm
+from django.db.models import Q, OuterRef, Subquery, Case, When
+from .forms import ReviewPubForm, ReviewNewsForm
 from .models import *
 from datetime import date
 from datetime import date
@@ -25,7 +25,7 @@ CONTEXT['doc'] = (("М", "Методики"), ("П", "Паспорти"), ("КЕ
 CONTEXT['projects'] = Projects.objects.all()
 CONTEXT['pubs'] = Publications.objects.all()
 CONTEXT['pubs_rev'] = ReviewsPubs.objects.all()
-CONTEXT['news'] = News.objects.all()
+CONTEXT['new'] = News.objects.all()
 CONTEXT['news_rev'] = ReviewsNews.objects.all()
 CONTEXT['staff'] = Staff.objects.all()
 STAFF = Staff.objects.all()
@@ -33,11 +33,16 @@ STAFF = Staff.objects.all()
 PROF = []
 for s in STAFF:
     if s.prof not in PROF:
-        num = len(Staff.objects.filter(prof=s.prof))
-        PROF.append((s.prof, num))
+        # num = len(Staff.objects.filter(prof=s.prof))
+        PROF.append(s.prof)
     else:
         continue
-PROFS = sorted(set(PROF))
+PROFS = list(set(PROF))
+trans_table = str.maketrans(
+    'ABCEHKMOPTXacekmopuxyi',
+    'АВСЕНКМОРТХасекморихуі',
+)
+PROFS.sort(key=lambda s: s[0].translate(trans_table))
 CONTEXT['staff_prof'] = PROFS
 CONTEXT['cats'] = Categories.objects.all()
 
@@ -71,113 +76,187 @@ class DivisionList(DetailView):
         context['div'] = Divisions.objects.get(slug=self.get_object().slug)
         return context
 
-class StaffList(ListView):
-    model = Staff
-    template_name = 'nio_app/staff.html'
 
+
+class StaffSort:
+
+    def get_div(self):
+        return Divisions.objects.all()
+
+    def get_prof(self):
+        return Staff.objects.values('prof').distinct()
+
+
+class StaffSortList(StaffSort, ListView):
+    template_name = 'nio_app/staff.html'
+    context_object_name = 'filter'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
+        context = super().get_context_data()
         context.update(CONTEXT)
-        context['staff_all'] = Staff.objects.all().count()
         return context
 
-    def post(self, request, *args, **kwargs):
-        if self.request.method == 'POST':
-            sort = self.sort_by(self.request, divs=self.request.POST.get('divs'), prof=self.request.POST.get('prof'),
-                                sort=self.request.POST.get('sort'))
-            CONTEXT['staff'] = sort
-            return render(request, 'nio_app/staff.html', context=CONTEXT)
-        else:
-            sort = self.sort_by(self.request)
-            CONTEXT['staff'] = sort
-            return render(request, 'nio_app/staff.html', context=CONTEXT)
-
-    def sort_by(self, request, divs=None, prof=None, sort=None):
-        if divs == None and prof == None:
-            if sort == None:
-                STAFF = Staff.objects.all()
-                return STAFF
-            elif sort != None:
-                STAFF = Staff.objects.all()
-                if sort == 'tabel':
-                    STAFF = STAFF.order_by('tabel')
-                    return STAFF
-                elif sort == 'fio':
-                    STAFF = STAFF.order_by('fio')
-                    return STAFF
-                elif sort == 'age':
-                    STAFF = STAFF.order_by('birthday')
-                    return STAFF
-                elif sort == 'oklad':
-                    STAFF = STAFF.order_by('oklad')
-                    return STAFF
-        else:
-            if prof == None and divs != None:
-                if sort == None:
-                    div = Divisions.objects.filter(abr=divs)
-                    STAFF = Staff.objects.filter(div_id=div[0])
-                    return STAFF
-                elif sort != None:
-                    div = Divisions.objects.filter(abr=divs)
-                    STAFF = Staff.objects.filter(div_id=div[0])
-                    if sort == 'tabel':
-                        STAFF = STAFF.order_by('tabel')
-                        return STAFF
-                    elif sort == 'fio':
-                        STAFF = STAFF.order_by('fio')
-                        return STAFF
-                    elif sort == 'age':
-                        STAFF = STAFF.order_by('birthday')
-                        return STAFF
-                    elif sort == 'oklad':
-                        STAFF = STAFF.order_by('oklad')
-                        return STAFF
-            elif divs == None and prof != None:
-                if sort == None:
-                    STAFF = Staff.objects.filter(prof=prof)
-                    return STAFF
-                elif sort != None:
-                    STAFF = Staff.objects.filter(prof=prof)
-                    if sort == 'tabel':
-                        STAFF = STAFF.order_by('tabel')
-                        return STAFF
-                    elif sort == 'fio':
-                        STAFF = STAFF.order_by('fio')
-                        return STAFF
-                    elif sort == 'age':
-                        STAFF = STAFF.order_by('birthday')
-                        return STAFF
-                    elif sort == 'oklad':
-                        STAFF = STAFF.order_by('oklad')
-                        return STAFF
-            elif divs != None and prof != None:
-                if sort == None:
-                    div = Divisions.objects.filter(abr=divs)
-                    STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
-                    return STAFF
-                elif sort != None:
-                    div = Divisions.objects.filter(abr=divs)
-                    STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
-                    if sort == 'tabel':
-                        STAFF = STAFF.order_by('tabel')
-                        return STAFF
-                    elif sort == 'fio':
-                        STAFF = STAFF.order_by('fio')
-                        return STAFF
-                    elif sort == 'age':
-                        STAFF = STAFF.order_by('birthday')
-                        return STAFF
-                    elif sort == 'oklad':
-                        STAFF = STAFF.order_by('oklad')
-                        return STAFF
-
-class StaffSort(StaffList, ListView):
-    model = Staff
-    template_name = 'nio_app/staff_sort.html'
-
     def get_queryset(self):
-        return Staff.objects.all().order_by('tabel')
+        queryset = Staff.objects.order_by('fio')
+        sorting = ('fio', 'tabel', 'oklad', 'birthday')
+        if self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get('sort') != None:
+            for s in sorting:
+                if self.request.GET.get('sort') == s:
+                    queryset = Staff.objects.order_by(s)
+        elif self.request.GET.get('divs') == None:
+            for s in sorting:
+                if self.request.GET.get('sort') == s:
+                    queryset = Staff.objects.filter(
+                        Q(prof__in=self.request.GET.getlist("prof"))
+                    ).order_by(s)
+        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') == None:
+            for s in sorting:
+                if self.request.GET.get('sort') == s:
+                    queryset = Staff.objects.filter(
+                        Q(div_id__in=self.request.GET.getlist("divs"))
+                    ).order_by(s)
+        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None:
+            for s in sorting:
+                if self.request.GET.get('sort') == s:
+                    queryset = Staff.objects.filter(
+                        Q(div_id__in=self.request.GET.getlist("divs")),
+                        Q(prof__in=self.request.GET.getlist("prof"))
+                    ).order_by(s)
+        return queryset
+
+class StaffList(StaffSort, ListView):
+    model = Staff
+    template_name = 'nio_app/staff.html'
+    context_object_name = 'filter'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(CONTEXT)
+        return context
+
+
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(object_list=None, **kwargs)
+    #     context.update(CONTEXT)
+    #     context['staff_all'] = Staff.objects.all().count()
+    #     return context
+    #
+    # def post(self, request, *args, **kwargs):
+    #     if self.request.method == 'POST':
+    #         sort = self.sort_by(self.request, divs=self.request.POST.get('divs'), prof=self.request.POST.get('prof'),
+    #                             sort=self.request.POST.get('sort'))
+    #         CONTEXT['staff'] = sort
+    #         return render(request, 'nio_app/staff.html', context=CONTEXT)
+    #     else:
+    #         sort = self.sort_by(self.request)
+    #         CONTEXT['staff'] = sort
+    #         return render(request, 'nio_app/staff.html', context=CONTEXT)
+    #
+    # def sort_by(self, request, divs=None, prof=None, sort=None):
+    #     if divs == None and prof == None:
+    #         if sort == None:
+    #             STAFF = Staff.objects.all()
+    #             return STAFF
+    #         elif sort != None:
+    #             STAFF = Staff.objects.all()
+    #             if sort == 'tabel':
+    #                 STAFF = STAFF.order_by('tabel')
+    #                 return STAFF
+    #             elif sort == 'fio':
+    #                 STAFF = STAFF.order_by('fio')
+    #                 return STAFF
+    #             elif sort == 'age':
+    #                 STAFF = STAFF.order_by('birthday')
+    #                 return STAFF
+    #             elif sort == 'oklad':
+    #                 STAFF = STAFF.order_by('oklad')
+    #                 return STAFF
+    #     else:
+    #         if prof == None and divs != None:
+    #             if sort == None:
+    #                 div = Divisions.objects.filter(abr=divs)
+    #                 STAFF = Staff.objects.filter(div_id=div[0])
+    #                 return STAFF
+    #             elif sort != None:
+    #                 div = Divisions.objects.filter(abr=divs)
+    #                 STAFF = Staff.objects.filter(div_id=div[0])
+    #                 if sort == 'tabel':
+    #                     STAFF = STAFF.order_by('tabel')
+    #                     return STAFF
+    #                 elif sort == 'fio':
+    #                     STAFF = STAFF.order_by('fio')
+    #                     return STAFF
+    #                 elif sort == 'age':
+    #                     STAFF = STAFF.order_by('birthday')
+    #                     return STAFF
+    #                 elif sort == 'oklad':
+    #                     STAFF = STAFF.order_by('oklad')
+    #                     return STAFF
+    #         elif divs == None and prof != None:
+    #             if sort == None:
+    #                 STAFF = Staff.objects.filter(prof=prof)
+    #                 return STAFF
+    #             elif sort != None:
+    #                 STAFF = Staff.objects.filter(prof=prof)
+    #                 if sort == 'tabel':
+    #                     STAFF = STAFF.order_by('tabel')
+    #                     return STAFF
+    #                 elif sort == 'fio':
+    #                     STAFF = STAFF.order_by('fio')
+    #                     return STAFF
+    #                 elif sort == 'age':
+    #                     STAFF = STAFF.order_by('birthday')
+    #                     return STAFF
+    #                 elif sort == 'oklad':
+    #                     STAFF = STAFF.order_by('oklad')
+    #                     return STAFF
+    #         elif divs != None and prof != None:
+    #             if sort == None:
+    #                 div = Divisions.objects.filter(abr=divs)
+    #                 STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
+    #                 return STAFF
+    #             elif sort != None:
+    #                 div = Divisions.objects.filter(abr=divs)
+    #                 STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
+    #                 if sort == 'tabel':
+    #                     STAFF = STAFF.order_by('tabel')
+    #                     return STAFF
+    #                 elif sort == 'fio':
+    #                     STAFF = STAFF.order_by('fio')
+    #                     return STAFF
+    #                 elif sort == 'age':
+    #                     STAFF = STAFF.order_by('birthday')
+    #                     return STAFF
+    #                 elif sort == 'oklad':
+    #                     STAFF = STAFF.order_by('oklad')
+    #                     return STAFF
+
+
+
+
+
+
+
+
+
+
+# class StaffSort(ListView):
+#     model = Staff
+#     template_name = 'nio_app/staff_sort.html'
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data()
+#         context.update(CONTEXT)
+#         context['staff'] = Staff.objects.order_by('fio')
+#         if 'tabel':
+#             context['staff'] = Staff.objects.order_by('tabel')
+#         elif 'oklad':
+#             context['staff'] = Staff.objects.order_by('oklad')
+#         elif 'age':
+#             context['staff'] = Staff.objects.order_by('birthday')
+#         return context
+
+
 
 
 class PubsList(ListView):
@@ -228,6 +307,49 @@ class AddReviewPub(View):
             form.pub = pub
             form.save()
         return redirect(pub.get_absolute_url())
+
+
+class NewsList(ListView):
+    model = News
+    template_name = 'nio_app/news.html'
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['last'] = News.objects.all().order_by('-pub_date')
+        return context
+
+class NewsDetail(DetailView):
+    model = News
+    template_name = 'nio_app/news_single.html'
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        return context
+    def get_queryset(self):
+        return News.objects.filter(slug=self.kwargs['slug'])
+
+class NewsCatsDetail(DetailView):
+    model = Categories
+    template_name = 'nio_app/news_category.html'
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        return context
+    def get_queryset(self):
+        return Categories.objects.filter(slug=self.kwargs['slug'])
+
+class AddReviewNews(View):
+    def post(self, request, slug):
+        form = ReviewNewsForm(request.POST)
+        news = News.objects.get(slug=slug)
+        if form.is_valid():
+            form = form.save(commit=False)
+            if request.POST.get("parent", None):
+                form.parent_id = int(request.POST.get("parent"))
+            form.news = news
+            form.save()
+        return redirect(news.get_absolute_url())
+
 
 
 

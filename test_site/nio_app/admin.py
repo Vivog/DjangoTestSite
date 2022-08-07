@@ -3,8 +3,21 @@ from django.utils.safestring import mark_safe
 
 from .models import *
 
-
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 # Register your models here.
+
+
+
+
+class PublicationsAdminForm(forms.ModelForm):
+    text = forms.CharField(label='Текст публікації', widget=CKEditorUploadingWidget())
+    class Meta:
+        model = Publications
+        fields = '__all__'
+
+
+
 
 @admin.register(Main)
 class MainAdmin(admin.ModelAdmin):
@@ -123,6 +136,7 @@ class PublicationsAdmin(admin.ModelAdmin):
     list_filter = ('div',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    form = PublicationsAdminForm
     save_on_top = True
     inlines = [ReviewPubsInline]
 

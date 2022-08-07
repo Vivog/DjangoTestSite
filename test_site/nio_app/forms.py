@@ -12,6 +12,11 @@ class ReviewPubForm(forms.ModelForm):
         model = ReviewsPubs
         fields = ('name', 'email', 'text')
 
+class ReviewNewsForm(forms.ModelForm):
+    class Meta:
+        model = ReviewsNews
+        fields = ('name', 'email', 'text')
+
 
 
 

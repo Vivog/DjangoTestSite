@@ -34,7 +34,7 @@
               <li><a href="{% url 'nio_app:staff' %}">Персонал</a></li>
               <li><a href="#">Документація</a></li>
               <li><a href="{% url 'nio_app:publics' %}">Публікації</a></li>
-              <li><a href="#">Новини</a></li>
+              <li><a href="{% url 'nio_app:news' %}">Новини</a></li>
             </ul>
           </div>
         </li>
@@ -51,9 +51,9 @@
           <a href="#"><i class="flaticon-technological"></i>Персонал</a>
           <ul class="sub-menu">
             <li><a href="{% url 'nio_app:staff' %}">Увесь персонал</a></li>
-            <li><a href="{% url 'nio_app:staff_sort' %}">За табелем</a></li>
-            <li><a href="{% url 'nio_app:staff' %}">За віком</a></li>
-            <li><a href="{% url 'nio_app:staff' %}">За окладом</a></li>
+            <li><a href="{% url 'nio_app:staff' %}filter/?sort=tabel">За табелем</a></li>
+            <li><a href="{% url 'nio_app:staff' %}filter/?sort=birthday">За віком</a></li>
+            <li><a href="{% url 'nio_app:staff' %}filter/?sort=oklad">За окладом</a></li>
           </ul>
         </li>
         <li class="menu-item-has-children">
