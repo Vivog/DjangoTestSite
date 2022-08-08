@@ -119,23 +119,20 @@
           </td>
         </tr>
         <tr>
-        <h4 class="shop-title">Номер телефону</h4>
-        <p style="margin:0 0 4px">{{s.phone}}</p>
+          <td>
+            <h4 class="shop-title">Номер телефону</h4>
+            <p style="margin:0 0 4px">{{s.phone}}</p>
+          </td>
+          <td>
+            <h4 class="shop-title">Оклад</h4>
+            <p style="margin:0 0 4px">{{s.oklad}}</p>
+          </td>
         </tr>
       </table>
     </div>
   </div><!-- .shop-tile -->
   {% endfor %}
   <!-- Pagination -->
-  <div class="pagination space-top-2x">
-    <div class="nav-links">
-      <span class="current">1</span>
-      <a href="#">2</a>
-      <a href="#">3</a>
-      <a href="#">4</a>
-      <span>...</span>
-      <a href="#">12</a>
-    </div>
-  </div>
+    {% include 'nio_app/include/pagination_staff.html' %}
 </section>
 {% endblock content %}

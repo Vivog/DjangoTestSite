@@ -26,7 +26,7 @@
     <nav class="main-navigation">
       <ul class="menu">
         <li class="current-menu-item menu-item-has-children">
-          <a href="#"><i class="flaticon-technology46"></i>Головна</a>
+          <a href="#" id="nav_header"><i class="flaticon-technology46"></i>Головна</a>
           <div class="mega-menu">
             <ul>
               <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
@@ -41,7 +41,7 @@
         <li class="menu-item-has-children">
           <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
           <ul class="sub-menu">
-            <li><a href="#">{{m.abr}}</a></li>
+            <li><a href="{% url 'nio_app:index_portal' %}#divs">{{m.abr}}</a></li>
             {% for d in m.divisions.all %}
             <li><a href="{% url 'nio_app:division' d.slug %}">{{d.abr}}</a></li>
             {% endfor %}
@@ -70,7 +70,7 @@
           <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
           <ul class="sub-menu">
             {% for pr in projects %}
-            <li><a href="#">{{pr.name|truncatewords:5}}</a></li>
+            <li><a href="#">{{pr.name|truncatewords:3}}</a></li>
             {% endfor %}
             <li><a href="#">Всі проекти</a></li>
           </ul>
