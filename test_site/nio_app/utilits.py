@@ -1,5 +1,5 @@
 
 
 class PortalMixin():
-    paginate_by = 7
+    paginate_by = 1
     

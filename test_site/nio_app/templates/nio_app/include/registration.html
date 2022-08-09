@@ -3,14 +3,15 @@
       <div class="modal-dialog">
         <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <div class="modal-content text-center">
-          <form method="post">
-            <input type="email" class="form-control" placeholder="Пошта" required readonly onfocus="this.removeAttribute('readonly')">
+          <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <input type="text" class="form-control" placeholder="Логін" required readonly onfocus="this.removeAttribute('readonly')">
             <input type="password" class="form-control" placeholder="Пароль" required>
             <div class="form-group">
               <button type="submit" class="btn login-btn btn-default waves-effect waves-light">Увійти до свого акаунту<i class="icon-head"></i></button>
             </div>
             <div class="text-left">
-              <span class="text-sm text-semibold">Вперше на порталі?<a href="#">Реєстрація</a></span>
+              <span class="text-sm text-semibold">Вперше на порталі?<a href="{% url 'account_signup' %}">Реєстрація</a></span>
             </div>
           </form><!-- <form> -->
         </div><!-- .modal-content -->

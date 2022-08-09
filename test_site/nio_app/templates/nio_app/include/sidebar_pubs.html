@@ -4,9 +4,9 @@
     <div class="space-top-2x visible-sm visible-xs"></div>
     <aside class="sidebar">
         <section class="widget widget_search">
-            <form method="post" class="search-box"><input type="text" class="form-control"
-                                                          placeholder="Пошук публікації">
-                <button type="submit"><i class="icon-search"></i></button>
+            <form method="get" class="search-box" action="{% url 'nio_app:search_pub' %}">
+                <input type="text" class="form-control" name="search_pub" placeholder="Пошук публікації">
+            <button type="submit"><i class="icon-search"></i></button>
             </form>
         </section>
         <section class="widget widget_categories">

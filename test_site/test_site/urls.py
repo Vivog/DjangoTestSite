@@ -23,6 +23,7 @@ from test_site import settings
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls, name=admin),
+    path('accounts/', include('allauth.urls')),
     path('', include('nio_app.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

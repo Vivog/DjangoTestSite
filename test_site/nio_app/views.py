@@ -3,22 +3,29 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
 
+import allauth
+from allauth.account.views import SignupView
+from allauth.account.forms import LoginForm
+
+
+
+
 from .forms import ReviewPubForm, ReviewNewsForm
 from .models import *
-
 # Create your views here.
-
-
+from .utilits import PortalMixin
 
 CONTEXT = {}
 CONTEXT['main'] = Main.objects.all()
 CONTEXT['div'] = Divisions.objects.all()
-CONTEXT['doc'] = (("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
-        ("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
+CONTEXT['doc'] = (
+("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
+("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
 CONTEXT['projects'] = Projects.objects.all()
 CONTEXT['pubs'] = Publications.objects.all()
 CONTEXT['pubs_rev'] = ReviewsPubs.objects.all()
 CONTEXT['new'] = News.objects.all()
+CONTEXT['new_all'] = News.objects.all()
 CONTEXT['news_rev'] = ReviewsNews.objects.all()
 CONTEXT['staff'] = Staff.objects.all()
 STAFF = Staff.objects.all()
@@ -45,6 +52,7 @@ def pageNotFound(request, exception):
     context.update(CONTEXT)
     return render(request, 'nio_app/404.html', context=context)
 
+
 def contacts(request):
     context = {}
     context.update(CONTEXT)
@@ -53,11 +61,30 @@ def contacts(request):
     context['arh'] = Staff.objects.get(tabel='672')
     return render(request, 'nio_app/contacts.html', context=context)
 
-def index_portal(request):
 
-    context = {}
-    context.update(CONTEXT)
-    return render(request, 'nio_app/index_portal.html', context=context)
+# def index_portal(request):
+#     context = {}
+#     context.update(CONTEXT)
+#     return render(request, 'nio_app/index_portal.html', context=context)
+
+# class CustomSignupView(SignupView):
+#     # here we add some context to the already existing context
+#     def get_context_data(self, **kwargs):
+#         # we get context data from original view
+#         context = super().get_context_data(**kwargs)
+#         context.update(CONTEXT)
+#         context['login_form'] = LoginForm() # add form to context
+#         return context
+
+class Index(ListView):
+    model = Main
+    template_name = 'nio_app/index_portal.html'
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['login_form'] = LoginForm()
+        return context
+
 
 class DivisionList(DetailView):
     model = Divisions
@@ -70,7 +97,6 @@ class DivisionList(DetailView):
         return context
 
 
-
 class StaffSort:
 
     def get_div(self):
@@ -81,50 +107,58 @@ class StaffSort:
 
 
 class StaffSortList(StaffSort, ListView):
-    template_name = 'nio_app/staff.html'
+    template_name = 'nio_app/staff/staff.html'
     context_object_name = 'filter'
     paginate_by = 3
 
     def get_queryset(self):
         # queryset = Staff.objects.order_by('fio')
         sorting = ('fio', 'tabel', 'oklad', 'birthday')
-        if self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get('sort') == None:
+        if self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get(
+                'sort') == None:
             queryset = Staff.objects.filter(
-                        Q(div_id__in=self.request.GET.getlist("divs"))
-                    ).order_by('fio')
-        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get('sort') == None:
+                Q(div_id__in=self.request.GET.getlist("divs"))
+            ).order_by('fio')
+        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get(
+                'sort') == None:
             queryset = Staff.objects.filter(
                 Q(div_id__in=self.request.GET.getlist("divs")),
                 Q(prof__in=self.request.GET.getlist("prof"))
             ).order_by('fio')
-        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get('sort') != None:
+        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get(
+                'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
                     queryset = Staff.objects.filter(
                         Q(div_id__in=self.request.GET.getlist("divs"))
                     ).order_by(s)
-        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get('sort') != None:
+        elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get(
+                'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
                     queryset = Staff.objects.filter(
                         Q(div_id__in=self.request.GET.getlist("divs")),
                         Q(prof__in=self.request.GET.getlist("prof"))
                     ).order_by(s)
-        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') != None and self.request.GET.get('sort') == None:
+        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') != None and self.request.GET.get(
+                'sort') == None:
             queryset = Staff.objects.filter(
-                        Q(prof__in=self.request.GET.getlist("prof"))
-                    ).order_by('fio')
-        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') != None and self.request.GET.get('sort') != None:
+                Q(prof__in=self.request.GET.getlist("prof"))
+            ).order_by('fio')
+        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') != None and self.request.GET.get(
+                'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
                     queryset = Staff.objects.filter(
                         Q(prof__in=self.request.GET.getlist("prof"))
                     ).order_by(s)
-        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get('sort') != None:
+        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get(
+                'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
                     queryset = Staff.objects.order_by(s)
-        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get('sort') == None:
+        elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get(
+                'sort') == None:
             queryset = Staff.objects.order_by('fio')
         return queryset
 
@@ -135,15 +169,15 @@ class StaffSortList(StaffSort, ListView):
         if self.request.GET.get('divs'):
             context['page'] += f"divs={self.request.GET.get('divs')}&"
         if self.request.GET.get('prof'):
-            context['page'] += f"divs={self.request.GET.get('prof')}&"
+            context['page'] += f"prof={self.request.GET.get('prof')}&"
         if self.request.GET.get('sort'):
-            context['page'] += f"divs={self.request.GET.get('sort')}&"
+            context['page'] += f"sort={self.request.GET.get('sort')}&"
         return context
 
 
 class StaffList(StaffSort, ListView):
     model = Staff
-    template_name = 'nio_app/staff.html'
+    template_name = 'nio_app/staff/staff.html'
     context_object_name = 'filter'
     paginate_by = 3
 
@@ -154,154 +188,44 @@ class StaffList(StaffSort, ListView):
         if self.request.GET.get('divs'):
             context['page'] += f"divs={self.request.GET.get('divs')}&"
         if self.request.GET.get('prof'):
-            context['page'] += f"divs={self.request.GET.get('prof')}&"
+            context['page'] += f"prof={self.request.GET.get('prof')}&"
         if self.request.GET.get('sort'):
-            context['page'] += f"divs={self.request.GET.get('sort')}&"
+            context['page'] += f"sort={self.request.GET.get('sort')}&"
         return context
 
+class SearchStaff(StaffSort, ListView):
+    template_name = 'nio_app/staff/staff.html'
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(object_list=None, **kwargs)
-    #     context.update(CONTEXT)
-    #     context['staff_all'] = Staff.objects.all().count()
-    #     return context
-    #
-    # def post(self, request, *args, **kwargs):
-    #     if self.request.method == 'POST':
-    #         sort = self.sort_by(self.request, divs=self.request.POST.get('divs'), prof=self.request.POST.get('prof'),
-    #                             sort=self.request.POST.get('sort'))
-    #         CONTEXT['staff'] = sort
-    #         return render(request, 'nio_app/staff.html', context=CONTEXT)
-    #     else:
-    #         sort = self.sort_by(self.request)
-    #         CONTEXT['staff'] = sort
-    #         return render(request, 'nio_app/staff.html', context=CONTEXT)
-    #
-    # def sort_by(self, request, divs=None, prof=None, sort=None):
-    #     if divs == None and prof == None:
-    #         if sort == None:
-    #             STAFF = Staff.objects.all()
-    #             return STAFF
-    #         elif sort != None:
-    #             STAFF = Staff.objects.all()
-    #             if sort == 'tabel':
-    #                 STAFF = STAFF.order_by('tabel')
-    #                 return STAFF
-    #             elif sort == 'fio':
-    #                 STAFF = STAFF.order_by('fio')
-    #                 return STAFF
-    #             elif sort == 'age':
-    #                 STAFF = STAFF.order_by('birthday')
-    #                 return STAFF
-    #             elif sort == 'oklad':
-    #                 STAFF = STAFF.order_by('oklad')
-    #                 return STAFF
-    #     else:
-    #         if prof == None and divs != None:
-    #             if sort == None:
-    #                 div = Divisions.objects.filter(abr=divs)
-    #                 STAFF = Staff.objects.filter(div_id=div[0])
-    #                 return STAFF
-    #             elif sort != None:
-    #                 div = Divisions.objects.filter(abr=divs)
-    #                 STAFF = Staff.objects.filter(div_id=div[0])
-    #                 if sort == 'tabel':
-    #                     STAFF = STAFF.order_by('tabel')
-    #                     return STAFF
-    #                 elif sort == 'fio':
-    #                     STAFF = STAFF.order_by('fio')
-    #                     return STAFF
-    #                 elif sort == 'age':
-    #                     STAFF = STAFF.order_by('birthday')
-    #                     return STAFF
-    #                 elif sort == 'oklad':
-    #                     STAFF = STAFF.order_by('oklad')
-    #                     return STAFF
-    #         elif divs == None and prof != None:
-    #             if sort == None:
-    #                 STAFF = Staff.objects.filter(prof=prof)
-    #                 return STAFF
-    #             elif sort != None:
-    #                 STAFF = Staff.objects.filter(prof=prof)
-    #                 if sort == 'tabel':
-    #                     STAFF = STAFF.order_by('tabel')
-    #                     return STAFF
-    #                 elif sort == 'fio':
-    #                     STAFF = STAFF.order_by('fio')
-    #                     return STAFF
-    #                 elif sort == 'age':
-    #                     STAFF = STAFF.order_by('birthday')
-    #                     return STAFF
-    #                 elif sort == 'oklad':
-    #                     STAFF = STAFF.order_by('oklad')
-    #                     return STAFF
-    #         elif divs != None and prof != None:
-    #             if sort == None:
-    #                 div = Divisions.objects.filter(abr=divs)
-    #                 STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
-    #                 return STAFF
-    #             elif sort != None:
-    #                 div = Divisions.objects.filter(abr=divs)
-    #                 STAFF = Staff.objects.filter(div_id=div[0]).filter(prof=prof)
-    #                 if sort == 'tabel':
-    #                     STAFF = STAFF.order_by('tabel')
-    #                     return STAFF
-    #                 elif sort == 'fio':
-    #                     STAFF = STAFF.order_by('fio')
-    #                     return STAFF
-    #                 elif sort == 'age':
-    #                     STAFF = STAFF.order_by('birthday')
-    #                     return STAFF
-    #                 elif sort == 'oklad':
-    #                     STAFF = STAFF.order_by('oklad')
-    #                     return STAFF
-
-
-
-
-
-
-
-
-
-
-# class StaffSort(ListView):
-#     model = Staff
-#     template_name = 'nio_app/staff_sort.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data()
-#         context.update(CONTEXT)
-#         context['staff'] = Staff.objects.order_by('fio')
-#         if 'tabel':
-#             context['staff'] = Staff.objects.order_by('tabel')
-#         elif 'oklad':
-#             context['staff'] = Staff.objects.order_by('oklad')
-#         elif 'age':
-#             context['staff'] = Staff.objects.order_by('birthday')
-#         return context
-
-
-
-
-class PubsList(ListView):
-    model = Publications
-    template_name = 'nio_app/publics.html'
-    paginate_by = 1
+    def get_queryset(self):
+        search_list = Staff.objects.filter(fio__icontains=self.request.GET.get('search_staff'))
+        return search_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
-        context['last'] = Publications.objects.all().order_by('-pub_date')
+        context['filter'] = self.get_queryset()
+        context['page'] = f"search_staff={self.request.GET.get('search_staff')}&"
+        return context
+
+
+class PubsList(PortalMixin, ListView):
+    model = Publications
+    template_name = 'nio_app/publics/publics.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['pubs'] = self.get_queryset()
         context['page'] = ''
         return context
 
     def get_queryset(self):
         return Publications.objects.all()
 
+
 class PubsDetail(DetailView):
     model = Publications
-    template_name = 'nio_app/public_single.html'
+    template_name = 'nio_app/publics/public_single.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
@@ -311,10 +235,10 @@ class PubsDetail(DetailView):
     def get_queryset(self):
         return Publications.objects.filter(slug=self.kwargs['slug'])
 
+
 class PubsCatsDetail(DetailView):
     model = Categories
-    template_name = 'nio_app/publics_category.html'
-
+    template_name = 'nio_app/publics/publics_category.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
@@ -340,34 +264,59 @@ class AddReviewPub(View):
         return redirect(pub.get_absolute_url())
 
 
-class NewsList(ListView):
+class SearchPub(ListView):
+    template_name = 'nio_app/publics/publics.html'
+    paginate_by = 1
+
+    def get_queryset(self):
+        search_list = Publications.objects.filter(name__icontains=self.request.GET.get('search_pub'))
+        print('SEARCH_PUB', search_list)
+        return search_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['pubs'] = self.get_queryset()
+        context['page'] = f"search_pub={self.request.GET.get('search_pub')}&"
+        return context
+
+
+class NewsList(PortalMixin, ListView):
     model = News
-    template_name = 'nio_app/news.html'
+    template_name = 'nio_app/news/news.html'
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
         context['last'] = News.objects.all().order_by('-pub_date')
         return context
 
+
 class NewsDetail(DetailView):
     model = News
-    template_name = 'nio_app/news_single.html'
+    template_name = 'nio_app/news/news_single.html'
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
         return context
+
     def get_queryset(self):
         return News.objects.filter(slug=self.kwargs['slug'])
 
+
 class NewsCatsDetail(DetailView):
     model = Categories
-    template_name = 'nio_app/news_category.html'
+    template_name = 'nio_app/news/news_category.html'
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
         return context
+
     def get_queryset(self):
         return Categories.objects.filter(slug=self.kwargs['slug'])
+
 
 class AddReviewNews(View):
     def post(self, request, slug):
@@ -382,9 +331,20 @@ class AddReviewNews(View):
         return redirect(news.get_absolute_url())
 
 
+class SearchNews(ListView):
+    template_name = 'nio_app/news/news.html'
+    paginate_by = 1
 
+    def get_queryset(self):
+        search_list = News.objects.filter(name__icontains=self.request.GET.get('search_news'))
+        return search_list
 
-
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['new'] = self.get_queryset()
+        context['page'] = f"search_news={self.request.GET.get('search_news')}&"
+        return context
 
     # def post(self, request):
     #     div = Divisions.objects.all()
@@ -409,7 +369,6 @@ class AddReviewNews(View):
     #     else:
     #         form = ChoiseStaffForm
     #     return render(request, 'nio_app/staff.html', {'form': form},)
-
 
 # def home(request):
 #     num_divisions = Divisions.objects.all().count()
@@ -677,8 +636,6 @@ class AddReviewNews(View):
 #     def get_queryset(self):
 #         # get() не применимо потому что нужно именно quertyset а не один елемент модели
 #         return Divisions.objects.filter(slug=self.kwargs['div_slug'])
-
-
 
 
 # def divisions(request):

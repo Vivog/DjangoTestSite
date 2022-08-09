@@ -69,8 +69,8 @@
     </div><!-- .shop-fiters -->
     <div class="shop-search">
       <div class="widget widget_search">
-        <form method="post" class="search-box">
-          <input type="text" class="form-control" placeholder="Пошук за призвищем">
+        <form method="get" class="search-box" action="{% url 'nio_app:search_staff' %}">
+          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за призвищем">
           <button type="submit"><i class="icon-search"></i></button>
         </form>
       </div>
@@ -132,6 +132,6 @@
   </div><!-- .shop-tile -->
   {% endfor %}
   <!-- Pagination -->
-    {% include 'nio_app/include/pagination_staff.html' %}
+    {% include 'nio_app/include/pagination.html' %}
 </section>
 {% endblock content %}

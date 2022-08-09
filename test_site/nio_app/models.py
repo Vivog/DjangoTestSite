@@ -358,7 +358,7 @@ class Publications(models.Model):
     class Meta:
         verbose_name = 'Публікація'
         verbose_name_plural = 'Публікації'
-        ordering = ['name']
+        ordering = ['-pub_date']
 
     def __str__(self):
         return self.name
