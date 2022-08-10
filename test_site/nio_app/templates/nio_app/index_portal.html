@@ -6,22 +6,22 @@
     <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url({% static 'nio_app/img/home/hosting-bg-01.jpg'%})">
       <div class="container padding-bottom-3x">
         <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
-        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за <strong>30</strong> секунд</h4>
-        <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">
-          <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <form method="post" autocomplete="off">
-              <div class="form-group">
-                <label for="ca_email" class="sr-only"></label>
-                <input type="email" class="form-control" id="ca_email" placeholder="Пошта" required readonly onfocus="this.removeAttribute('readonly')">
-              </div>
-              <div class="form-group">
-                <label for="ca_password" class="sr-only"></label>
-                <input type="password" class="form-control" id="ca_password" placeholder="Пароль" required autocomplete="off">
-              </div>
-              <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">Створи акаунт</button>
-            </form>
-          </div>
-        </div><!-- .row -->
+        {% if request.user.is_authenticated %}
+        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Ради вітати вас <strong>{{user.username}}</strong></h4>
+        {% else %}
+          <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за <strong>30</strong> секунд</h4>
+          <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">
+            <a id="reg"></a>
+            <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+              <a href="{% url 'nio_app:registration' %}">
+                <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">
+                  Створи акаунт
+                  <i class="icon-head"></i>
+                </button>
+              </a>
+            </div>
+          </div><!-- .row -->
+        {% endif %}
       </div><!-- .container -->
     </section><!-- .fw-section -->
 

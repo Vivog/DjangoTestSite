@@ -1,0 +1,22 @@
+    <!-- Окно регистрации -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="modal-content text-center">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            {% for f in form %}
+            <div class="form-group"><label class="form-label" for="{{ f.id_for_label }}"></label>{{ f }}</div>
+            <div class="form-error">{{ f.errors }}</div>
+            {% endfor %}
+            <div class="form-group">
+              <button type="submit" class="btn login-btn btn-default waves-effect waves-light">Увійти до свого акаунту<i class="icon-head"></i></button>
+            </div>
+            <div class="text-left">
+              <span class="text-sm text-semibold">Вперше на порталі?<a href="{% url 'nio_app:registration' %}">Реєстрація</a></span>
+            </div>
+          </form><!-- <form> -->
+        </div><!-- .modal-content -->
+      </div><!-- .modal-dialog -->
+    </div><!-- .modal.fade -->

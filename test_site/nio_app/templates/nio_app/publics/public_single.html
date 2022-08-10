@@ -127,7 +127,7 @@
             <div class="column">
               <span class="comment-autor"><i class="icon-head"></i><a href="#">{{ r.name }}</a></span>
               <span class="comment-reply"><i class="icon-reply"></i><a href="#comment-form"
-                                                                       onclick="addReview('{{ r.name }}', '{{ r.id }}')">Відповісти</a></span>
+                                                                       onclick="addReview('{{ r.name }}', '{{ r.id }}', '{{ user.username }}')">Відповісти</a></span>
             </div>
             <div class="column">
               <span class="comment-date">{{r.pub_date}}</span>
@@ -162,9 +162,10 @@
   </div><!-- .row -->
 </div><!-- .container -->
     <script>
-        function addReview(name, id) {
+        function addReview(name, id, username) {
             document.getElementById("contactparent").value = id;
-            document.getElementById("cf_comment").innerText = `${name}, `
+            document.getElementById("cf_comment").innerText = `${name}, `;
+            document.getElementById("cf_name").innerText = `${username}`;
         }
 
     </script>

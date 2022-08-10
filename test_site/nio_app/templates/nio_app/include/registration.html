@@ -1,19 +1,26 @@
-    <!-- Окно регистрации -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <div class="modal-content text-center">
-          <form method="post" action="{% url 'account_login' %}">
-            {% csrf_token %}
-            <input type="text" class="form-control" placeholder="Логін" required readonly onfocus="this.removeAttribute('readonly')">
-            <input type="password" class="form-control" placeholder="Пароль" required>
-            <div class="form-group">
-              <button type="submit" class="btn login-btn btn-default waves-effect waves-light">Увійти до свого акаунту<i class="icon-head"></i></button>
-            </div>
-            <div class="text-left">
-              <span class="text-sm text-semibold">Вперше на порталі?<a href="{% url 'account_signup' %}">Реєстрація</a></span>
-            </div>
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+{% block content %}
+    <!-- Створи новий акаунт -->
+    <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url({% static 'nio_app/img/home/hosting-bg-01.jpg'%})">
+      <div class="container padding-bottom-3x">
+        <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
+        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за <strong>30</strong> секунд</h4>
+        <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">
+          <a id="reg"></a>
+          <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+         <!-- Окно регистрации -->
+          <form method="post">
+           {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            {% for f in form %}
+            <div class="form-group"><label class="form-label" for="{{ f.id_for_label }}"></label>{{ f }}</div>
+            <div class="form-error">{{ f.errors }}</div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">Створи акаунт</button>
           </form><!-- <form> -->
-        </div><!-- .modal-content -->
-      </div><!-- .modal-dialog -->
-    </div><!-- .modal.fade -->
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </section><!-- .fw-section -->
+     {% endblock content %}

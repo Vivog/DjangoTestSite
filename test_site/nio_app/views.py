@@ -1,16 +1,17 @@
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, View
-
-import allauth
-from allauth.account.views import SignupView
-from allauth.account.forms import LoginForm
-
-
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, View, CreateView
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login, logout
 
 
-from .forms import ReviewPubForm, ReviewNewsForm
+
+
+
+from .forms import ReviewPubForm, ReviewNewsForm, RegisterUserForm, LoginUserForm
 from .models import *
 # Create your views here.
 from .utilits import PortalMixin
@@ -45,6 +46,7 @@ trans_table = str.maketrans(
 PROFS.sort(key=lambda s: s[0].translate(trans_table))
 CONTEXT['staff_prof'] = PROFS
 CONTEXT['cats'] = Categories.objects.all()
+CONTEXT['form'] = LoginUserForm
 
 
 def pageNotFound(request, exception):
@@ -62,27 +64,49 @@ def contacts(request):
     return render(request, 'nio_app/contacts.html', context=context)
 
 
-# def index_portal(request):
-#     context = {}
-#     context.update(CONTEXT)
-#     return render(request, 'nio_app/index_portal.html', context=context)
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'nio_app/include/login.html'
 
-# class CustomSignupView(SignupView):
-#     # here we add some context to the already existing context
-#     def get_context_data(self, **kwargs):
-#         # we get context data from original view
-#         context = super().get_context_data(**kwargs)
-#         context.update(CONTEXT)
-#         context['login_form'] = LoginForm() # add form to context
-#         return context
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        return context
 
-class Index(ListView):
+    def get_success_url(self):
+        return reverse_lazy('nio_app:index_portal')
+
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'nio_app/include/registration.html'
+    success_url = reverse_lazy('nio_app:index_portal')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['form'] = RegisterUserForm
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('nio_app:index_portal')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+def logout_user(request):
+    logout(request)
+    return redirect('nio_app:index_portal')
+
+
+class Index(ListView, LoginUser):
     model = Main
     template_name = 'nio_app/index_portal.html'
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
-        context['login_form'] = LoginForm()
+        context['form'] = LoginUserForm
         return context
 
 
