@@ -26,7 +26,7 @@
     <!-- Content -->
     <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
       <!-- Post -->
-      {% for p in pubs %}
+      {% for p in object_list %}
       <section class="post-item">
         <a href="{% url 'nio_app:public_single' p.slug %}" class="post-thumb waves-effect">
           <img src="{{ p.photo_1.url }}" alt="Post01" style="width: 100%; height: auto; object-fit: cover;">

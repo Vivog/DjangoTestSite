@@ -191,8 +191,10 @@ class Documents(models.Model):
                                     blank=True, null=True)
     objects = models.Manager()
 
+    staff = Staff.objects.filter(fio__icontains='Віталій')
+
     def display_author(self):
-        return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
+        return ', '.join([self.staff.fio.split()[0] for self.staff in self.author.all()])
 
     display_author.short_description = 'Автори'
 

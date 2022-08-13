@@ -1,8 +1,14 @@
-    <!-- Окно регистрации -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <div class="modal-content text-center">
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+{% block content %}
+    <!-- Створи новий акаунт -->
+    <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url({% static 'nio_app/img/home/hosting-bg-01.jpg'%})">
+      <div class="container padding-bottom-3x">
+        <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
+        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Чекаємо на вхід: </h4>
+        <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">
+          <a id="reg"></a>
+          <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
           <form method="post">
             {% csrf_token %}
             <div class="form-error">{{ form.non_field_errors }}</div>
@@ -20,3 +26,5 @@
         </div><!-- .modal-content -->
       </div><!-- .modal-dialog -->
     </div><!-- .modal.fade -->
+    </section><!-- .fw-section -->
+{% endblock content %}

@@ -7,7 +7,8 @@
       <div class="container padding-bottom-3x">
         <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
         {% if request.user.is_authenticated %}
-        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Ради вітати вас <strong>{{user.username}}</strong></h4>
+        <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Ради вітати вас
+          <br><strong>{{user.username|upper}}</strong></h4>
         {% else %}
           <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Створи акаунт за <strong>30</strong> секунд</h4>
           <div class="row padding-top padding-bottom-3x scrollReveal sr-scaleUp sr-delay-2 sr-ease-in-out-back">

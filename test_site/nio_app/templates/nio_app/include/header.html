@@ -16,7 +16,10 @@
            {{user.username}} | Вийти
         </a>
         {% else %}
-        <a href="#" id="btn_enter" class="btn btn-sm btn-default btn-icon-right waves-effect waves-light" data-toggle="modal" data-target="#loginModal">Увійти<i class="icon-head"></i></a>
+         <a href="{% url 'nio_app:login' %}"
+           class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
+           Увійти
+        </a>
         {% endif %}
         <div class="search-btn">
           <i class="icon-search"></i>

@@ -31,4 +31,5 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Логін",
                                                'readonly':True, 'onfocus': "this.removeAttribute('readonly')"}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': "form-control", 'placeholder': "Пароль"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': "form-control", 'placeholder': "Пароль",
+                                                                 'readonly':True, 'onfocus': "this.removeAttribute('readonly')"}))

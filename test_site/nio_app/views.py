@@ -46,7 +46,6 @@ trans_table = str.maketrans(
 PROFS.sort(key=lambda s: s[0].translate(trans_table))
 CONTEXT['staff_prof'] = PROFS
 CONTEXT['cats'] = Categories.objects.all()
-CONTEXT['form'] = LoginUserForm
 
 
 def pageNotFound(request, exception):
@@ -67,11 +66,12 @@ def contacts(request):
 class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'nio_app/include/login.html'
-
-    def get_context_data(self, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        return context
+    extra_context = CONTEXT
+    #  Достатньо написати тільки це і не переопредиляти метод!!!
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context.update(CONTEXT)
+    #     return context
 
     def get_success_url(self):
         return reverse_lazy('nio_app:index_portal')
@@ -80,34 +80,23 @@ class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'nio_app/include/registration.html'
     success_url = reverse_lazy('nio_app:index_portal')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        context['form'] = RegisterUserForm
-        return context
-
-    def get_success_url(self):
-        return reverse_lazy('nio_app:index_portal')
+    extra_context = CONTEXT
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
-        return redirect('home')
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('nio_app:index_portal')
 
 def logout_user(request):
     logout(request)
     return redirect('nio_app:index_portal')
 
 
-class Index(ListView, LoginUser):
+class Index(ListView):
     model = Main
     template_name = 'nio_app/index_portal.html'
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        context['form'] = LoginUserForm
-        return context
+    extra_context = CONTEXT
+
 
 
 class DivisionList(DetailView):
@@ -235,16 +224,17 @@ class SearchStaff(StaffSort, ListView):
 class PubsList(PortalMixin, ListView):
     model = Publications
     template_name = 'nio_app/publics/publics.html'
+    queryset = Publications.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
-        context['pubs'] = self.get_queryset()
+        context['pubs'] = self.queryset
         context['page'] = ''
         return context
 
-    def get_queryset(self):
-        return Publications.objects.all()
+    # def get_queryset(self):
+    #     return Publications.objects.all()
 
 
 class PubsDetail(DetailView):
