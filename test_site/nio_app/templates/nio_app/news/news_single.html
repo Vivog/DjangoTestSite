@@ -51,23 +51,28 @@
       <div class="image-carousel space-bottom-2x">
         <div class="inner">
           {% if news.photo_1 %}
-          <img src="{{news.photo_1.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          <img src="{{news.photo_1.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
           {% if news.photo_2 %}
-          <img src="{{news.photo_2.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          <img src="{{news.photo_2.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
           {% if news.photo_3 %}
-          <img src="{{news.photo_3.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          <img src="{{news.photo_3.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
           {% if news.photo_4 %}
-          <img src="{{news.photo_4.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          <img src="{{news.photo_4.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
           {% if news.photo_5 %}
-          <img src="{{news.photo_5.url}}" alt="Image" style="width: 100%; height: 50%; object-fit: cover;">
+          <img src="{{news.photo_5.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
         </div>
       </div><!-- .image-carousel -->
-      <p>{{ news.text|safe }}</p>
+      {% for t in object_list %}
+      <p>{{ t|safe }}</p>
+      {% endfor %}
+        {% if is_paginated %}
+           {% include 'nio_app/include/pagination.html' %}
+        {% endif %}
       <div class="post-tools space-top-2x">
         <div class="column">
           <div class="tags-links">

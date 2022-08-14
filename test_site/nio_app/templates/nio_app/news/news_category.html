@@ -31,7 +31,7 @@
       {% for n in categories.news_set.all %}
       <article class="post-item">
         <a href="{% url 'nio_app:news_single' n.slug %}" class="post-thumb waves-effect">
-          <img src="{{ n.photo_1.url }}" alt="Post01" style="width: 100%; height: auto; object-fit: cover;">
+          <img src="{{ n.photo_1.url }}" alt="Post01" style="width: 100%; max-height: 500px; object-fit: cover;">
         </a><!-- .post-thumb -->
         <div class="post-body">
           <div class="post-meta">

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -6,10 +7,7 @@ from django.views.generic import ListView, DetailView, View, CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout
-
-
-
-
+from django.views.generic.list import MultipleObjectMixin
 
 from .forms import ReviewPubForm, ReviewNewsForm, RegisterUserForm, LoginUserForm
 from .models import *
@@ -237,13 +235,16 @@ class PubsList(PortalMixin, ListView):
     #     return Publications.objects.all()
 
 
-class PubsDetail(DetailView):
+class PubsDetail(DetailView, MultipleObjectMixin):
     model = Publications
     template_name = 'nio_app/publics/public_single.html'
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
+        object_list = Publications.objects.get(slug=self.kwargs['slug']).text.split('\n')
+        context = super().get_context_data(object_list=object_list, **kwargs)
         context.update(CONTEXT)
+        context['page'] = ''
         return context
 
     def get_queryset(self):
@@ -306,13 +307,16 @@ class NewsList(PortalMixin, ListView):
         return context
 
 
-class NewsDetail(DetailView):
+class NewsDetail(DetailView, MultipleObjectMixin):
     model = News
     template_name = 'nio_app/news/news_single.html'
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
+        object_list = News.objects.get(slug=self.kwargs['slug']).text.split('\n')
+        context = super().get_context_data(object_list=object_list, **kwargs)
         context.update(CONTEXT)
+        context['page'] = ''
         return context
 
     def get_queryset(self):

@@ -4,6 +4,7 @@ from django.urls import reverse
 # Create your models here.
 
 class Main(models.Model):
+    """Головна модель загального підрозділу"""
     name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='Назва підрозділу')
 
@@ -30,6 +31,7 @@ class Main(models.Model):
 
     objects = models.Manager()
 
+    """Визначення загальної кількості персоналу"""
     def staff(self):
         num = 0
         for d in self.divisions.all():
@@ -51,6 +53,7 @@ class Main(models.Model):
 
 
 class Divisions(models.Model):
+    """Підрозіл що входить до загального підрозділу"""
     name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='Назва підрозділу')
 
@@ -79,6 +82,7 @@ class Divisions(models.Model):
 
     photo = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
 
+    """Шлях до фото підрозділу"""
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
         return f'divs/{instance.slug}/photo/{filename}'
@@ -97,6 +101,7 @@ class Divisions(models.Model):
         super().__init__(*args, **kwargs)
         self.__original_name = self.name
 
+    """Визначення кількості персоналу, проектів та документації через сумісні моделі"""
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
@@ -116,6 +121,7 @@ class Divisions(models.Model):
 
 
 class Staff(models.Model):
+    """Персонал підрозділу"""
     fio = models.CharField(max_length=100, help_text='не більше ніж 100 символів',
                            verbose_name='ПІБ')
 
@@ -158,6 +164,7 @@ class Staff(models.Model):
 
 
 class Documents(models.Model):
+    """Документація підрозділу"""
     CHOICES_DOC_TYPE = (
         ("М", "Методика"), ("П", "Паспорт"), ("КЕ", "Керівництво з експлуатації"), ("ТД", "Технична довідка"),
         ("ЗТ", "Технічний звіт"), ("ТІ", "Технологічна інструкція"), ("І", "Інше"), (None, "Тип"))
@@ -214,6 +221,7 @@ class Documents(models.Model):
 
 
 class Location(models.Model):
+    """Приміщення підрозділу"""
     loc = models.CharField(max_length=100, help_text='Вкажіть приміщення або цех(приміщення)',
                            verbose_name='Приміщення')
 
@@ -229,6 +237,7 @@ class Location(models.Model):
 
 
 class Cooperation(models.Model):
+    """Сумісні підрозділи"""
     name = models.CharField(max_length=100, help_text='Вкажіть пов\'язаний підрозділ',
                             verbose_name='Підрозділ')
 
@@ -244,6 +253,7 @@ class Cooperation(models.Model):
 
 
 class Projects(models.Model):
+    """Проекти підрозділу"""
     name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='Назва проекту')
 
@@ -307,6 +317,7 @@ class Projects(models.Model):
 
 
 class Publications(models.Model):
+    """Публікації підрозділу"""
     name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='Назва публікації')
 
@@ -396,6 +407,7 @@ class ReviewsPubs(models.Model):
 
 
 class News(models.Model):
+    """Загальні новини"""
     name = models.CharField(max_length=200, help_text='не більше ніж 200 символів',
                             verbose_name='Назва новини')
 
@@ -467,6 +479,7 @@ class ReviewsNews(models.Model):
 
 
 class Theses(models.Model):
+    """Тезіси що характеризують підрозділ"""
     name = models.CharField(max_length=100, help_text='не більше ніж 100 символів',
                             verbose_name='Теза')
 
@@ -485,6 +498,7 @@ class Theses(models.Model):
 
 
 class Categories(models.Model):
+    """Категорії до публікацій та новин"""
     name = models.CharField(max_length=100, help_text='не більше ніж 100 символів',
                             verbose_name='Категорія')
 
