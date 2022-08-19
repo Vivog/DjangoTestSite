@@ -1,12 +1,10 @@
-from django.core.paginator import Paginator
-from django.db.models import Q
+from django.contrib.auth import login, logout
+from django.contrib.auth.views import LoginView
+from django.db.models import Q, Count
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, View, CreateView
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView
-from django.contrib.auth import login, logout
 from django.views.generic.list import MultipleObjectMixin
 
 from .forms import ReviewPubForm, ReviewNewsForm, RegisterUserForm, LoginUserForm
@@ -17,9 +15,6 @@ from .utilits import PortalMixin
 CONTEXT = {}
 CONTEXT['main'] = Main.objects.all()
 CONTEXT['div'] = Divisions.objects.all()
-CONTEXT['doc'] = (
-("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
-("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
 CONTEXT['projects'] = Projects.objects.all()
 CONTEXT['pubs'] = Publications.objects.all()
 CONTEXT['pubs_rev'] = ReviewsPubs.objects.all()
@@ -28,11 +23,9 @@ CONTEXT['new_all'] = News.objects.all()
 CONTEXT['news_rev'] = ReviewsNews.objects.all()
 CONTEXT['staff'] = Staff.objects.all()
 STAFF = Staff.objects.all()
-# PROF = [('Усі',len(STAFF)), ]
 PROF = []
 for s in STAFF:
     if s.prof not in PROF:
-        # num = len(Staff.objects.filter(prof=s.prof))
         PROF.append(s.prof)
     else:
         continue
@@ -44,6 +37,19 @@ trans_table = str.maketrans(
 PROFS.sort(key=lambda s: s[0].translate(trans_table))
 CONTEXT['staff_prof'] = PROFS
 CONTEXT['cats'] = Categories.objects.all()
+CONTEXT['docs_all'] = Documents.objects.all()
+CONTEXT['doc'] = (
+    ("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
+    ("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
+CONTEXT['docs_type'] = Documents.objects.values('type').annotate(Count('type'))
+CONTEXT['dt'] = []
+for i in CONTEXT['doc']:
+    for t in CONTEXT['docs_type']:
+        if t['type'] in i:
+            CONTEXT['dt'].append((i[1], t['type__count']))
+        else:
+            continue
+CONTEXT['page'] = ''
 
 
 def pageNotFound(request, exception):
@@ -65,6 +71,7 @@ class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'nio_app/include/login.html'
     extra_context = CONTEXT
+
     #  Достатньо написати тільки це і не переопредиляти метод!!!
     # def get_context_data(self, *, object_list=None, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -73,6 +80,7 @@ class LoginUser(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('nio_app:index_portal')
+
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
@@ -85,6 +93,7 @@ class RegisterUser(CreateView):
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('nio_app:index_portal')
 
+
 def logout_user(request):
     logout(request)
     return redirect('nio_app:index_portal')
@@ -94,7 +103,6 @@ class Index(ListView):
     model = Main
     template_name = 'nio_app/index_portal.html'
     extra_context = CONTEXT
-
 
 
 class DivisionList(DetailView):
@@ -203,6 +211,7 @@ class StaffList(StaffSort, ListView):
         if self.request.GET.get('sort'):
             context['page'] += f"sort={self.request.GET.get('sort')}&"
         return context
+
 
 class SearchStaff(StaffSort, ListView):
     template_name = 'nio_app/staff/staff.html'
@@ -387,6 +396,50 @@ class SearchNews(ListView):
     #     else:
     #         form = ChoiseStaffForm
     #     return render(request, 'nio_app/staff.html', {'form': form},)
+
+
+class DocsList(ListView):
+    model = Documents
+    template_name = 'nio_app/docs/docs.html'
+    paginate_by = 4
+    extra_context = CONTEXT
+
+
+class DocDetail(DetailView):
+    model = Documents
+    template_name = 'nio_app/docs/doc_single.html'
+    extra_context = CONTEXT
+
+    def get_queryset(self):
+        return Documents.objects.filter(slug=self.kwargs['slug'])
+
+
+class DocsTypeDetail(ListView):
+    model = Documents
+    template_name = 'nio_app/docs/docs.html'
+    paginate_by = 6
+    extra_context = CONTEXT
+
+    def get_queryset(self):
+        length = len(self.kwargs['type']) - 3
+        metka = self.kwargs['type'][:length]
+        q = Q(type__istartswith=self.kwargs['type'][:1])
+        return Documents.objects.filter(q)
+
+
+class SearchDoc(ListView):
+    template_name = 'nio_app/docs/docs.html'
+    paginate_by = 5
+
+    def get_queryset(self):
+        search_list = Documents.objects.filter(name__icontains=self.request.GET.get('search_docs'))
+        return search_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        context['page'] = f"search_docs={self.request.GET.get('search_docs')}&"
+        return context
 
 # def home(request):
 #     num_divisions = Divisions.objects.all().count()

@@ -1,11 +1,12 @@
 {% extends 'nio_app/base_portal.html' %}
 {% load static %}
 
+
 {% block content %}
     <!-- Створи новий акаунт -->
     <section class="fw-section space-top padding-top-3x padding-bottom-2x text-center" style="background-image: url({% static 'nio_app/img/home/hosting-bg-01.jpg'%})">
       <div class="container padding-bottom-3x">
-        <h1 class="scrollReveal sr-bottom">Портал НДВ, пізнавай нові технології</h1>
+        <h1 class="scrollReveal sr-bottom">Портал НДВ<br>пізнавай нові технології</h1>
         {% if request.user.is_authenticated %}
         <h4 class="text-gray text-normal scrollReveal sr-bottom sr-delay-1">Ради вітати вас
           <br><strong>{{user.username|upper}}</strong></h4>
@@ -34,27 +35,8 @@
             <h2 class="block-title">Пошук документа<small>Знайди те, що треба</small></h2>
           </div>
           <div class="col-lg-8 col-md-7 col-sm-6">
-            <form method="get" class="domain-search">
-              <input type="text" class="form-control" placeholder="Пошук документа">
-              <div class="domain-dropdown">
-                <span>Тип</span>
-                <div class="dropdown">
-                  <div>
-                    <label class="checkbox checkbox-inline">
-                      <input type="checkbox" checked> {{doc.0.0}}
-                    </label>
-                  </div>
-                    {% for d in doc|slice:"1:-1" %}
-                    {% for i in d|slice:":1" %}
-                  <div>
-                    <label class="checkbox checkbox-inline">
-                      <input type="checkbox"> {{i}}
-                    </label>
-                  </div>
-                    {% endfor %}
-                    {% endfor %}
-                </div>
-              </div>
+            <form method="get" class="domain-search" action="{% url 'nio_app:search_docs' %}">
+              <input type="text" class="form-control" name="search_docs" placeholder="Пошук документа">
               <button type="submit" class="waves-effect waves-light"><i class="icon-search"></i></button>
             </form><!-- .domain-search -->
           </div>

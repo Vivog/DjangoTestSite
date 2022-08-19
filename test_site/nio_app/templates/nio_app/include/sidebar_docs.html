@@ -1,0 +1,41 @@
+{% load static %}
+<!-- Sidebar -->
+<div class="col-lg-3 col-md-4 col-lg-pull-9 col-md-pull-8">
+    <div class="space-top-2x visible-sm visible-xs"></div>
+    <aside class="sidebar">
+        <section class="widget widget_search">
+            <form method="get" class="search-box" action="{% url 'nio_app:search_docs' %}">
+                <input type="text" class="form-control" name="search_docs" placeholder="Пошук документації">
+            <button type="submit"><i class="icon-search"></i></button>
+            </form>
+        </section>
+        <section class="widget widget_categories">
+            <h3 class="widget-title"><i class="icon-ribbon"></i>Типи документів
+            </h3>
+            <ul>{% for d in dt %}
+                <li><a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.0 }}<span>{{ d.1 }}</span></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section><!-- .widget.widget_categories -->
+        <section class="widget widget_recent_posts">
+            <h3 class="widget-title"><i class="icon-paper"></i>
+                Останні додані
+            </h3>
+            {% for d in docs_all|slice:":7" %}
+            <div class="item" style="margin-bottom: 6px">
+                <div class="info">
+                    <h4><a href="{% url 'nio_app:doc_single' d.slug %}">{{ d.year }}_{{ d.number }}</a></h4>
+                </div>
+            </div><!-- .item -->
+            {% endfor %}
+        </section><!-- .widget.widget_recent_posts -->
+        <section class="widget widget_tag_cloud">
+            <h3 class="widget-title"><i class="icon-tag"></i>Посилання
+            </h3>
+            {% for d in dt %}
+            <a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.0 }}</a>
+            {% endfor %}
+        </section><!-- .widget.widget_tag_cloud -->
+    </aside><!-- .sidebar -->
+</div><!-- .col-lg-3.col-md-4 -->

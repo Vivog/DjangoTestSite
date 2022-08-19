@@ -6,16 +6,18 @@
     <div class="inner">
       <div class="column">
         <div class="title">
-          <a href="{% url 'nio_app:publics' %}">
-          <h1>Публікації</h1>
+          <a href="{% url 'nio_app:docs' %}">
+          <h1>Документація</h1>
           </a>
         </div><!-- .title -->
       </div><!-- .column -->
       <div class="column">
         <div class="breadcrumbs">
-          <a href="{% url 'nio_app:index_portal' %}">Головна</a>
+           <a href="{% url 'nio_app:docs' %}">
+          <h1>Документація</h1>
+          </a>
           <span class="delimiter"><i class="icon-arrow-right"></i></span>
-          <span>Публікації</span>
+          <span>{{ documents.get_type_display }}</span>
         </div><!-- .breadcrumbs -->
       </div><!-- .column -->
     </div>
@@ -23,13 +25,15 @@
 </section><!-- .page-title -->
 
 <!-- Container -->
-<section class="container">
+<div class="container">
   <div class="row">
+  <h1>Обраний тип документу: {{ documents.get_type_display }}</h1>
     <!-- Content -->
     <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
+
       <!-- Post -->
-      {% for p in object_list %}
-      <section class="post-item">
+      {% for p in categories.publications_set.all %}
+      <article class="post-item">
         <a href="{% url 'nio_app:public_single' p.slug %}" class="post-thumb waves-effect">
           <img src="{{ p.photo_1.url }}" alt="Post01" style="width: 100%; max-height: 500px; object-fit: cover;">
         </a><!-- .post-thumb -->
@@ -39,15 +43,14 @@
               <span>
                 {% for a in p.author.all %}
                 <i class="icon-head"></i>
-                <a href="{% url 'nio_app:filter' %}?divs={{a.div_id}}&prof={{a.prof}}">
-                  {{ a.fio }}</a>
+                <a href="{% url 'nio_app:staff' %}#{{ a.slug }}">{{ a.fio }}</a>
                 {% endfor %}
               </span>
               <span>у</span>
               {% for c in p.category.all %}
               <span>
                 <i class="icon-ribbon"></i>
-                <a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}</a>
+                <a href="#">{{ c.name }}</a>
               </span>
               {% endfor %}
               <span class="post-comments">
@@ -63,13 +66,16 @@
           <p>{{ p.description }}</p>
           <a href="{% url 'nio_app:public_single' p.slug %}">Читати далі</a>
         </div><!-- .post-body -->
-      </section><!-- .post-item -->
+      </article><!-- .post-item -->
       {% endfor %}
+
       <!-- Pagination -->
         {% include 'nio_app/include/pagination.html' %}
+
     </div><!-- .col-lg-9.col-md-8 -->
-      <!-- Sidebar -->
-        {% include 'nio_app/include/sidebar_pubs.html' %}
+
+          <!-- Sidebar -->
+        {% include 'nio_app/include/sidebar_docs.html' %}
   </div><!-- .row -->
-</section><!-- .container -->
+</div><!-- .container -->
 {% endblock content %}

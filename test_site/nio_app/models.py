@@ -171,8 +171,17 @@ class Documents(models.Model):
 
     CHOICES_STATUS = (("Р", "Розробка"), ("У", "Узгодження"), ("В", "Впроваджено"), (None, "Статус"))
 
+    year = models.CharField(max_length=4, help_text="Введіть рік випуску",
+                            verbose_name="Рік випуску", null=True)
+
+    number = models.CharField(max_length=20, help_text="Введіть номер документу",
+                            verbose_name="Номер документа", null=True)
+
     name = models.CharField(max_length=500, help_text="Введіть назву документу",
                             verbose_name="Назва документа")
+
+    description = models.TextField(max_length=5000, help_text='Введіть короткий опис документа (мета)',
+                                   verbose_name='Опис документа', null=True)
 
     slug = models.SlugField(max_length=500, unique=True, verbose_name='URL', db_index=True)
 
@@ -214,10 +223,10 @@ class Documents(models.Model):
     class Meta:
         verbose_name = 'Документація'
         verbose_name_plural = 'Документація'
-        ordering = ['div']
+        ordering = ['-release_date']
 
     def __str__(self):
-        return self.name
+        return f'{self.year}_{self.number}_{self.name}'
 
 
 class Location(models.Model):

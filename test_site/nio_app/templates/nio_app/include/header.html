@@ -9,6 +9,15 @@
       <!-- Mobile Menu Toggle -->
       <div class="nav-toggle"><span></span></div>
       <div class="toolbar">
+        <!-- Вхід до адмінки -->
+        {% if request.user.is_authenticated %}
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:index' %}"
+           class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
+           ADMIN
+        </a>
+        {% endif %}
+        {% endif %}
         <!-- Вхід чи вихід з акаунту -->
         {% if request.user.is_authenticated %}
         <a href="{% url 'nio_app:logout' %}"
@@ -36,20 +45,24 @@
   <div class="container">
     <nav class="main-navigation">
       <ul class="menu">
+        {% block main %}
         <li class="current-menu-item menu-item-has-children">
+          {% endblock main %}
           <a href="#" id="nav_header"><i class="flaticon-technology46"></i>Головна</a>
           <div class="mega-menu">
             <ul>
               <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
               <li><a href="{% url 'nio_app:index_portal' %}#divs">Підрозділи</a></li>
               <li><a href="{% url 'nio_app:staff' %}">Персонал</a></li>
-              <li><a href="#">Документація</a></li>
+              <li><a href="{% url 'nio_app:docs' %}">Документація</a></li>
               <li><a href="{% url 'nio_app:publics' %}">Публікації</a></li>
               <li><a href="{% url 'nio_app:news' %}">Новини</a></li>
             </ul>
           </div>
         </li>
+        {% block divs %}
         <li class="menu-item-has-children">
+          {% endblock divs %}
           <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
           <ul class="sub-menu">
             <li><a href="{% url 'nio_app:index_portal' %}#divs">{{m.abr}}</a></li>
@@ -70,10 +83,10 @@
         <li class="menu-item-has-children">
           <a href="#"><i class="flaticon-writing50"></i>Документація</a>
           <ul class="sub-menu">
-            {% for v in doc|slice:":-1" %}
-            {% for i in v|slice:"1:" %}
-            <li><a href="#">{{i}}</a></li>
-            {% endfor %}
+            {% for v in dt %}
+
+            <li><a href="{% url 'nio_app:docs_type' v.0 %}">{{ v.0 }}</a></li>
+
             {% endfor %}
           </ul>
         </li>

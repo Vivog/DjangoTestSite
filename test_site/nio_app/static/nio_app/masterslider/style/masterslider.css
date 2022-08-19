@@ -32,7 +32,7 @@
 
 .ms-layout-partialview .ms-container { overflow: hidden; }
 
-.master-slider img, .ms-slide-bgvideocont video {max-width:none;}
+.master-slider img, .ms-slide-bgvideocont video {max-width:100%;}
 
 .ms-ie img{border:none;}
 .ms-ie8 * {opacity:inherit;filter:inherit;}

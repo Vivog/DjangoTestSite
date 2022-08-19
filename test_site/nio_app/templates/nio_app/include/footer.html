@@ -5,11 +5,11 @@
         <div class="container">
           <div class="tools">
             <div class="cell">
-              <i><img src="{% static 'nio_app/img/footer/icons/help.png' %}" alt="Email"></i>
+              <i><img src="{% static 'nio_app/img/footer/icons/email.png' %}" alt="Email"></i>
               <span><a href=mailto:savolk@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20дня">ПОШТА НДВ</a></span>
             </div>
             <div class="cell">
-              <i><img src="{% static 'nio_app/img/footer/icons/phone.png' %}" alt="Phone"></i>
+              <i><img src="{% static 'nio_app/img/footer/icons/phone-call.png' %}" alt="Phone"></i>
               <span><a href="#"></a>9-78-33</span>
             </div>
           </div>
@@ -49,7 +49,7 @@
                 </h3>
                 <ul>
                   <li><a href="#">Загальна інформація</a></li>
-                  <li><a href="#">Категорії</a></li>
+                  <li><a href="{% url 'nio_app:docs' %}">Документація</a></li>
                   <li><a href="{% url 'nio_app:contacts' %}">Зв'язок</a></li>
                 </ul>
               </section><!-- .widget.widget_pages -->

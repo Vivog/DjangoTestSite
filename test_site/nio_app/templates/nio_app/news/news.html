@@ -52,7 +52,7 @@
           <a href="{% url 'nio_app:news_single' n.slug %}" class="post-title">
             <h3>{{ n.name }}</h3>
           </a>
-          <p>{{ n.description }}</p>
+          <p>{{ n.description|safe }}</p>
           <a href="{% url 'nio_app:news_single' n.slug %}">Читати далі</a>
         </div><!-- .post-body -->
       </article><!-- .post-item -->
