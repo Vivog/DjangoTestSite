@@ -1,9 +1,10 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.db.models import Q, Count
+from django.http import FileResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, resolve
 from django.views.generic import ListView, DetailView, View, CreateView
 from django.views.generic.list import MultipleObjectMixin
 
@@ -39,14 +40,15 @@ CONTEXT['staff_prof'] = PROFS
 CONTEXT['cats'] = Categories.objects.all()
 CONTEXT['docs_all'] = Documents.objects.all()
 CONTEXT['doc'] = (
-    ("М", "Методики"), ("П", "Паспорти"), ("КЕ", "Керівництва з експлуатації"), ("ТД", "Техничні довідки"),
-    ("ЗТ", "Технічні звіти"), ("ТІ", "Технологічні інструкції"), ("І", "Інше"), (None, "Тип"))
+    ("M", "Методики"), ("P", "Паспорти"), ("KE", "Керівництва з експлуатації"), ("TD", "Техничні довідки"),
+    ("ZT", "Технічні звіти"), ("TI", "Технологічні інструкції"), ("I", "Інше"), (None, "Тип"))
 CONTEXT['docs_type'] = Documents.objects.values('type').annotate(Count('type'))
 CONTEXT['dt'] = []
 for i in CONTEXT['doc']:
     for t in CONTEXT['docs_type']:
         if t['type'] in i:
-            CONTEXT['dt'].append((i[1], t['type__count']))
+            add = [i[0], i[1], t['type__count']]
+            CONTEXT['dt'].append(add)
         else:
             continue
 CONTEXT['page'] = ''
@@ -65,6 +67,11 @@ def contacts(request):
     context['sec'] = Staff.objects.get(tabel='633')
     context['arh'] = Staff.objects.get(tabel='672')
     return render(request, 'nio_app/contacts.html', context=context)
+
+def cats(request):
+    context = {}
+    context.update(CONTEXT)
+    return render(request, 'nio_app/cats.html', context=context)
 
 
 class LoginUser(LoginView):
@@ -414,16 +421,32 @@ class DocDetail(DetailView):
         return Documents.objects.filter(slug=self.kwargs['slug'])
 
 
+def download_doc(request, id):
+    from pathlib import Path
+    # Build paths inside the project like this: BASE_DIR / 'subdir'.
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = str(Documents.objects.get(pk=id).doc)
+    filename = Path(BASE_DIR, 'media/', path)
+    # if not filename.exists():
+    #     filename = Path(BASE_DIR, 'static/site_app/cv', 'Savushkin_CV.pdf')
+
+    return FileResponse(open(filename, 'rb'), as_attachment=True)
+
+
 class DocsTypeDetail(ListView):
+
     model = Documents
     template_name = 'nio_app/docs/docs.html'
-    paginate_by = 6
-    extra_context = CONTEXT
+    paginate_by = 5
+    # extra_context = CONTEXT
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        return context
 
     def get_queryset(self):
-        length = len(self.kwargs['type']) - 3
-        metka = self.kwargs['type'][:length]
-        q = Q(type__istartswith=self.kwargs['type'][:1])
+        q = Q(type=self.kwargs['type'])
         return Documents.objects.filter(q)
 
 
@@ -440,6 +463,8 @@ class SearchDoc(ListView):
         context.update(CONTEXT)
         context['page'] = f"search_docs={self.request.GET.get('search_docs')}&"
         return context
+
+
 
 # def home(request):
 #     num_divisions = Divisions.objects.all().count()

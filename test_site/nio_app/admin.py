@@ -112,7 +112,7 @@ class DocumentsAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     list_filter = ('div', 'status', 'type')
     search_fields = ('name', 'year', 'type')
-    prepopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {'slug': ('name',),}
     form = DocumentsAdminForm
 
 

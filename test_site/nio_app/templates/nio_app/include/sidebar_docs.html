@@ -13,7 +13,7 @@
             <h3 class="widget-title"><i class="icon-ribbon"></i>Типи документів
             </h3>
             <ul>{% for d in dt %}
-                <li><a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.0 }}<span>{{ d.1 }}</span></a>
+                <li><a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.1 }}<span>{{ d.2 }}</span></a>
                 </li>
                 {% endfor %}
             </ul>
@@ -34,7 +34,7 @@
             <h3 class="widget-title"><i class="icon-tag"></i>Посилання
             </h3>
             {% for d in dt %}
-            <a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.0 }}</a>
+            <a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.1 }}</a>
             {% endfor %}
         </section><!-- .widget.widget_tag_cloud -->
     </aside><!-- .sidebar -->

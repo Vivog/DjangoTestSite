@@ -43,20 +43,30 @@
               <span>у</span>
               <span>
                 <i class="icon-ribbon"></i>
-                <a href="{% url 'nio_app:docs_type' documents.get_type_display %}">{{ documents.get_type_display }}</a>
+                <a href="{% url 'nio_app:docs_type' documents.type %}">{{ documents.get_type_display }}</a>
               </span>
             </div>
         <div class="column"><span>{{ documents.release_date }}</span></div>
       </div><!-- .post-meta -->
       <p>{{ documents.description|safe }}</p>
+
+      <!-- Завантаження файлу -->
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'nio_app:download_doc' id=documents.pk %}"
+           class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
+           ЗАВАНТАЖИТИ ДОКУМЕНТ
+        </a>
+        {% endif %}
+
       <div class="post-tools space-top-2x">
         <div class="column">
           <div class="tags-links">
-            <a href="{% url 'nio_app:docs_type' documents.get_type_display %}">{{ documents.get_type_display }}</a>
+            <a href="{% url 'nio_app:docs_type' documents.type %}">{{ documents.get_type_display }}</a>
           </div>
         </div><!-- .column -->
       </div><!-- .post-tools -->
-      <!-- Comment Form -->
+
+      <!-- Запит до архіву -->
       <div class="comments-area space-top-3x">
         <div class="comment-respond">
           <h4 class="comment-reply-title">Запит до архіву</h4>
