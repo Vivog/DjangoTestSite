@@ -10,7 +10,7 @@
       <div class="toolbar">
         <!-- Вхід до адмінки -->
         {% if request.user.is_authenticated %}
-        {% if user.is_superuser %}
+        {% if user.is_staff %}
         <a href="{% url 'admin:index' %}"
            class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
            ADMIN
