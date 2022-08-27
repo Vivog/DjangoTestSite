@@ -49,7 +49,7 @@
   <div class="row">
     <!-- Content -->
     <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
-      <h2>{{documents.name}}</h2>
+      <h3>{{documents.name}}</h3>
       <div class="post-meta">
         <div class="column">
               <span>
@@ -59,7 +59,7 @@
                   автори:
                 {% for a in documents.author.all %}
                 <i class="icon-head"></i>
-                <a href="{% url 'nio_app:filter' %}?divs={{a.div_id}}&prof={{a.prof}}">
+                <a href="{% url 'nio_app:staff_single' a.slug %}">
                     {{ a.fio }}</a>
                 {% endfor %}
               </span>
@@ -74,12 +74,17 @@
       <p>{{ documents.description|safe }}</p>
 
       <!-- Завантаження файлу -->
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'nio_app:download_doc' id=documents.pk %}"
-           class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
-           ЗАВАНТАЖИТИ ДОКУМЕНТ
-        </a>
-        {% endif %}
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'nio_app:download_doc' id=documents.pk as download %}"
+         class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
+        ЗАВАНТАЖИТИ ДОКУМЕНТ
+      </a>
+      {% else %}
+      <a href="{% url 'nio_app:login' %}"
+         class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
+        ЗАВАНТАЖИТИ ДОКУМЕНТ
+      </a>
+      {% endif %}
 
       <div class="post-tools space-top-2x">
         <div class="column">

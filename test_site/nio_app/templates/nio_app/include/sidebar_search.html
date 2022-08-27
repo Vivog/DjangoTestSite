@@ -11,7 +11,7 @@
               </h3>
               <ul>
                   {% for m in models %}
-                  <li><a href="#">
+                  <li><a href="{% url 'nio_app:search_cat' cat=m.0|lower search=m.2 %}" id="cat">
                    {{ m.0 }}
                   <span>{{ m.1 }}</span>
                 </a>

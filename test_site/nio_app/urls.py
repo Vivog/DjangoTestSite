@@ -6,6 +6,7 @@ app_name = 'nio_app'
 urlpatterns = [
     path('', Index.as_view(), name='index_portal'),
     path('search/', SearchMain.as_view(), name='search'),
+    path('search/<str:cat>/<str:search>/', SearchCat.as_view(), name='search_cat'),
     path('login/', LoginUser.as_view(), name='login'),
     path('reg/', RegisterUser.as_view(), name='registration'),
     path('logout/', logout_user, name='logout'),

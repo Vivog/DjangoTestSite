@@ -28,7 +28,7 @@
     <div class="container padding-bottom">
 
       <!-- Help Search -->
-      <form method="get" class="help-search">
+      <form method="get" class="help-search" action="{% url 'nio_app:search' %}">
         <input type="text" class="form-control" placeholder="Пошук по сайту" name="search" required>
         <button type="submit" class="waves-effect waves-light"><i class="icon-search"></i></button>
       </form><!-- .help-search -->
@@ -38,9 +38,12 @@
         <!-- Content -->
         <div class="col-lg-8 col-md-8 col-lg-offset-1 col-lg-push-3 col-md-push-4">
           <h2 class="block-title">
-            Ось що знайшли...
-            <small>Пошукове сполучення: {{ search_text }}</small>
+            Обрана категорія: {{ cat|title }}
           </h2>
+          <h3 class="block-title">
+            Ось що знайшли...
+            <small>Пошукове сполучення: {{ s_text }}</small>
+          </h3>
           {% if object_list %}
           {% for s in object_list %}
           <h5 class="text-muted space-bottom">
