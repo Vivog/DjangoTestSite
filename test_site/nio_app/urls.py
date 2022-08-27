@@ -5,12 +5,14 @@ from nio_app.views import *
 app_name = 'nio_app'
 urlpatterns = [
     path('', Index.as_view(), name='index_portal'),
+    path('search/', SearchMain.as_view(), name='search'),
     path('login/', LoginUser.as_view(), name='login'),
     path('reg/', RegisterUser.as_view(), name='registration'),
     path('logout/', logout_user, name='logout'),
     path('#divs/', Index.as_view(), name='divs'),
     path('division/<slug:slug>/', DivisionList.as_view(), name='division'),
     path('staff/', StaffList.as_view(), name='staff'),
+    path('staff/<slug:slug>/', StaffSingle.as_view(), name='staff_single'),
     path('search_staff/', SearchStaff.as_view(), name='search_staff'),
     path('staff/filter/', StaffSortList.as_view(), name='filter'),
     path('publics/', PubsList.as_view(), name='publics'),

@@ -22,7 +22,7 @@ class RegisterUserForm(UserCreationForm):
                                                'readonly':True, 'onfocus': "this.removeAttribute('readonly')"}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': "form-control", 'placeholder': "Пошта"}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': "form-control", 'placeholder': "Пароль"}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': "form-control", 'placeholder': "Пароль(ще раз)"}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': "form-control", 'placeholder': "Пароль (ще раз)"}))
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')

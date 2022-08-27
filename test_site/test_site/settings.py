@@ -224,3 +224,10 @@ INTERNAL_IPS = [
 ]
 
 SITE_ID = 1
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': Path(BASE_DIR, 'test_site_cache'),
+    }
+}

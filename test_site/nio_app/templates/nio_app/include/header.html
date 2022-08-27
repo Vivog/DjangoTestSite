@@ -1,5 +1,4 @@
 {% load static %}
-<header class="navbar navbar-sticky">
   <!-- Toolbar -->
   <div class="topbar">
     <div class="container">
@@ -32,87 +31,11 @@
         {% endif %}
         <div class="search-btn">
           <i class="icon-search"></i>
-          <form method="post" class="search-box">
-            <input type="text" class="form-control input-sm" placeholder="Пошук">
+          <form method="get" class="search-box" action="{% url 'nio_app:search' %}">
+            <input type="text" class="form-control input-sm" placeholder="Пошук" name="search">
             <button type="submit"><i class="icon-search"></i></button>
           </form>
         </div><!-- .search-btn -->
       </div><!-- .toolbar -->
     </div><!-- .container -->
   </div><!-- .topbar -->
-  <!-- Main Navigation -->
-  {% for m in main %}
-  <div class="container">
-    <nav class="main-navigation">
-      <ul class="menu">
-        {% block main %}
-        <li class="current-menu-item menu-item-has-children">
-          {% endblock main %}
-          <a href="#" id="nav_header"><i class="flaticon-technology46"></i>Головна</a>
-          <div class="mega-menu">
-            <ul>
-              <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
-              <li><a href="{% url 'nio_app:index_portal' %}#divs">Підрозділи</a></li>
-              <li><a href="{% url 'nio_app:staff' %}">Персонал</a></li>
-              <li><a href="{% url 'nio_app:docs' %}">Документація</a></li>
-              <li><a href="{% url 'nio_app:publics' %}">Публікації</a></li>
-              <li><a href="{% url 'nio_app:news' %}">Новини</a></li>
-            </ul>
-          </div>
-        </li>
-        {% block divs %}
-        <li class="menu-item-has-children">
-          {% endblock divs %}
-          <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
-          <ul class="sub-menu">
-            <li><a href="{% url 'nio_app:index_portal' %}#divs">{{m.abr}}</a></li>
-            {% for d in m.divisions.all %}
-            <li><a href="{% url 'nio_app:division' d.slug %}">{{d.abr}}</a></li>
-            {% endfor %}
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#"><i class="flaticon-technological"></i>Персонал</a>
-          <ul class="sub-menu">
-            <li><a href="{% url 'nio_app:staff' %}">Увесь персонал</a></li>
-            <li><a href="{% url 'nio_app:staff' %}filter/?sort=tabel">За табелем</a></li>
-            <li><a href="{% url 'nio_app:staff' %}filter/?sort=birthday">За віком</a></li>
-            <li><a href="{% url 'nio_app:staff' %}filter/?sort=oklad">За окладом</a></li>
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#"><i class="flaticon-writing50"></i>Документація</a>
-          <ul class="sub-menu">
-            {% for v in dt %}
-            <li><a href="{% url 'nio_app:docs_type' v.0 %}">{{ v.1 }}</a></li>
-            {% endfor %}
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
-          <ul class="sub-menu">
-            {% for pr in projects %}
-            <li><a href="#">{{pr.name|truncatewords:3}}</a></li>
-            {% endfor %}
-            <li><a href="#">Всі проекти</a></li>
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#"><i class="flaticon-positive"></i>Допомога</a>
-          <ul class="sub-menu">
-            <li><a href="#">Загальна інформація</a></li>
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#"><i class="flaticon-light129"></i>Інше</a>
-          <ul class="sub-menu">
-            <li><a href="#">Про розробку</a></li>
-            <li><a href="{% url 'nio_app:cats' %}">Категорії</a></li>
-            <li><a href="{% url 'nio_app:contacts' %}">Зв'язок</a></li>
-          </ul>
-        </li>
-      </ul><!-- .menu -->
-    </nav><!-- .main-navigation -->
-  </div><!-- .container -->
-  {% endfor %}
-</header><!-- .navbar -->

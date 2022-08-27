@@ -5,9 +5,26 @@ from .models import *
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
+from django.forms.widgets import *
 # Register your models here.
 
 
+
+class StaffAdminForm(forms.ModelForm):
+    years = []
+    for i in range(1930, 2030):
+        years.append(i)
+    birthday = forms.DateField(label='Дата народження', widget=SelectDateWidget(years=years))
+    class Meta:
+        model = Staff
+        fields = '__all__'
+
+
+class DivisionsAdminForm(forms.ModelForm):
+    description = forms.CharField(label='Опис підрозділу', widget=CKEditorUploadingWidget())
+    class Meta:
+        model = Divisions
+        fields = '__all__'
 
 
 class PublicationsAdminForm(forms.ModelForm):
@@ -23,10 +40,16 @@ class NewsAdminForm(forms.ModelForm):
         fields = '__all__'
 
 class DocumentsAdminForm(forms.ModelForm):
+    years = []
+    for i in range(1990, 2051):
+        years.append(i)
     description = forms.CharField(label='Опис документу', widget=CKEditorUploadingWidget())
+    release_date = forms.DateField(label='Дата впровадження', widget=SelectDateWidget(years=years))
     class Meta:
         model = Documents
         fields = '__all__'
+
+
 
 
 
@@ -64,6 +87,7 @@ class DivisionsAdmin(admin.ModelAdmin):
             'Додаткові фото', {'fields': ('photo_1', 'photo_2', 'photo_3', 'photo_4', 'photo_5')}
         ),
     )
+    form = DivisionsAdminForm
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -97,6 +121,7 @@ class StaffAdmin(admin.ModelAdmin):
         )
     )
     search_fields = ('tabel', 'fio')
+    form = StaffAdminForm
 
     def get_html_photo(self, object):
         if object.photo:

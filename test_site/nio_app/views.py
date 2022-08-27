@@ -1,5 +1,8 @@
+from itertools import chain
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.http import FileResponse
 from django.shortcuts import redirect
@@ -14,15 +17,21 @@ from .models import *
 from .utilits import PortalMixin
 
 CONTEXT = {}
-CONTEXT['main'] = Main.objects.all()
-CONTEXT['div'] = Divisions.objects.all()
-CONTEXT['projects'] = Projects.objects.all()
-CONTEXT['pubs'] = Publications.objects.all()
-CONTEXT['pubs_rev'] = ReviewsPubs.objects.all()
-CONTEXT['new'] = News.objects.all()
-CONTEXT['new_all'] = News.objects.all()
-CONTEXT['news_rev'] = ReviewsNews.objects.all()
-CONTEXT['staff'] = Staff.objects.all()
+CONTEXT['models'] = ((Divisions._meta.verbose_name_plural, Divisions.objects.all().count()),
+                     (Staff._meta.verbose_name_plural, Staff.objects.all().count()),
+                     (Documents._meta.verbose_name_plural, Documents.objects.all().count()),
+                     (Projects._meta.verbose_name_plural, Projects.objects.all().count()),
+                     (Publications._meta.verbose_name_plural, Publications.objects.all().count()),
+                     (News._meta.verbose_name_plural, News.objects.all().count()))
+CONTEXT['main'] = Main.objects.all().prefetch_related('divisions')
+"""Виключимо з підрозділів НДВ"""
+CONTEXT['div'] = Divisions.objects.all().prefetch_related('locs', 'coops', 'theses')[1:]
+CONTEXT['pubs'] = Publications.objects.all().select_related('div').prefetch_related('author', 'category')
+CONTEXT['pubs_rev'] = ReviewsPubs.objects.all().select_related('parent', 'pub')
+CONTEXT['new'] = News.objects.all().prefetch_related('category')
+CONTEXT['new_all'] = News.objects.all().prefetch_related('category')
+CONTEXT['news_rev'] = ReviewsNews.objects.all().select_related('parent', 'news')
+CONTEXT['staff'] = Staff.objects.all().select_related('div')
 STAFF = Staff.objects.all()
 PROF = []
 for s in STAFF:
@@ -37,8 +46,9 @@ trans_table = str.maketrans(
 )
 PROFS.sort(key=lambda s: s[0].translate(trans_table))
 CONTEXT['staff_prof'] = PROFS
+CONTEXT['projects'] = Projects.objects.all().select_related('div').prefetch_related('author', 'category')
 CONTEXT['cats'] = Categories.objects.all()
-CONTEXT['docs_all'] = Documents.objects.all()
+CONTEXT['docs_all'] = Documents.objects.all().select_related('div').prefetch_related('author')
 CONTEXT['doc'] = (
     ("M", "Методики"), ("P", "Паспорти"), ("KE", "Керівництва з експлуатації"), ("TD", "Техничні довідки"),
     ("ZT", "Технічні звіти"), ("TI", "Технологічні інструкції"), ("I", "Інше"), (None, "Тип"))
@@ -106,20 +116,70 @@ def logout_user(request):
     return redirect('nio_app:index_portal')
 
 
-class Index(ListView):
-    model = Main
-    template_name = 'nio_app/index_portal.html'
-    extra_context = CONTEXT
+class SearchMain(ListView):
+    template_name = 'nio_app/search.html'
+    paginate_by = 5
 
-
-class DivisionList(DetailView):
-    model = Divisions
-    template_name = 'nio_app/division.html'
+    def get_queryset(self):
+        search_list = []
+        search_list.append(Divisions.objects.filter(name__icontains=self.request.GET.get('search')))
+        search_list.append(Divisions.objects.filter(abr__icontains=self.request.GET.get('search')))
+        search_list.append(Staff.objects.filter(fio__icontains=self.request.GET.get('search')))
+        search_list.append(Documents.objects.filter(name__icontains=self.request.GET.get('search')))
+        # search_list.append(Documents.objects.filter(description__icontains=self.request.GET.get('search')))
+        search_list.append(Projects.objects.filter(name__icontains=self.request.GET.get('search')))
+        search_list.append(Publications.objects.filter(name__icontains=self.request.GET.get('search')))
+        # search_list.append(Publications.objects.filter(description__icontains=self.request.GET.get('search')))
+        search_list.append(News.objects.filter(name__icontains=self.request.GET.get('search')))
+        # search_list.append(News.objects.filter(description__icontains=self.request.GET.get('search')))
+        print('SEARCH', search_list)
+        return search_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
-        context['div'] = Divisions.objects.get(slug=self.get_object().slug)
+        context['searching'] = []
+        for s_c in self.get_queryset():
+            for s in s_c:
+                if s:
+                    print('S_C', s)
+                    context['searching'].append((s._meta.verbose_name_plural, s, s.slug))
+                else:
+                    continue
+        print('SEARCHING ALL', context['searching'])
+        context['serch_text'] = self.request.GET.get('search')
+        context['page'] = f"search={self.request.GET.get('search')}&"
+        return context
+
+
+
+
+class Index(ListView):
+    model = Main
+    template_name = 'nio_app/index_portal.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update(CONTEXT)
+        print('DIV', context['div'])
+        return context
+        """при використанні DataMixin"""
+        # c_def = self.get_user_context()
+        # return dict(list(context.items()) + list(c_def.items()))
+
+
+class DivisionList(DetailView, MultipleObjectMixin):
+    model = Divisions
+    template_name = 'nio_app/division.html'
+    paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        div = Divisions.objects.get(slug=self.get_object().slug)
+        object_list = div.description.split('\n')
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context.update(CONTEXT)
+        context['div'] = div
+        context['page'] = ''
         return context
 
 
@@ -219,6 +279,17 @@ class StaffList(StaffSort, ListView):
             context['page'] += f"sort={self.request.GET.get('sort')}&"
         return context
 
+class StaffSingle(DetailView):
+    model = Staff
+    template_name = 'nio_app/staff/staff_single.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(CONTEXT)
+        context['single'] = Staff.objects.get(slug=self.kwargs['slug'])
+        context['page'] = ''
+        return context
+
 
 class SearchStaff(StaffSort, ListView):
     template_name = 'nio_app/staff/staff.html'
@@ -247,14 +318,12 @@ class PubsList(PortalMixin, ListView):
         context['page'] = ''
         return context
 
-    # def get_queryset(self):
-    #     return Publications.objects.all()
-
 
 class PubsDetail(DetailView, MultipleObjectMixin):
     model = Publications
     template_name = 'nio_app/publics/public_single.html'
     paginate_by = 6
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         object_list = Publications.objects.get(slug=self.kwargs['slug']).text.split('\n')
@@ -301,7 +370,6 @@ class SearchPub(ListView):
 
     def get_queryset(self):
         search_list = Publications.objects.filter(name__icontains=self.request.GET.get('search_pub'))
-        print('SEARCH_PUB', search_list)
         return search_list
 
     def get_context_data(self, *, object_list=None, **kwargs):

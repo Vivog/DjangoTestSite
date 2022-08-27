@@ -26,13 +26,13 @@
   <div class="row">
     <!-- Content -->
     <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
-      <h1>{{publications.name}}</h1>
+      <h2>{{publications.name}}</h2>
       <div class="post-meta">
         <div class="column">
           <span>
                 {% for a in publications.author.all %}
                 <i class="icon-head"></i>
-                <a href="{% url 'nio_app:staff' %}#{{ a.slug }}">{{ a.fio }}</a>
+                <a href="{% url 'nio_app:staff_single' a.slug %}">{{ a.fio }}</a>
                 {% endfor %}
           </span>
           <span>у</span>

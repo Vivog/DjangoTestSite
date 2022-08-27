@@ -1,5 +1,8 @@
 {% extends 'nio_app/base_portal.html' %}
 {% load static %}
+
+
+
 {% block content %}
 <section class="page-title">
   <div class="container">
@@ -39,7 +42,7 @@
               <span>
                 {% for a in p.author.all %}
                 <i class="icon-head"></i>
-                <a href="{% url 'nio_app:filter' %}?divs={{a.div_id}}&prof={{a.prof}}">
+                <a href="{% url 'nio_app:staff_single' a.slug %}">
                   {{ a.fio }}</a>
                 {% endfor %}
               </span>

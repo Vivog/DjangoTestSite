@@ -1,5 +1,28 @@
 {% extends 'nio_app/base_portal.html' %}
 {% load static %}
+
+{% block main %}
+<li class="menu-item-has-children">
+  {% endblock main %}
+  {% block divs %}
+<li class="menu-item-has-children">
+  {% endblock divs %}
+  {% block staff %}
+<li class="menu-item-has-children">
+  {% endblock staff %}
+  {% block docs %}
+<li class="menu-item-has-children current-menu-item">
+  {% endblock docs %}
+  {% block projects %}
+<li class="menu-item-has-children">
+  {% endblock projects %}
+  {% block help %}
+<li class="menu-item-has-children">
+  {% endblock help %}
+  {% block other %}
+<li class="menu-item-has-children">
+  {% endblock other %}
+
 {% block content %}
 <section class="page-title">
   <div class="container">

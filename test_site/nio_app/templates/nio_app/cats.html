@@ -1,6 +1,28 @@
 {% extends 'nio_app/base_portal.html' %}
 {% load static %}
 
+{% block main %}
+<li class="menu-item-has-children">
+  {% endblock main %}
+  {% block divs %}
+<li class="menu-item-has-children">
+  {% endblock divs %}
+  {% block staff %}
+<li class="menu-item-has-children">
+  {% endblock staff %}
+  {% block docs %}
+<li class="menu-item-has-children">
+  {% endblock docs %}
+  {% block projects %}
+<li class="menu-item-has-children">
+  {% endblock projects %}
+  {% block help %}
+<li class="menu-item-has-children">
+  {% endblock help %}
+  {% block other %}
+<li class="menu-item-has-children current-menu-item">
+  {% endblock other %}
+
 
 {% block content %}
     <section class="page-title">
@@ -47,7 +69,7 @@
         <div class="grid-item main">
           <a href="{% url 'nio_app:index_portal' %}#divs" class="portfolio-item">
             <div class="thumbnail waves-effect waves-light">
-              <img src="{% static 'nio_app/img/cats/01.jpg' %}" alt="Підрозділи">
+              <img src="{% static 'nio_app/img/cats/div2.svg' %}" alt="Підрозділи">
               <h3 class="portfolio-title">Підрозділи</h3>
             </div>
           </a>
@@ -57,7 +79,7 @@
         <div class="grid-item main">
           <a href="{% url 'nio_app:staff' %}" class="portfolio-item">
             <div class="thumbnail waves-effect waves-light">
-              <img src="{% static 'nio_app/img/cats/01.jpg' %}" alt="Персонал">
+              <img src="{% static 'nio_app/img/cats/staff2.svg' %}" alt="Персонал">
               <h3 class="portfolio-title">Персонал</h3>
             </div>
           </a>
@@ -67,7 +89,7 @@
         <div class="grid-item other">
           <a href="{% url 'nio_app:docs' %}" class="portfolio-item">
             <div class="thumbnail waves-effect waves-light">
-              <img src="{% static 'nio_app/img/cats/01.jpg' %}" alt="Документація">
+              <img src="{% static 'nio_app/img/cats/staff2.svg' %}" alt="Документація">
               <h3 class="portfolio-title">Документація</h3>
             </div>
           </a>
@@ -77,7 +99,7 @@
         <div class="grid-item main">
           <a href="#" class="portfolio-item">
             <div class="thumbnail waves-effect waves-light">
-              <img src="{% static 'nio_app/img/cats/01.jpg' %}" alt="Проекти">
+              <img src="{% static 'nio_app/img/cats/div2.svg' %}" alt="Проекти">
               <h3 class="portfolio-title">Проекти</h3>
             </div>
           </a>
@@ -87,7 +109,7 @@
         <div class="grid-item other">
           <a href="{% url 'nio_app:publics' %}" class="portfolio-item">
             <div class="thumbnail waves-effect waves-light">
-              <img src="{% static 'nio_app/img/cats/01.jpg' %}" alt="Публікації">
+              <img src="{% static 'nio_app/img/cats/div2.svg' %}" alt="Публікації">
               <h3 class="portfolio-title">Публікації</h3>
             </div>
           </a>
@@ -97,7 +119,7 @@
         <div class="grid-item other">
           <a href="{% url 'nio_app:news' %}" class="portfolio-item">
             <div class="thumbnail waves-effect waves-light">
-              <img src="{% static 'nio_app/img/cats/01.jpg' %}" alt="Новини">
+              <img src="{% static 'nio_app/img/cats/div2.svg' %}" alt="Новини">
               <h3 class="portfolio-title">Новини</h3>
             </div>
           </a>
@@ -106,7 +128,7 @@
 
       <!-- Load More Button -->
       <div class="text-center padding-top">
-        <a href="#" class="btn btn-default btn-ghost waves-effect">Чогось не вистачає?</a>
+        <a href="{% url 'nio_app:contacts' %}" class="btn btn-default btn-ghost waves-effect">Чогось не вистачає?</a>
       </div>
     </section><!-- .container -->
 

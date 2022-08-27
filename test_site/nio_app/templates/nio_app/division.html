@@ -1,6 +1,27 @@
 {% extends 'nio_app/base_portal.html' %}
 {% load static %}
 
+{% block main %}
+<li class="menu-item-has-children">
+  {% endblock main %}
+  {% block divs %}
+<li class="menu-item-has-children current-menu-item ">
+  {% endblock divs %}
+  {% block staff %}
+<li class="menu-item-has-children">
+  {% endblock staff %}
+  {% block docs %}
+<li class="menu-item-has-children">
+  {% endblock docs %}
+  {% block projects %}
+<li class="menu-item-has-children">
+  {% endblock projects %}
+  {% block help %}
+<li class="menu-item-has-children">
+  {% endblock help %}
+  {% block other %}
+<li class="menu-item-has-children">
+  {% endblock other %}
 
 {% block content %}
     <section class="page-title">
@@ -56,7 +77,11 @@
             </span>
           </div>
           <h2 class="shop-title"><a href="#">{{div.name}}</a></h2>
-          <p class="text-gray">{{div.description}}</p>
+          {% for text in object_list %}
+          <p class="text-gray">{{text|safe}}</p>
+          {% endfor %}
+          <!-- Pagination -->
+        {% include 'nio_app/include/pagination.html' %}
           <div class="post-tools space-top">
             <div class="column">
               <div class="tags-links">
