@@ -63,7 +63,7 @@
                   автори:
                 {% for a in d.author.all %}
                 <i class="icon-head"></i>
-                <a href="{% url 'nio_app:filter' %}?divs={{a.div_id}}&prof={{a.prof}}">
+               <a href="{% url 'nio_app:staff_single' a.slug %}">
                     {{ a.fio }}</a>
                 {% endfor %}
               </span>

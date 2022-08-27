@@ -244,7 +244,7 @@ class StaffSort:
 class StaffSortList(StaffSort, ListView):
     template_name = 'nio_app/staff/staff.html'
     context_object_name = 'filter'
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self):
         # queryset = Staff.objects.order_by('fio')
@@ -314,7 +314,7 @@ class StaffList(StaffSort, ListView):
     model = Staff
     template_name = 'nio_app/staff/staff.html'
     context_object_name = 'filter'
-    paginate_by = 3
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()

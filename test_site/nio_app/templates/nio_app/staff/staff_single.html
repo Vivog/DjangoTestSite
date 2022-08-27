@@ -95,8 +95,8 @@
     </div><!-- .shop-fiters -->
     <div class="shop-search">
       <div class="widget widget_search">
-        <form method="post" class="search-box">
-          <input type="text" class="form-control" placeholder="Пошук за прізвищем">
+        <form method="get" class="search-box" action="{% url 'nio_app:search_staff' %}">
+          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за прізвищем">
           <button type="submit"><i class="icon-search"></i></button>
         </form>
       </div>
