@@ -103,6 +103,7 @@ def cats(request):
 
 
 class LoginUser(LoginView, PortalMixin):
+    """Авторизація"""
     form_class = LoginUserForm
     template_name = 'nio_app/include/login.html'
 
@@ -118,6 +119,7 @@ class LoginUser(LoginView, PortalMixin):
 
 
 class RegisterUser(CreateView, PortalMixin):
+    """Реєстрація"""
     form_class = RegisterUserForm
     template_name = 'nio_app/include/registration.html'
     success_url = reverse_lazy('nio_app:index_portal')
@@ -137,11 +139,13 @@ class RegisterUser(CreateView, PortalMixin):
 
 
 def logout_user(request):
+    """Вихід користувача"""
     logout(request)
     return redirect('nio_app:index_portal')
 
 
 class SearchMain(ListView):
+    """Пошук загальний"""
     template_name = 'nio_app/search.html'
     paginate_by = 5
 
@@ -191,6 +195,7 @@ class SearchMain(ListView):
 
 
 class SearchCat(ListView):
+    """Пошук за категорією"""
     template_name = 'nio_app/search_cat.html'
     paginate_by = 5
 
@@ -228,6 +233,7 @@ class SearchCat(ListView):
 
 
 class Index(PortalMixin, ListView):
+    """Головна сторінка"""
     model = Main
     template_name = 'nio_app/index_portal.html'
 
@@ -240,6 +246,7 @@ class Index(PortalMixin, ListView):
 
 
 class DivisionList(DetailView, MultipleObjectMixin, PortalMixin):
+    """Підрозділи"""
     model = Divisions
     template_name = 'nio_app/division.html'
     paginate_by = 5
@@ -257,6 +264,7 @@ class DivisionList(DetailView, MultipleObjectMixin, PortalMixin):
 
 
 class StaffList(ListView, PortalMixin):
+    """Персонал"""
     model = Staff
     template_name = 'nio_app/staff/staff.html'
     paginate_by = 5
@@ -291,6 +299,7 @@ class StaffList(ListView, PortalMixin):
 
 
 class StaffSortList(ListView, PortalMixin):
+    """Сортування персоналу"""
     template_name = 'nio_app/staff/staff_sort.html'
     context_object_name = 'staff_sort'
     paginate_by = 5
@@ -375,6 +384,7 @@ class StaffSortList(ListView, PortalMixin):
 
 
 class StaffSingle(DetailView, PortalMixin):
+    """Окремий працівник"""
     model = Staff
     template_name = 'nio_app/staff/staff_single.html'
 
@@ -389,6 +399,7 @@ class StaffSingle(DetailView, PortalMixin):
 
 
 class SearchStaff(ListView, PortalMixin):
+    """Пошук персоналу"""
     template_name = 'nio_app/staff/staff.html'
 
     def get_queryset(self):
@@ -408,6 +419,7 @@ class SearchStaff(ListView, PortalMixin):
 
 
 class PubsList(ListView, PortalMixin):
+    """Публікації"""
     model = Publications
     template_name = 'nio_app/publics/publics.html'
     queryset = Publications.objects.prefetch_related('author', 'category')
@@ -425,9 +437,13 @@ class PubsList(ListView, PortalMixin):
 
 
 class PubsDetail(DetailView, MultipleObjectMixin, PortalMixin):
+    """Окрема публікація"""
     model = Publications
     template_name = 'nio_app/publics/public_single.html'
     paginate_by = 6
+
+    def get_object(self, queryset=None):
+        return Publications.objects.prefetch_related('category', 'author').get(slug=self.kwargs['slug'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         object_list = self.object.text.split('\n')
@@ -439,9 +455,6 @@ class PubsDetail(DetailView, MultipleObjectMixin, PortalMixin):
         self.divisions = Divisions.objects.only('abr', 'slug')
         mixin_context = self.get_user_context()
         return dict(list(context.items()) + list(mixin_context.items()))
-
-    def get_queryset(self):
-        return Publications.objects.filter(slug=self.kwargs['slug'])
 
 
 class PubsCatsDetail(DetailView, PortalMixin):

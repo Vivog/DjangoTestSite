@@ -26,17 +26,17 @@
   <div class="row">
     <!-- Content -->
     <div class="col-lg-9 col-md-8 col-lg-push-3 col-md-push-4">
-      <h2>{{publications.name}}</h2>
+      <h2>{{object.name}}</h2>
       <div class="post-meta">
         <div class="column">
           <span>
-                {% for a in publications.author.all %}
+                {% for a in object.author.all %}
                 <i class="icon-head"></i>
                 <a href="{% url 'nio_app:staff_single' a.slug %}">{{ a.fio }}</a>
                 {% endfor %}
           </span>
           <span>у</span>
-          {% for c in publications.category.all %}
+          {% for c in object.category.all %}
           <span>
                 <i class="icon-ribbon"></i>
                 <a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}</a>
@@ -44,10 +44,10 @@
           {% endfor %}
           <span class="post-comments">
             <i class="icon-speech-bubble"></i>
-            <a href="#coments">{{publications.reviewspubs_set.count}}</a>
+            <a href="#coments">{{object.reviewspubs_set.count}}</a>
           </span>
         </div>
-        <div class="column"><span>{{ publications.pub_date }}</span></div>
+        <div class="column"><span>{{ object.pub_date }}</span></div>
       </div><!-- .post-meta -->
       <!-- Image Carousel -->
       <!-- Data API:
@@ -59,20 +59,20 @@
           -->
       <div class="image-carousel space-bottom-2x">
         <div class="inner">
-          {% if publications.photo_1 %}
-          <img src="{{publications.photo_1.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+          {% if object.photo_1 %}
+          <img src="{{object.photo_1.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
-          {% if publications.photo_2 %}
-          <img src="{{publications.photo_2.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+          {% if object.photo_2 %}
+          <img src="{{object.photo_2.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
-          {% if publications.photo_3 %}
-          <img src="{{publications.photo_3.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+          {% if object.photo_3 %}
+          <img src="{{object.photo_3.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
-          {% if publications.photo_4 %}
-          <img src="{{publications.photo_4.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+          {% if object.photo_4 %}
+          <img src="{{object.photo_4.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
-          {% if publications.photo_5 %}
-          <img src="{{publications.photo_5.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+          {% if object.photo_5 %}
+          <img src="{{object.photo_5.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
         </div>
       </div><!-- .image-carousel -->
@@ -85,7 +85,7 @@
       <div class="post-tools space-top-2x">
         <div class="column">
           <div class="tags-links">
-            {% for c in publications.category.all %}
+            {% for c in object.category.all %}
             <a href="{% url 'nio_app:publics_category' c.slug %}">{{c.name}}</a>
             {% endfor %}
           </div>
@@ -96,7 +96,7 @@
         <div class="comment-respond">
           <h4 class="comment-reply-title">Залиште коментарій</h4>
           <form method="post" id="comment-form" class="comment-form"
-                action="{% url 'nio_app:add_review_pub' publications.slug %}">
+                action="{% url 'nio_app:add_review_pub' object.slug %}">
             {% csrf_token %}
             <input type="hidden" name="parent" id="contactparent" value="">
             <div class="row">
@@ -127,7 +127,7 @@
         <!-- Коментарії -->
         <a name="coments"></a>
         <h4 class="comments-count">Коментарії</h4>
-        {% for r in publications.get_review %}
+        {% for r in object.get_review %}
         <!-- Parent Comment -->
         <div class="comment">
           <div class="comment-meta">
