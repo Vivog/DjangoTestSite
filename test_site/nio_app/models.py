@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+
 # Create your models here.
 
 class Main(models.Model):
@@ -32,6 +33,7 @@ class Main(models.Model):
     objects = models.Manager()
 
     """Визначення загальної кількості персоналу"""
+
     def staff(self):
         num = 0
         for d in self.divisions.all():
@@ -82,27 +84,25 @@ class Divisions(models.Model):
 
     photo = models.ImageField(upload_to="boss_foto/", verbose_name="Фото")
 
+    pics = models.ManyToManyField('DivisionsPics', verbose_name='Картинка до підрозділу')
+
     """Шлях до фото підрозділу"""
+
     def directory_path(instance, filename):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
         return f'divs/{instance.slug}/photo/{filename}'
-
-    photo_1 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", null=True)
-    photo_2 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
-    photo_3 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
-    photo_4 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
-    photo_5 = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
 
     objects = models.Manager()
 
     __original_name = None
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.__original_name = self.name
-        self.save()
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.__original_name = self.name
+    #     self.save()
 
     """Визначення кількості персоналу, проектів та документації через сумісні моделі"""
+
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
@@ -119,6 +119,30 @@ class Divisions(models.Model):
 
     def __str__(self):
         return self.abr
+
+
+class DivisionsPics(models.Model):
+    """Картинки що відображають діяльність підрозділів"""
+
+    div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Підрозділ', null=True)
+
+    """Шлях до фото підрозділу"""
+
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'divs/{instance.div.slug}/photo/{filename}'
+
+    pic = models.ImageField(upload_to=directory_path, verbose_name="Фото підрозділу", blank=True, null=True)
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = 'Картинка до підрозділу'
+        verbose_name_plural = 'Картинки до підрозділів'
+        ordering = ['div']
+
+    def __str__(self):
+        return f'{self.pic}'
 
 
 class Staff(models.Model):
@@ -176,7 +200,7 @@ class Documents(models.Model):
                             verbose_name="Рік випуску", null=True)
 
     number = models.CharField(max_length=20, help_text="Введіть номер документу",
-                            verbose_name="Номер документа", null=True)
+                              verbose_name="Номер документа", null=True)
 
     name = models.CharField(max_length=500, help_text="Введіть назву документу",
                             verbose_name="Назва документа")
@@ -279,38 +303,11 @@ class Projects(models.Model):
     category = models.ManyToManyField('Categories', help_text='оберіть категорію/категорії',
                                       verbose_name='Оберіть категорію')
 
-    def directory_path(instance, filename):
-        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-        return f'archives/{instance.div.slug}/projects/{instance.pk}/{instance.slug}/{filename}'
+    docs = models.ManyToManyField('ProjectsDocs', verbose_name='Документ до проекту')
 
-    doc_1 = models.FileField(upload_to=directory_path, null=True, max_length=500)
-    doc_2 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_3 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_4 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_5 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_6 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_7 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_8 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_9 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-    doc_10 = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
-
-    photo_1 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", null=True, max_length=500)
-    photo_2 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True,
-                                max_length=500)
-    photo_3 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True,
-                                max_length=500)
-    photo_4 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True,
-                                max_length=500)
-    photo_5 = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True,
-                                max_length=500)
+    pics = models.ManyToManyField('ProjectsPics', verbose_name='Картинка до проекту')
 
     objects = models.Manager()
-
-    def file_load(self):
-        self.doc.upload_to = f'archives/{self.div.slug}/projects/{self.pk}/'
-        return self.doc.upload_to
-
-    file_load.short_description = 'Розташування файлів'
 
     def display_author(self):
         return ', '.join([staff.fio.split()[0] for staff in self.author.all()])
@@ -324,6 +321,66 @@ class Projects(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProjectsDocs(models.Model):
+    """Файли проекту"""
+
+    project = models.ForeignKey(Projects, on_delete=models.SET_NULL, verbose_name='Проект', null=True)
+
+    """Шлях до файлів проекту"""
+
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'archives/{instance.project.div.slug}/projects/{instance.project.pk}/{instance.project.slug}/{filename}'
+
+    doc = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+
+    objects = models.Manager()
+
+    def file_load(self):
+        self.doc.upload_to = f'archives/{self.project.div.slug}/projects/{self.project.pk}/'
+        return self.doc.upload_to
+
+    file_load.short_description = 'Розташування файлів'
+
+    class Meta:
+        verbose_name = 'Документ проекту'
+        verbose_name_plural = 'Документи проектів'
+        ordering = ['project']
+
+    def __str__(self):
+        return f'{self.doc}'
+
+
+class ProjectsPics(models.Model):
+    """Картинки проекту"""
+    project = models.ForeignKey(Projects, on_delete=models.SET_NULL, verbose_name='Проект', null=True)
+
+    """Шлях до картинок проекту"""
+
+    def directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return f'archives/{instance.project.div.slug}/projects/{instance.project.pk}/{instance.project.slug}/{filename}'
+
+    pic = models.ImageField(upload_to=directory_path, verbose_name="Картинка проекту", blank=True, null=True,
+                            max_length=500)
+
+    objects = models.Manager()
+
+    def file_load(self):
+        self.pic.upload_to = f'archives/{self.project.div.slug}/projects/{self.project.pk}/'
+        return self.pic.upload_to
+
+    file_load.short_description = 'Розташування файлів'
+
+    class Meta:
+        verbose_name = 'Картинка проекту'
+        verbose_name_plural = 'Картинки проектів'
+        ordering = ['project']
+
+    def __str__(self):
+        return f'{self.pic}'
 
 
 class Publications(models.Model):

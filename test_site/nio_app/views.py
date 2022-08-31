@@ -1,13 +1,10 @@
-from itertools import chain
-
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.core.paginator import Paginator
-from django.db.models import Q, Count
+from django.db.models import Q
 from django.http import FileResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.urls import reverse_lazy, resolve
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, View, CreateView
 from django.views.generic.list import MultipleObjectMixin
 
@@ -23,87 +20,115 @@ CONTEXT['models'] = [[Divisions._meta.verbose_name_plural, Divisions.objects.all
                      [Projects._meta.verbose_name_plural, Projects.objects.all().count()],
                      [Publications._meta.verbose_name_plural, Publications.objects.all().count()],
                      [News._meta.verbose_name_plural, News.objects.all().count()]]
-CONTEXT['main'] = Main.objects.all().prefetch_related('divisions')
-"""Виключимо з підрозділів НДВ"""
-CONTEXT['div'] = Divisions.objects.all().prefetch_related('locs', 'coops', 'theses')[1:]
-CONTEXT['pubs'] = Publications.objects.all().select_related('div').prefetch_related('author', 'category')
-CONTEXT['pubs_rev'] = ReviewsPubs.objects.all().select_related('parent', 'pub')
-CONTEXT['new'] = News.objects.all().prefetch_related('category')
-CONTEXT['new_all'] = News.objects.all().prefetch_related('category')
-CONTEXT['news_rev'] = ReviewsNews.objects.all().select_related('parent', 'news')
-CONTEXT['staff'] = Staff.objects.all().select_related('div')
-STAFF = Staff.objects.all()
-PROF = []
-for s in STAFF:
-    if s.prof not in PROF:
-        PROF.append(s.prof)
-    else:
-        continue
-PROFS = list(set(PROF))
-trans_table = str.maketrans(
-    'ABCEHKMOPTXacekmopuxyi',
-    'АВСЕНКМОРТХасекморихуі',
-)
-PROFS.sort(key=lambda s: s[0].translate(trans_table))
-CONTEXT['staff_prof'] = PROFS
-CONTEXT['projects'] = Projects.objects.all().select_related('div').prefetch_related('author', 'category')
-CONTEXT['cats'] = Categories.objects.all()
-CONTEXT['docs_all'] = Documents.objects.all().select_related('div').prefetch_related('author')
-CONTEXT['doc'] = (
-    ("M", "Методики"), ("P", "Паспорти"), ("KE", "Керівництва з експлуатації"), ("TD", "Техничні довідки"),
-    ("ZT", "Технічні звіти"), ("TI", "Технологічні інструкції"), ("I", "Інше"), (None, "Тип"))
-CONTEXT['docs_type'] = Documents.objects.values('type').annotate(Count('type'))
-CONTEXT['dt'] = []
-for i in CONTEXT['doc']:
-    for t in CONTEXT['docs_type']:
-        if t['type'] in i:
-            add = [i[0], i[1], t['type__count']]
-            CONTEXT['dt'].append(add)
-        else:
-            continue
-CONTEXT['page'] = ''
+
+
+# CONTEXT['main'] = Main.objects.prefetch_related('divisions')
+# """Виключимо з підрозділів НДВ"""
+# CONTEXT['div'] = Divisions.objects.prefetch_related('locs', 'coops', 'theses')[1:]
+# CONTEXT['pubs'] = Publications.objects.select_related('div').prefetch_related('author', 'category')
+# CONTEXT['pubs_rev'] = ReviewsPubs.objects.select_related('parent', 'pub')
+# CONTEXT['new'] = News.objects.prefetch_related('category')
+# CONTEXT['new_all'] = News.objects.prefetch_related('category')
+# CONTEXT['news_rev'] = ReviewsNews.objects.select_related('parent', 'news')
+# CONTEXT['staff'] = Staff.objects.select_related('div')
+# STAFF = Staff.objects.all()
+# PROF = []
+# for s in STAFF:
+#     if s.prof not in PROF:
+#         PROF.append(s.prof)
+#     else:
+#         continue
+# PROFS = list(set(PROF))
+# trans_table = str.maketrans(
+#     'ABCEHKMOPTXacekmopuxyi',
+#     'АВСЕНКМОРТХасекморихуі',
+# )
+# PROFS.sort(key=lambda s: s[0].translate(trans_table))
+# CONTEXT['staff_prof'] = PROFS
+# CONTEXT['projects'] = Projects.objects.select_related('div').prefetch_related('author', 'category')
+# CONTEXT['cats'] = Categories.objects.all()
+# CONTEXT['docs_all'] = Documents.objects.select_related('div').prefetch_related('author')
+# CONTEXT['doc'] = (
+#     ("M", "Методики"), ("P", "Паспорти"), ("KE", "Керівництва з експлуатації"), ("TD", "Техничні довідки"),
+#     ("ZT", "Технічні звіти"), ("TI", "Технологічні інструкції"), ("I", "Інше"), (None, "Тип"))
+# CONTEXT['docs_type'] = Documents.objects.values('type').annotate(Count('type'))
+# CONTEXT['dt'] = []
+# for i in CONTEXT['doc']:
+#     for t in CONTEXT['docs_type']:
+#         if t['type'] in i:
+#             add = [i[0], i[1], t['type__count']]
+#             CONTEXT['dt'].append(add)
+#         else:
+#             continue
+# CONTEXT['page'] = ''
 
 
 def pageNotFound(request, exception):
+    """Сторінка 404"""
     context = {}
-    context.update(CONTEXT)
+
+    """використання PortalMixin"""
+    mixin = PortalMixin()
+    mixin.divisions = Divisions.objects.only('abr', 'slug')
+    mixin_context = mixin.get_user_context()
+    context = dict(list(context.items()) + list(mixin_context.items()))
     return render(request, 'nio_app/404.html', context=context)
 
 
 def contacts(request):
+    """Контакти"""
     context = {}
-    context.update(CONTEXT)
-    context['dev'] = Staff.objects.get(tabel='654')
-    context['sec'] = Staff.objects.get(tabel='633')
-    context['arh'] = Staff.objects.get(tabel='672')
+    contact = Staff.objects.only('phone')
+    context['dev'] = contact.get(tabel='654')
+    context['sec'] = contact.get(tabel='633')
+    context['arh'] = contact.get(tabel='672')
+
+    """використання PortalMixin"""
+    mixin = PortalMixin()
+    mixin.divisions = Divisions.objects.only('abr', 'slug')
+    mixin_context = mixin.get_user_context()
+    context = dict(list(context.items()) + list(mixin_context.items()))
     return render(request, 'nio_app/contacts.html', context=context)
 
+
 def cats(request):
+    """Категорії"""
     context = {}
-    context.update(CONTEXT)
+    """використання PortalMixin"""
+    mixin = PortalMixin()
+    mixin.divisions = Divisions.objects.only('abr', 'slug')
+    mixin_context = mixin.get_user_context()
+    context = dict(list(context.items()) + list(mixin_context.items()))
     return render(request, 'nio_app/cats.html', context=context)
 
 
-class LoginUser(LoginView):
+class LoginUser(LoginView, PortalMixin):
     form_class = LoginUserForm
     template_name = 'nio_app/include/login.html'
-    extra_context = CONTEXT
 
-    #  Достатньо написати тільки це і не переопредиляти метод!!!
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context.update(CONTEXT)
-    #     return context
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+
+        """використання PortalMixin"""
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_success_url(self):
         return reverse_lazy('nio_app:index_portal')
 
 
-class RegisterUser(CreateView):
+class RegisterUser(CreateView, PortalMixin):
     form_class = RegisterUserForm
     template_name = 'nio_app/include/registration.html'
     success_url = reverse_lazy('nio_app:index_portal')
-    extra_context = CONTEXT
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+
+        """використання PortalMixin"""
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
+
 
     def form_valid(self, form):
         user = form.save()
@@ -164,6 +189,7 @@ class SearchMain(ListView):
         context['page'] = f"search={self.request.GET.get('search')}&"
         return context
 
+
 class SearchCat(ListView):
     template_name = 'nio_app/search_cat.html'
     paginate_by = 5
@@ -201,62 +227,86 @@ class SearchCat(ListView):
         return context
 
 
-
-
-class Index(ListView):
+class Index(PortalMixin, ListView):
     model = Main
     template_name = 'nio_app/index_portal.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        print('DIV', context['div'])
-        return context
-        """при використанні DataMixin"""
-        # c_def = self.get_user_context()
-        # return dict(list(context.items()) + list(c_def.items()))
+
+        """використання PortalMixin"""
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class DivisionList(DetailView, MultipleObjectMixin):
+class DivisionList(DetailView, MultipleObjectMixin, PortalMixin):
     model = Divisions
     template_name = 'nio_app/division.html'
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        div = Divisions.objects.get(slug=self.get_object().slug)
+        div = self.object
         object_list = div.description.split('\n')
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context.update(CONTEXT)
         context['div'] = div
-        context['page'] = ''
-        return context
+
+        """використання PortalMixin"""
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class StaffSort:
 
-    def get_div(self):
-        return Divisions.objects.all()
-
-    def get_prof(self):
-        return Staff.objects.values('prof').distinct()
-
-
-class StaffSortList(StaffSort, ListView):
+class StaffList(ListView, PortalMixin):
+    model = Staff
     template_name = 'nio_app/staff/staff.html'
-    context_object_name = 'filter'
     paginate_by = 5
+    STAFF = Staff.objects.select_related('div')
+
+    def staff_prof(self):
+        PROF = []
+        for s in self.STAFF:
+            if s.prof not in PROF:
+                PROF.append(s.prof)
+            else:
+                continue
+        PROFS = list(set(PROF))
+        return PROFS
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['staff_prof'] = self.staff_prof()
+        context['staff'] = self.STAFF
+        context['page'] = ''
+        if self.request.GET.get('divs'):
+            context['page'] += f"divs={self.request.GET.get('divs')}&"
+        if self.request.GET.get('prof'):
+            context['page'] += f"prof={self.request.GET.get('prof')}&"
+        if self.request.GET.get('sort'):
+            context['page'] += f"sort={self.request.GET.get('sort')}&"
+        self.divisions = Divisions.objects.only('abr', 'slug')
+
+        """використання PortalMixin"""
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+
+class StaffSortList(ListView, PortalMixin):
+    template_name = 'nio_app/staff/staff_sort.html'
+    context_object_name = 'staff_sort'
+    paginate_by = 5
+    STAFF = Staff.objects.select_related('div')
 
     def get_queryset(self):
         # queryset = Staff.objects.order_by('fio')
         sorting = ('fio', 'tabel', 'oklad', 'birthday')
         if self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') == None:
-            queryset = Staff.objects.filter(
+            queryset = self.STAFF.filter(
                 Q(div_id__in=self.request.GET.getlist("divs"))
             ).order_by('fio')
         elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get(
                 'sort') == None:
-            queryset = Staff.objects.filter(
+            queryset = self.STAFF.filter(
                 Q(div_id__in=self.request.GET.getlist("divs")),
                 Q(prof__in=self.request.GET.getlist("prof"))
             ).order_by('fio')
@@ -264,14 +314,14 @@ class StaffSortList(StaffSort, ListView):
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = Staff.objects.filter(
+                    queryset = self.STAFF.filter(
                         Q(div_id__in=self.request.GET.getlist("divs"))
                     ).order_by(s)
         elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get(
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = Staff.objects.filter(
+                    queryset = self.STAFF.filter(
                         Q(div_id__in=self.request.GET.getlist("divs")),
                         Q(prof__in=self.request.GET.getlist("prof"))
                     ).order_by(s)
@@ -284,22 +334,32 @@ class StaffSortList(StaffSort, ListView):
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = Staff.objects.filter(
+                    queryset = self.STAFF.filter(
                         Q(prof__in=self.request.GET.getlist("prof"))
                     ).order_by(s)
         elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = Staff.objects.order_by(s)
+                    queryset = self.STAFF.order_by(s)
         elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') == None:
-            queryset = Staff.objects.order_by('fio')
+            queryset = self.STAFF.order_by('fio')
         return queryset
 
+    def staff_prof(self):
+        PROF = []
+        for s in self.STAFF:
+            if s.prof not in PROF:
+                PROF.append(s.prof)
+            else:
+                continue
+        PROFS = list(set(PROF))
+        return PROFS
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context.update(CONTEXT)
+        context['staff_prof'] = self.staff_prof()
         context['page'] = ''
         if self.request.GET.get('divs'):
             context['page'] += f"divs={self.request.GET.get('divs')}&"
@@ -307,102 +367,104 @@ class StaffSortList(StaffSort, ListView):
             context['page'] += f"prof={self.request.GET.get('prof')}&"
         if self.request.GET.get('sort'):
             context['page'] += f"sort={self.request.GET.get('sort')}&"
-        return context
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class StaffList(StaffSort, ListView):
-    model = Staff
-    template_name = 'nio_app/staff/staff.html'
-    context_object_name = 'filter'
-    paginate_by = 5
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data()
-        context.update(CONTEXT)
-        context['page'] = ''
-        if self.request.GET.get('divs'):
-            context['page'] += f"divs={self.request.GET.get('divs')}&"
-        if self.request.GET.get('prof'):
-            context['page'] += f"prof={self.request.GET.get('prof')}&"
-        if self.request.GET.get('sort'):
-            context['page'] += f"sort={self.request.GET.get('sort')}&"
-        return context
-
-class StaffSingle(DetailView):
+class StaffSingle(DetailView, PortalMixin):
     model = Staff
     template_name = 'nio_app/staff/staff_single.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context.update(CONTEXT)
-        context['single'] = Staff.objects.get(slug=self.kwargs['slug'])
-        context['page'] = ''
-        return context
+        context['single'] = self.object
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class SearchStaff(StaffSort, ListView):
+class SearchStaff(ListView, PortalMixin):
     template_name = 'nio_app/staff/staff.html'
 
     def get_queryset(self):
-        search_list = Staff.objects.filter(fio__icontains=self.request.GET.get('search_staff'))
+        search_list = Staff.objects.select_related('div').filter(fio__icontains=self.request.GET.get('search_staff'))
         return search_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context.update(CONTEXT)
-        context['filter'] = self.get_queryset()
+        context['staff'] = self.get_queryset()
         context['page'] = f"search_staff={self.request.GET.get('search_staff')}&"
-        return context
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class PubsList(PortalMixin, ListView):
+class PubsList(ListView, PortalMixin):
     model = Publications
     template_name = 'nio_app/publics/publics.html'
-    queryset = Publications.objects.all()
+    queryset = Publications.objects.prefetch_related('author', 'category')
+    paginate_by = 2
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        context['pubs'] = self.queryset
-        context['page'] = ''
-        return context
+        context = super().get_context_data(object_list=self.object_list, **kwargs)
+        context['cats'] = Categories.objects.filter(publications__gte=1).distinct()
+        context['pubs'] = Publications.objects.only('name', 'slug', 'photo_1')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class PubsDetail(DetailView, MultipleObjectMixin):
+class PubsDetail(DetailView, MultipleObjectMixin, PortalMixin):
     model = Publications
     template_name = 'nio_app/publics/public_single.html'
     paginate_by = 6
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
-        object_list = Publications.objects.get(slug=self.kwargs['slug']).text.split('\n')
+        object_list = self.object.text.split('\n')
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context.update(CONTEXT)
-        context['page'] = ''
-        return context
+        context['cats'] = Categories.objects.filter(publications__gte=1).distinct()
+        context['pubs'] = Publications.objects.only('name', 'slug', 'photo_1')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
         return Publications.objects.filter(slug=self.kwargs['slug'])
 
 
-class PubsCatsDetail(DetailView):
+class PubsCatsDetail(DetailView, PortalMixin):
     model = Categories
     template_name = 'nio_app/publics/publics_category.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        return context
+        object_list = Publications.objects.prefetch_related('category', 'author')
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['cats'] = Categories.objects.filter(publications__gte=1).distinct()
+        context['pubs'] = Publications.objects.only('name', 'slug', 'photo_1')
 
-    def get_queryset(self):
-        return Categories.objects.filter(slug=self.kwargs['slug'])
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
 class AddReviewPub(View):
 
     def post(self, request, slug):
         form = ReviewPubForm(request.POST)
-        pub = Publications.objects.get(slug=slug)
+        pub = Publications.objects.prefetch_related('category', 'author').get(slug=slug)
         if form.is_valid():
             form = form.save(commit=False)
             if request.POST.get("parent", None):
@@ -413,57 +475,75 @@ class AddReviewPub(View):
         return redirect(pub.get_absolute_url())
 
 
-class SearchPub(ListView):
+class SearchPub(ListView, PortalMixin):
     template_name = 'nio_app/publics/publics.html'
-    paginate_by = 1
 
     def get_queryset(self):
-        search_list = Publications.objects.filter(name__icontains=self.request.GET.get('search_pub'))
+        search_list = Publications.objects.select_related('div').filter(name__icontains=self.request.GET.get('search_pub'))
         return search_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        context['pubs'] = self.get_queryset()
+        context['cats'] = Categories.objects.filter(publications__gte=1).distinct()
+        context['pubs'] = Publications.objects.only('name', 'slug', 'photo_1')
         context['page'] = f"search_pub={self.request.GET.get('search_pub')}&"
-        return context
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class NewsList(PortalMixin, ListView):
+class NewsList(ListView, PortalMixin):
     model = News
     template_name = 'nio_app/news/news.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        context['last'] = News.objects.all().order_by('-pub_date')
-        return context
+        context['cats'] = Categories.objects.filter(news__gte=1).distinct()
+        context['news'] = News.objects.only('name', 'slug', 'photo_1')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class NewsDetail(DetailView, MultipleObjectMixin):
+class NewsDetail(DetailView, MultipleObjectMixin, PortalMixin):
     model = News
     template_name = 'nio_app/news/news_single.html'
     paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        object_list = News.objects.get(slug=self.kwargs['slug']).text.split('\n')
+        object_list = self.object.text.split('\n')
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context.update(CONTEXT)
-        context['page'] = ''
-        return context
+        context['cats'] = Categories.objects.filter(news__gte=1).distinct()
+        context['news'] = News.objects.only('name', 'slug', 'photo_1')
 
-    def get_queryset(self):
-        return News.objects.filter(slug=self.kwargs['slug'])
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class NewsCatsDetail(DetailView):
+
+class NewsCatsDetail(DetailView, PortalMixin):
     model = Categories
     template_name = 'nio_app/news/news_category.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        return context
+        context['cats'] = Categories.objects.filter(news__gte=1).distinct()
+        context['news'] = News.objects.only('name', 'slug', 'photo_1')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
         return Categories.objects.filter(slug=self.kwargs['slug'])
@@ -482,7 +562,7 @@ class AddReviewNews(View):
         return redirect(news.get_absolute_url())
 
 
-class SearchNews(ListView):
+class SearchNews(ListView, PortalMixin):
     template_name = 'nio_app/news/news.html'
     paginate_by = 1
 
@@ -492,50 +572,49 @@ class SearchNews(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
         context['new'] = self.get_queryset()
         context['page'] = f"search_news={self.request.GET.get('search_news')}&"
-        return context
 
-    # def post(self, request):
-    #     div = Divisions.objects.all()
-    #     if request.method == '':
-    #     for d in div:
-    #         print(d)
-    #         if divs == d:
-    #             print('DIVS ', divs)
-    #
-    #     return render(request, 'nio_app/staff.html', context=CONTEXT)
+        context['cats'] = Categories.objects.filter(news__gte=1).distinct()
+        context['news'] = News.objects.only('name', 'slug', 'photo_1')
 
-    # def post(self, request):
-    #     if request.method == 'POST':
-    #         form = ChoiseStaffForm(request.POST)
-    #         if form.is_valid():
-    #             divs = request.POST.get('by_divs')
-    #             print('DIVS ', divs)
-    #             # context =
-    #             div = Divisions.objects.filter(abr=form.by_divs)
-    #             CONTEXT['staff'] = Staff.objects.filter(div_id=div.id)
-    #             return redirect('nio_app:staff')
-    #     else:
-    #         form = ChoiseStaffForm
-    #     return render(request, 'nio_app/staff.html', {'form': form},)
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class DocsList(ListView):
+class DocsList(ListView, PortalMixin):
     model = Documents
     template_name = 'nio_app/docs/docs.html'
     paginate_by = 4
-    extra_context = CONTEXT
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class DocDetail(DetailView):
+class DocDetail(DetailView, PortalMixin):
     model = Documents
     template_name = 'nio_app/docs/doc_single.html'
-    extra_context = CONTEXT
 
-    def get_queryset(self):
-        return Documents.objects.filter(slug=self.kwargs['slug'])
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
 
 
 def download_doc(request, id):
@@ -546,28 +625,30 @@ def download_doc(request, id):
     filename = Path(BASE_DIR, 'media/', path)
     # if not filename.exists():
     #     filename = Path(BASE_DIR, 'static/site_app/cv', 'Savushkin_CV.pdf')
-
     return FileResponse(open(filename, 'rb'), as_attachment=True)
 
 
-class DocsTypeDetail(ListView):
-
+class DocsTypeDetail(ListView, PortalMixin):
     model = Documents
     template_name = 'nio_app/docs/docs.html'
     paginate_by = 5
-    # extra_context = CONTEXT
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
-        return context
+        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
+
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
         q = Q(type=self.kwargs['type'])
         return Documents.objects.filter(q)
 
 
-class SearchDoc(ListView):
+class SearchDoc(ListView, PortalMixin):
     template_name = 'nio_app/docs/docs.html'
     paginate_by = 5
 
@@ -577,11 +658,14 @@ class SearchDoc(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(CONTEXT)
+        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
         context['page'] = f"search_docs={self.request.GET.get('search_docs')}&"
-        return context
 
+        """використання PortalMixin"""
+        self.divisions = Divisions.objects.only('abr', 'slug')
+        mixin_context = self.get_user_context()
 
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 # def home(request):
 #     num_divisions = Divisions.objects.all().count()

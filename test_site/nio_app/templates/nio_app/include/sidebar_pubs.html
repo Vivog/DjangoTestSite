@@ -12,10 +12,10 @@
         <section class="widget widget_categories">
             <h3 class="widget-title"><i class="icon-ribbon"></i>Категорії
             </h3>
-            <ul>{% for c in cats %} {% if c.publications_set.count %}
+            <ul>{% for c in cats %}
                 <li><a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}<span>{{ c.publications_set.count }}</span></a>
                 </li>
-                {% endif %} {% endfor %}
+                {% endfor %}
             </ul>
         </section><!-- .widget.widget_categories -->
         <section class="widget widget_recent_posts">
@@ -37,9 +37,7 @@
             <h3 class="widget-title"><i class="icon-tag"></i>Посилання
             </h3>
             {% for c in cats %}
-            {% if c.publications_set.count %}
             <a href="{% url 'nio_app:publics_category' c.slug %}">{{ c.name }}</a>
-            {% endif %}
             {% endfor %}
         </section><!-- .widget.widget_tag_cloud -->
     </aside><!-- .sidebar -->

@@ -67,7 +67,7 @@
             </colgroup>
             <tr>
               <td>&nbsp;</td>
-              {% for d in div %}
+              {% for d in divisions %}
               <td>
                 <span class="text-bold" style="font-size: 20px">{{d.abr}}</span>
                 <a href="{% url 'nio_app:division' d.slug %}" class="text-sm space-top">Відкрити</a>
@@ -76,31 +76,31 @@
             </tr>
             <tr>
               <td class="text-gray text-right">Чисельність</td>
-              {% for d in div %}
+              {% for d in divisions %}
               <td class="text-bold">{{d.num_staff}}</td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Кількість документації</td>
-              {% for d in div %}
+              {% for d in divisions %}
               <td class="text-bold">{{d.num_docs}}</td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Розташування</td>
-              {% for d in div %}
+              {% for d in divisions %}
               <td class="text-normal">{% for l in d.locs.all %}{{l.loc}}<br>{% endfor %}</td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Пов'язані підрозділи</td>
-              {% for d in div %}
+              {% for d in divisions %}
               <td class="text-normal">{% for c in d.coops.all %}{{c.name}}<br>{% endfor %}</td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Керіники</td>
-              {% for d in div %}
+              {% for d in divisions %}
               <td class="text-bold">{{d.boss}}</td>
               {% endfor %}
             </tr>
@@ -219,7 +219,7 @@
           <div class="col-sm-4 scrollReveal sr-scaleDown sr-ease-in-out-back">
             <div class="testimonial">
               <div class="author-ava">
-                <img src="{% static 'nio_app/img/testimonials/01.png' %}" alt="Author">
+                <img src="{% static 'nio_app/img/testimonials/01.jpg' %}" alt="Author">
               </div>
               <h3 class="author-name">Юрій Дерій</h3>
               <p class="text-gray">Директор з маркетингу</p>
@@ -229,7 +229,7 @@
           <div class="col-sm-4 scrollReveal sr-scaleDown sr-delay-1 sr-ease-in-out-back">
             <div class="testimonial">
               <div class="author-ava">
-                <img src="{% static 'nio_app/img/testimonials/02.png' %}" alt="Author">
+                <img src="{% static 'nio_app/img/testimonials/01.jpg' %}" alt="Author">
               </div>
               <h3 class="author-name">Геннадій Чорний</h3>
               <p class="text-gray">Головний конструктор</p>
@@ -239,7 +239,7 @@
           <div class="col-sm-4 scrollReveal sr-scaleDown sr-delay-2 sr-ease-in-out-back">
             <div class="testimonial">
               <div class="author-ava">
-                <img src="{% static 'nio_app/img/testimonials/03.png' %}" alt="Author">
+                <img src="{% static 'nio_app/img/testimonials/01.jpg' %}" alt="Author">
               </div>
               <h3 class="author-name">Володимир Чобенко</h3>
               <p class="text-gray">Начальник КУ</p>

@@ -75,7 +75,7 @@
 
       <!-- Завантаження файлу -->
       {% if request.user.is_authenticated %}
-      <a href="{% url 'nio_app:download_doc' id=documents.pk as download %}"
+      <a href="{% url 'nio_app:download_doc' id=documents.pk %}"
          class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
         ЗАВАНТАЖИТИ ДОКУМЕНТ
       </a>

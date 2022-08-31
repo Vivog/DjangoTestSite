@@ -38,7 +38,6 @@
     <header class="navbar navbar-sticky">
         {% include 'nio_app/include/header.html' %}
     <!-- Main Navigation -->
-  {% for m in main %}
   <div class="container">
     <nav class="main-navigation">
       <ul class="menu">
@@ -62,9 +61,8 @@
           {% endblock divs %}
           <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
           <ul class="sub-menu">
-            <li><a href="{% url 'nio_app:index_portal' %}#divs">{{m.abr}}</a></li>
-            {% for d in m.divisions.all %}
-            <li><a href="{% url 'nio_app:division' d.slug %}">{{d.abr}}</a></li>
+            {% for d in divisions %}
+            <li><a href="{% url 'nio_app:division' d.slug %}">{{ d.abr }}</a></li>
             {% endfor %}
           </ul>
         </li>
@@ -113,7 +111,7 @@
       </ul><!-- .menu -->
     </nav><!-- .main-navigation -->
   </div><!-- .container -->
-  {% endfor %}
+
 </header><!-- .navbar -->
 
       {% block content %}
