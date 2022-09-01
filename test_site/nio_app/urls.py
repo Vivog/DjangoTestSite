@@ -1,9 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 
 from nio_app.views import *
 
 app_name = 'nio_app'
 urlpatterns = [
+
     path('', Index.as_view(), name='index_portal'),
 
     path('search/', SearchMain.as_view(), name='search'),
@@ -33,11 +34,6 @@ urlpatterns = [
     path('news/<slug:slug>/', NewsDetail.as_view(), name='news_single'),
     path('news/<slug:slug>/review/', AddReviewNews.as_view(), name='add_review_news'),
 
-    path('docs/', DocsList.as_view(), name='docs'),
-    path('download_doc/<int:id>/', download_doc, name='download_doc'),
-    path('search_docs/', SearchDoc.as_view(), name='search_docs'),
-    path('docs/type/<str:type>/', DocsTypeDetail.as_view(), name='docs_type'),
-    path('docs/<slug:slug>/', DocDetail.as_view(), name='doc_single'),
 
     path('contacts/', contacts, name='contacts'),
 

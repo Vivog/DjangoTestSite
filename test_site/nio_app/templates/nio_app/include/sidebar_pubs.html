@@ -28,7 +28,7 @@
                                                                             style="width: 60px; height: 60px; object-fit: cover;"></a>
                 </div>
                 <div class="info">
-                    <h4><a href="post-right-sidebar.html">{{ p.name|truncatewords:3}}</a></h4>
+                    <h4><a href="{% url 'nio_app:public_single' p.slug %}">{{ p.name|truncatewords:3}}</a></h4>
                 </div>
             </div><!-- .item -->
             {% endfor %}

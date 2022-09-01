@@ -45,18 +45,6 @@ class NewsAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
-class DocumentsAdminForm(forms.ModelForm):
-    years = []
-    for i in range(1990, 2051):
-        years.append(i)
-    description = forms.CharField(label='Опис документу', widget=CKEditorUploadingWidget())
-    release_date = forms.DateField(label='Дата впровадження', widget=SelectDateWidget(years=years))
-
-    class Meta:
-        model = Documents
-        fields = '__all__'
-
-
 @admin.register(Main)
 class MainAdmin(admin.ModelAdmin):
     list_display = ('abr', 'boss', 'staff',)
@@ -136,17 +124,6 @@ class StaffAdmin(admin.ModelAdmin):
             return mark_safe(f"<img src='{object.photo.url}' width=100")
 
     get_html_photo.short_description = 'Мініатюра'
-
-
-@admin.register(Documents)
-class DocumentsAdmin(admin.ModelAdmin):
-    # fields = ('fio')
-    list_display = ('number', 'div', 'release_date', "status", "type", "name", "display_author", 'file_load')
-    list_display_links = ('name',)
-    list_filter = ('div', 'status', 'type')
-    search_fields = ('name', 'year', 'type')
-    prepopulated_fields = {'slug': ('name',), }
-    form = DocumentsAdminForm
 
 
 @admin.register(Location)

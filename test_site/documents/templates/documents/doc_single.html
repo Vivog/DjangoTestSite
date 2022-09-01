@@ -29,7 +29,7 @@
     <div class="inner">
       <div class="column">
         <div class="title">
-          <a href="{% url 'nio_app:docs' %}">
+          <a href="{% url 'documents:docs' %}">
           <h1>Документація</h1>
           </a>
         </div><!-- .title -->
@@ -66,7 +66,7 @@
               <span>у</span>
               <span>
                 <i class="icon-ribbon"></i>
-                <a href="{% url 'nio_app:docs_type' documents.type %}">{{ documents.get_type_display }}</a>
+                <a href="{% url 'documents:docs_type' documents.type %}">{{ documents.get_type_display }}</a>
               </span>
             </div>
         <div class="column"><span>{{ documents.release_date }}</span></div>
@@ -75,7 +75,7 @@
 
       <!-- Завантаження файлу -->
       {% if request.user.is_authenticated %}
-      <a href="{% url 'nio_app:download_doc' id=documents.pk %}"
+      <a href="{% url 'documents:download_doc' id=documents.pk %}"
          class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
         ЗАВАНТАЖИТИ ДОКУМЕНТ
       </a>
@@ -89,7 +89,7 @@
       <div class="post-tools space-top-2x">
         <div class="column">
           <div class="tags-links">
-            <a href="{% url 'nio_app:docs_type' documents.type %}">{{ documents.get_type_display }}</a>
+            <a href="{% url 'documents:docs_type' documents.type %}">{{ documents.get_type_display }}</a>
           </div>
         </div><!-- .column -->
       </div><!-- .post-tools -->
@@ -116,7 +116,7 @@
     </div><!-- .comments-area -->
   </div><!-- .col-lg-9.col-md-8 -->
       <!-- Sidebar -->
-        {% include 'nio_app/include/sidebar_docs.html' %}
+        {% include 'documents/include/sidebar_docs.html' %}
   </div><!-- .row -->
 </div><!-- .container -->
 {% endblock content %}

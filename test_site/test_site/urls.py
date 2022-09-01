@@ -25,6 +25,7 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
     path('accounts/', include('allauth.urls')),
     path('', include('nio_app.urls')),
+    path('documents/', include('documents.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 

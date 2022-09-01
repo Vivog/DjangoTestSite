@@ -4,7 +4,7 @@
     <div class="space-top-2x visible-sm visible-xs"></div>
     <aside class="sidebar">
         <section class="widget widget_search">
-            <form method="get" class="search-box" action="{% url 'nio_app:search_docs' %}">
+            <form method="get" class="search-box" action="{% url 'documents:search_docs' %}">
                 <input type="text" class="form-control" name="search_docs" placeholder="Пошук документації">
             <button type="submit"><i class="icon-search"></i></button>
             </form>
@@ -13,7 +13,7 @@
             <h3 class="widget-title"><i class="icon-ribbon"></i>Типи документів
             </h3>
             <ul>{% for d in dt %}
-                <li><a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.1 }}<span>{{ d.2 }}</span></a>
+                <li><a href="{% url 'documents:docs_type' d.0 %}">{{ d.1 }}<span>{{ d.2 }}</span></a>
                 </li>
                 {% endfor %}
             </ul>
@@ -25,7 +25,7 @@
             {% for d in docs_all|slice:":7" %}
             <div class="item" style="margin-bottom: 6px">
                 <div class="info">
-                    <h4><a href="{% url 'nio_app:doc_single' d.slug %}">{{ d.year }}_{{ d.number }}</a></h4>
+                    <h4><a href="{% url 'documents:doc_single' d.slug %}">{{ d.year }}_{{ d.number }}</a></h4>
                 </div>
             </div><!-- .item -->
             {% endfor %}
@@ -34,7 +34,7 @@
             <h3 class="widget-title"><i class="icon-tag"></i>Посилання
             </h3>
             {% for d in dt %}
-            <a href="{% url 'nio_app:docs_type' d.0 %}">{{ d.1 }}</a>
+            <a href="{% url 'documents:docs_type' d.0 %}">{{ d.1 }}</a>
             {% endfor %}
         </section><!-- .widget.widget_tag_cloud -->
     </aside><!-- .sidebar -->

@@ -29,7 +29,7 @@
     <div class="inner">
       <div class="column">
         <div class="title">
-          <a href="{% url 'nio_app:docs' %}">
+          <a href="{% url 'documents:docs' %}">
           <h1>Документація</h1>
           </a>
         </div><!-- .title -->
@@ -56,7 +56,7 @@
         <div class="post-body">
           <div class="post-meta">
             <div class="column">
-              <span><a href="{% url 'nio_app:doc_single' d.slug %}" style="font-size: 18px">
+              <span><a href="{% url 'documents:doc_single' d.slug %}" style="font-size: 18px">
                 <strong>{{ d.year }}_{{ d.number }}</strong></a>
               </span>
               <span>
@@ -70,16 +70,16 @@
               <span>у</span>
               <span>
                 <i class="icon-ribbon"></i>
-                <a href="{% url 'nio_app:docs_type' d.type %}">{{ d.get_type_display }}</a>
+                <a href="{% url 'documents:docs_type' d.type %}">{{ d.get_type_display }}</a>
               </span>
             </div>
             <div class="column"><span>{{ d.release_date }}</span></div>
           </div><!-- .post-meta -->
-          <a href="{% url 'nio_app:doc_single' d.slug %}" class="post-title">
+          <a href="{% url 'documents:doc_single' d.slug %}" class="post-title">
             <h3>{{ d.name }}</h3>
           </a>
           <p>{{ d.description|safe|truncatewords:25 }}</p>
-          <a href="{% url 'nio_app:doc_single' d.slug %}">Докладніше</a>
+          <a href="{% url 'documents:doc_single' d.slug %}">Докладніше</a>
         </div><!-- .post-body -->
       </section><!-- .post-item -->
       {% endfor %}
@@ -87,7 +87,7 @@
         {% include 'nio_app/include/pagination.html' %}
     </div><!-- .col-lg-9.col-md-8 -->
       <!-- Sidebar -->
-        {% include 'nio_app/include/sidebar_docs.html' %}
+        {% include 'documents/include/sidebar_docs.html' %}
   </div><!-- .row -->
 </section><!-- .container -->
 {% endblock content %}

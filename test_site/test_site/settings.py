@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "debug_toolbar",
     'nio_app.apps.NioAppConfig',
+    'documents.apps.DocumentsConfig',
 
     'ckeditor',
     'ckeditor_uploader',

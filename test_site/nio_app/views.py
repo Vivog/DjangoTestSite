@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
-from django.http import FileResponse
+# from django.http import FileResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -10,13 +10,14 @@ from django.views.generic.list import MultipleObjectMixin
 
 from .forms import ReviewPubForm, ReviewNewsForm, RegisterUserForm, LoginUserForm
 from .models import *
+from documents.models import Documents
 # Create your views here.
 from .utilits import PortalMixin
 
 CONTEXT = {}
 CONTEXT['models'] = [[Divisions._meta.verbose_name_plural, Divisions.objects.all().count()],
                      [Staff._meta.verbose_name_plural, Staff.objects.all().count()],
-                     [Documents._meta.verbose_name_plural, Documents.objects.all().count()],
+                     # [Documents._meta.verbose_name_plural, Documents.objects.all().count()],
                      [Projects._meta.verbose_name_plural, Projects.objects.all().count()],
                      [Publications._meta.verbose_name_plural, Publications.objects.all().count()],
                      [News._meta.verbose_name_plural, News.objects.all().count()]]
@@ -443,7 +444,7 @@ class PubsDetail(DetailView, MultipleObjectMixin, PortalMixin):
     paginate_by = 6
 
     def get_object(self, queryset=None):
-        return Publications.objects.prefetch_related('category', 'author').get(slug=self.kwargs['slug'])
+        return Publications.objects.prefetch_related('category', 'author', 'reviewspubs_set').get(slug=self.kwargs['slug'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         object_list = self.object.text.split('\n')
@@ -598,87 +599,7 @@ class SearchNews(ListView, PortalMixin):
         return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class DocsList(ListView, PortalMixin):
-    model = Documents
-    template_name = 'nio_app/docs/docs.html'
-    paginate_by = 4
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
-
-        """використання PortalMixin"""
-        self.divisions = Divisions.objects.only('abr', 'slug')
-        mixin_context = self.get_user_context()
-
-        return dict(list(context.items()) + list(mixin_context.items()))
-
-
-class DocDetail(DetailView, PortalMixin):
-    model = Documents
-    template_name = 'nio_app/docs/doc_single.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
-
-        """використання PortalMixin"""
-        self.divisions = Divisions.objects.only('abr', 'slug')
-        mixin_context = self.get_user_context()
-
-        return dict(list(context.items()) + list(mixin_context.items()))
-
-
-
-def download_doc(request, id):
-    from pathlib import Path
-    # Build paths inside the project like this: BASE_DIR / 'subdir'.
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    path = str(Documents.objects.get(pk=id).doc)
-    filename = Path(BASE_DIR, 'media/', path)
-    # if not filename.exists():
-    #     filename = Path(BASE_DIR, 'static/site_app/cv', 'Savushkin_CV.pdf')
-    return FileResponse(open(filename, 'rb'), as_attachment=True)
-
-
-class DocsTypeDetail(ListView, PortalMixin):
-    model = Documents
-    template_name = 'nio_app/docs/docs.html'
-    paginate_by = 5
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
-
-        """використання PortalMixin"""
-        self.divisions = Divisions.objects.only('abr', 'slug')
-        mixin_context = self.get_user_context()
-
-        return dict(list(context.items()) + list(mixin_context.items()))
-
-    def get_queryset(self):
-        q = Q(type=self.kwargs['type'])
-        return Documents.objects.filter(q)
-
-
-class SearchDoc(ListView, PortalMixin):
-    template_name = 'nio_app/docs/docs.html'
-    paginate_by = 5
-
-    def get_queryset(self):
-        search_list = Documents.objects.filter(name__icontains=self.request.GET.get('search_docs'))
-        return search_list
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=None, **kwargs)
-        context['docs_all'] = Documents.objects.only('year', 'slug', 'number')
-        context['page'] = f"search_docs={self.request.GET.get('search_docs')}&"
-
-        """використання PortalMixin"""
-        self.divisions = Divisions.objects.only('abr', 'slug')
-        mixin_context = self.get_user_context()
-
-        return dict(list(context.items()) + list(mixin_context.items()))
 
 # def home(request):
 #     num_divisions = Divisions.objects.all().count()
