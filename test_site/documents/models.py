@@ -1,7 +1,8 @@
 from django.db import models
 
 # Create your models here.
-from nio_app.models import Divisions, Staff
+from staff.models import Staff
+from divisions.models import Divisions
 
 
 class Documents(models.Model):

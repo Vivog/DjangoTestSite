@@ -1,0 +1,162 @@
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+
+{% block main %}
+<li class="menu-item-has-children">
+  {% endblock main %}
+  {% block divs %}
+<li class="menu-item-has-children">
+  {% endblock divs %}
+  {% block staff %}
+<li class="menu-item-has-children current-menu-item">
+  {% endblock staff %}
+  {% block docs %}
+<li class="menu-item-has-children">
+  {% endblock docs %}
+  {% block projects %}
+<li class="menu-item-has-children">
+  {% endblock projects %}
+  {% block help %}
+<li class="menu-item-has-children">
+  {% endblock help %}
+  {% block other %}
+<li class="menu-item-has-children">
+  {% endblock other %}
+
+{% block content %}
+<section class="page-title">
+  <div class="container">
+    <div class="inner">
+      <div class="column">
+        <div class="title">
+          <a href="{% url 'staff:staff' %}">
+          <h1>Персонал</h1>
+          </a>
+        </div><!-- .title -->
+      </div><!-- .column -->
+      <div class="column">
+        <div class="breadcrumbs">
+          <a href="{% url 'nio_app:index_portal' %}">Головна</a>
+          <span class="delimiter"><i class="icon-arrow-right"></i></span>
+          <span>Персонал</span>
+        </div><!-- .breadcrumbs -->
+      </div><!-- .column -->
+    </div>
+  </div>
+</section><!-- .page-title -->
+<!-- Catalog -->
+<section class="container">
+  <!-- Shop Filters -->
+  <div class="shop-filters-wrap">
+    <div class="shop-filters">
+      <div class="inner">
+        <div class="shop-filter">
+          <div class="shop-filter-dropdown">
+            <span>Сортування</span>
+            <div class="dropdown">
+              <form method="get" id="staff_sort"  action="{% url 'staff:staff_sort' %}">
+                <div><strong>Підрозділи</strong><br>
+                  {% for d in divisions %}
+                  <label class="radio radio-inline">
+                    <input type="radio" name="divs" value="{{d.pk}}" id="divs_{{d.abr}}"> {{d.abr}}
+                  </label>
+                  {% endfor %}
+                </div>
+                <div><strong>Посада</strong>
+                  {% for p in staff_prof %}
+                  <label class="radio">
+                    <input type="radio" name="prof" value="{{p}}">{{p}}<span class="text-gray"></span>
+                  </label>
+                  {% endfor %}
+                </div>
+                <div><strong>Додатково</strong>
+                  <label class="radio">
+                    <input type="radio" name="sort" value="fio">За ПІБ
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort" value="tabel">За табелем
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort" value="birthday">За віком
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sort" value="oklad">За окладом
+                  </label>
+                </div>
+                <label class="radio radio-inline">
+                  <input class="btn" type="submit" value="Обрати" id="btn">
+                </label>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- .shop-fiters -->
+    <div class="shop-search">
+      <div class="widget widget_search">
+        <form method="get" class="search-box" action="{% url 'staff:search_staff' %}">
+          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за прізвищем">
+          <button type="submit"><i class="icon-search"></i></button>
+        </form>
+      </div>
+    </div><!-- .shop-search -->
+  </div><!-- .shop-fiters-wrap -->
+  <!-- Shop Items -->
+  {% for s in staff %}
+  <a name="{{s.slug}}"></a>
+  <div class="shop-tile">
+    <a href="#" class="thumbnail">
+      <img src="{{s.photo.url}}" alt="Photo">
+    </a>
+    <div class="description">
+      <div class="shop-meta">
+        <div class="column">
+          <span class="price">{{s.fio}}</span>
+        </div>
+        <div class="column">
+          <span class="hidden-xs">у</span>
+          <span id="div">
+            <i class="icon-ribbon hidden-xs"></i>
+            <a href="{% url 'divisions:division' s.div.slug %}">{{s.div.abr}}</a>
+          </span>
+        </div>
+      </div>
+      <table>
+        <tr>
+          <td>
+            <h6 class="shop-title">Табельний номер</h6>
+            <p style="margin:0 0 4px">{{s.tabel}}</p>
+          </td>
+          <td>
+            <h6 class="shop-title">Підрозділ</h6>
+            <p style="margin:0 0 4px">{{s.div.abr}}</p>
+          </td>
+        </tr>
+         <tr>
+          <td>
+            <h6 class="shop-title">Професія</h6>
+           <p style="margin:0 0 4px">{{s.prof}}</p>
+          </td>
+          <td>
+            <h6 class="shop-title">Дата народження</h6>
+            <p style="margin:0 0 4px">{{s.birthday}} <span class="text-gray">({{s.birthday|timesince|slice:":2"}} років)</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h4 class="shop-title">Номер телефону</h4>
+            <p style="margin:0 0 4px">{{s.phone}}</p>
+          </td>
+          <td>
+            <h4 class="shop-title">Оклад</h4>
+            <p style="margin:0 0 4px">{{s.oklad}}</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><!-- .shop-tile -->
+  {% endfor %}
+  <!-- Pagination -->
+    {% include 'nio_app/include/pagination.html' %}
+</section>
+{% endblock content %}

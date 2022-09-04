@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'nio_app.apps.NioAppConfig',
     'documents.apps.DocumentsConfig',
+    'staff.apps.StaffConfig',
+    'divisions.apps.DivisionsConfig',
+    'projects.apps.ProjectsConfig',
+    'publics.apps.PublicsConfig',
+    'news.apps.NewsConfig',
+    'search.apps.SearchConfig',
 
     'ckeditor',
     'ckeditor_uploader',
@@ -92,6 +98,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ATOMIC_REQUEST': True,
     }
 }
 

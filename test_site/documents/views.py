@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView
 
 from nio_app.utilits import PortalMixin
 from .models import *
+from divisions.models import Divisions
 
 
 # Create your views here.

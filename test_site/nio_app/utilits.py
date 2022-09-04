@@ -1,7 +1,8 @@
 from django.db.models import Count
 
 from documents.models import Documents
-from .models import *
+from divisions.models import Divisions
+from projects.models import Projects
 
 class PortalMixin:
     paginate_by = 2
@@ -24,7 +25,6 @@ class PortalMixin:
 
     def get_user_context(self, **kwargs):
         context = kwargs
-        # context['divisions'] = Divisions.objects.prefetch_related().defer('theses')
         context['divisions'] = self.divisions
         context['dt'] = self.docs_name()
         context['projects'] = Projects.objects.only('name')

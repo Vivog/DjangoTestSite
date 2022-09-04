@@ -1,0 +1,91 @@
+{% extends 'nio_app/base_portal.html' %}
+{% load static %}
+
+
+{% block content %}
+<section class="page-title">
+  <div class="container">
+    <div class="inner">
+      <div class="column">
+        <div class="title">
+          <a href="{% url 'search:search' %}">
+          <h1>Пошук</h1>
+          </a>
+        </div><!-- .title -->
+      </div><!-- .column -->
+      <div class="column">
+        <div class="breadcrumbs">
+          <a href="{% url 'nio_app:index_portal' %}">Головна</a>
+          <span class="delimiter"><i class="icon-arrow-right"></i></span>
+          <span>Пошук</span>
+        </div><!-- .breadcrumbs -->
+      </div><!-- .column -->
+    </div>
+  </div>
+</section><!-- .page-title -->
+
+   <!-- Container -->
+    <div class="container padding-bottom">
+
+      <!-- Help Search -->
+      <form method="get" class="help-search">
+        <input type="text" class="form-control" placeholder="Пошук по сайту" name="search" required>
+        <button type="submit" class="waves-effect waves-light"><i class="icon-search"></i></button>
+      </form><!-- .help-search -->
+
+      <div class="row padding-top">
+
+        <!-- Content -->
+        <div class="col-lg-8 col-md-8 col-lg-offset-1 col-lg-push-3 col-md-push-4">
+          <h2 class="block-title">
+            Ось що знайшли...
+            <small>Пошукове сполучення: {{ search_text }}</small>
+          </h2>
+          {% if object_list %}
+          {% for s in object_list %}
+          <h5 class="text-muted space-bottom">
+            {{ forloop.counter }}.
+            <strong>Категорія:</strong>
+            <i>
+            {{ s.0 }}
+            </i><br>
+            {% if s.0 == 'Підрозділи' %}
+            <a href="{% url 'divisions:divisions' s.2 %}">
+              {{ s.1|truncatewords:5 }}</a>
+            {% elif s.0 == 'Персонал' %}
+           <a href="{% url 'staff:staff_single' s.2 %}">
+             {{ s.1|truncatewords:5 }}</a>
+             {% elif s.0 == 'Публікації' %}
+           <a href="{% url 'publics:public_single' s.2 %}">
+             {{ s.1|truncatewords:5 }}</a>
+             {% elif s.0 == 'Новини' %}
+           <a href="{% url 'news:news_single' s.2 %}">
+             {{ s.1|truncatewords:5 }}</a>
+             {% elif s.0 == 'Документація' %}
+           <a href="{% url 'documents:doc_single' s.2 %}">
+             {{ s.1|truncatewords:5 }}</a>
+             {% elif s.0 == 'Проекти' %}
+           <a href="#">
+             {{ s.1|truncatewords:5 }}</a>
+            {% endif %}
+          </h5>
+          {% endfor %}
+          <!-- Pagination -->
+        {% include 'nio_app/include/pagination.html' %}
+          {% else %}
+          <h5 class="text-muted space-bottom">
+           Упс... Схоже нічого не знайдено
+          </h5>
+          {% endif %}
+        </div><!-- .col-lg-8.col-md-8.col-lg-offset-1.col-lg-push-3.col-md-push-4 -->
+
+
+
+           <!-- Sidebar -->
+        {% include 'search/include/sidebar_search.html' %}
+      </div><!-- .row -->
+
+      <!-- Topics -->
+    </div><!-- .container -->
+
+{% endblock content %}

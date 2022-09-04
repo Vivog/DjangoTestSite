@@ -1,0 +1,44 @@
+{% load static %}
+<!-- Sidebar -->
+<div class="col-lg-3 col-md-4 col-lg-pull-9 col-md-pull-8">
+    <div class="space-top-2x visible-sm visible-xs"></div>
+    <aside class="sidebar">
+        <section class="widget widget_search">
+            <form method="get" class="search-box" action="{% url 'publics:search_pub' %}">
+                <input type="text" class="form-control" name="search_pub" placeholder="Пошук публікації">
+            <button type="submit"><i class="icon-search"></i></button>
+            </form>
+        </section>
+        <section class="widget widget_categories">
+            <h3 class="widget-title"><i class="icon-ribbon"></i>Категорії
+            </h3>
+            <ul>{% for c in cats %}
+                <li><a href="{% url 'publics:publics_category' c.slug %}">{{ c.name }}<span>{{ c.publications_set.count }}</span></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section><!-- .widget.widget_categories -->
+        <section class="widget widget_recent_posts">
+            <h3 class="widget-title"><i class="icon-paper"></i>Останні публікації
+            </h3>
+            {% for p in pubs|slice:":3" %}
+            <div class="item">
+                <div class="thumb">
+                    <a href="{% url 'publics:public_single' p.slug %}"><img src="{{p.photo_1.url}}" alt="Post01"
+                                                                            style="width: 60px; height: 60px; object-fit: cover;"></a>
+                </div>
+                <div class="info">
+                    <h4><a href="{% url 'publics:public_single' p.slug %}">{{ p.name|truncatewords:3}}</a></h4>
+                </div>
+            </div><!-- .item -->
+            {% endfor %}
+        </section><!-- .widget.widget_recent_posts -->
+        <section class="widget widget_tag_cloud">
+            <h3 class="widget-title"><i class="icon-tag"></i>Посилання
+            </h3>
+            {% for c in cats %}
+            <a href="{% url 'publics:publics_category' c.slug %}">{{ c.name }}</a>
+            {% endfor %}
+        </section><!-- .widget.widget_tag_cloud -->
+    </aside><!-- .sidebar -->
+</div><!-- .col-lg-3.col-md-4 -->

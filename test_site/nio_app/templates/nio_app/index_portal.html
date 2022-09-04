@@ -66,24 +66,24 @@
               <col>
             </colgroup>
             <tr>
-              <td>&nbsp;</td>
+              <td class="text-gray text-right">Назва підрозділу</td>
               {% for d in divisions %}
               <td>
                 <span class="text-bold" style="font-size: 20px">{{d.abr}}</span>
-                <a href="{% url 'nio_app:division' d.slug %}" class="text-sm space-top">Відкрити</a>
+                <a href="{% url 'divisions:division' d.slug %}" class="text-sm space-top">Відкрити</a>
               </td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Чисельність</td>
-              {% for d in divisions %}
-              <td class="text-bold">{{d.num_staff}}</td>
+              {% for ns in divisions %}
+              <td class="text-bold">{{ ns.staff_set.count }}</td>
               {% endfor %}
             </tr>
             <tr>
               <td class="text-gray text-right">Кількість документації</td>
-              {% for d in divisions %}
-              <td class="text-bold">{{d.num_docs}}</td>
+              {% for doc in divisions %}
+              <td class="text-bold">{{ doc.div.count }}</td>
               {% endfor %}
             </tr>
             <tr>
@@ -101,7 +101,11 @@
             <tr>
               <td class="text-gray text-right">Керіники</td>
               {% for d in divisions %}
-              <td class="text-bold">{{d.boss}}</td>
+              {% for s in boss %}
+              {% if s.div_id == d.pk %}
+              <td class="text-bold"><a style="border-bottom: unset" href="{% url 'staff:staff_single' s.slug %}">{{ s.fio }}</a></td>
+              {% endif %}
+              {% endfor %}
               {% endfor %}
             </tr>
           </table><!-- table -->

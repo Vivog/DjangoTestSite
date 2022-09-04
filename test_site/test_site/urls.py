@@ -25,7 +25,13 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
     path('accounts/', include('allauth.urls')),
     path('', include('nio_app.urls')),
+    path('search/', include('search.urls')),
+    path('divisions/', include('divisions.urls')),
+    path('staff/', include('staff.urls')),
     path('documents/', include('documents.urls')),
+    path('projects/', include('projects.urls')),
+    path('publics/', include('publics.urls')),
+    path('news/', include('news.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
