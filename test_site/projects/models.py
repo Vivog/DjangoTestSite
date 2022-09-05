@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 from divisions.models import Divisions
@@ -14,7 +15,7 @@ class Projects(models.Model):
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
 
     description = models.TextField(max_length=5000, help_text='Введіть короткий опис мети проекту',
-                                   verbose_name='Опис підрозділу')
+                                   verbose_name='Опис проекту')
 
     div = models.ForeignKey(Divisions, on_delete=models.SET_NULL, verbose_name='Назва підрозділу', null=True)
 
@@ -41,6 +42,12 @@ class Projects(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("projects:project_single", kwargs={"slug": self.slug})
+
+    def get_review(self):
+        return self.reviewsprojects_set.filter(parent__isnull=True)
 
 
 class ProjectsDocs(models.Model):
@@ -101,3 +108,26 @@ class ProjectsPics(models.Model):
 
     def __str__(self):
         return f'{self.pic}'
+
+
+class ReviewsProjects(models.Model):
+    """Відгуки на проект"""
+    email = models.EmailField()
+    name = models.CharField(verbose_name="Ім'я", max_length=100)
+    text = models.TextField(verbose_name="Повідомлення", max_length=5000)
+    parent = models.ForeignKey(
+        'self', verbose_name="До кого", on_delete=models.SET_NULL, blank=True, null=True
+    )
+    project = models.ForeignKey(Projects, verbose_name="Проект", on_delete=models.CASCADE)
+
+    pub_date = models.DateTimeField(verbose_name='Дата коментарія', null=True, auto_now=True)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.name} - {self.project}"
+
+    class Meta:
+        verbose_name = "Відгук на проект"
+        verbose_name_plural = "Відгуки на проект"
+        ordering = ['-pub_date']

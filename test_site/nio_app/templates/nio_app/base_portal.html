@@ -93,9 +93,9 @@
           <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
           <ul class="sub-menu">
             {% for pr in projects %}
-            <li><a href="#">{{pr.name|truncatewords:3}}</a></li>
+            <li><a href="{% url 'projects:project_single' pr.slug %}">{{pr.name|truncatewords:3}}</a></li>
             {% endfor %}
-            <li><a href="#">Всі проекти</a></li>
+            <li><a href="{% url 'projects:projects' %}">Всі проекти</a></li>
           </ul>
         </li>
         {% block other %}

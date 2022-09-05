@@ -48,7 +48,7 @@ class News(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("nio_app:news_single", kwargs={"slug": self.slug})
+        return reverse("news:news_single", kwargs={"slug": self.slug})
 
     def get_review(self):
         return self.reviewsnews_set.filter(parent__isnull=True)

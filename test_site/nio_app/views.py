@@ -31,7 +31,7 @@ class Index(PortalMixin, ListView):
     """Головна сторінка"""
     model = Main
     template_name = 'nio_app/index_portal.html'
-    staff = Staff.objects.select_related('div_id').only('fio', 'prof', 'div_id').filter(prof__icontains='нач')
+    staff = Staff.objects.select_related('div').only('fio', 'prof', 'div_id').filter(prof__icontains='нач')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
