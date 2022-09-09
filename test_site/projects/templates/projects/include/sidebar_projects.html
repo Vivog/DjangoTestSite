@@ -25,7 +25,9 @@
             <div class="item">
                 <div class="thumb">
                     <a href="{% url 'projects:project_single' pr.slug %}">
-                        <img src="{{pr.pic.all.0.url}}" alt="Post01" style="width: 60px; height: 60px; object-fit: cover;">
+                        {% for pic in pr.projectspics_set.all %}
+                        <img src="{{ pic.pic.url }}" alt="Post01" style="width: 60px; height: 60px; object-fit: cover;">
+                        {% endfor %}
                     </a>
                 </div>
                 <div class="info">

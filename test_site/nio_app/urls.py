@@ -6,6 +6,7 @@ app_name = 'nio_app'
 urlpatterns = [
 
     path('', Index.as_view(), name='index_portal'),
+    path('pageNotFound/', pageNotFound, name='404'),
 
     path('login/', LoginUser.as_view(), name='login'),
     path('reg/', RegisterUser.as_view(), name='registration'),

@@ -23,7 +23,6 @@ class ReviewProjectsInline(admin.TabularInline):
 @admin.register(Projects)
 class ProjectsAdmin(admin.ModelAdmin):
     list_display = ('name', 'div', "display_author",)
-    exclude = ('pics', 'docs')
     list_display_links = ('name',)
     list_filter = ('div',)
     search_fields = ('name',)
@@ -31,11 +30,17 @@ class ProjectsAdmin(admin.ModelAdmin):
     form = ProjectsAdminForm
     save_on_top = True
     inlines = [ReviewProjectsInline]
+    list_select_related = True
 
 
 @admin.register(ProjectsPics)
 class ProjectsPicsAdmin(admin.ModelAdmin):
-    list_display = ('project', 'pic', 'file_load')
+    list_display = ('project', 'get_html_pic', 'file_load')
+    def get_html_pic(self, object):
+        if object.pic:
+            return mark_safe(f"<img src='{object.pic.url}' width=100")
+
+    get_html_pic.short_description = 'Мініатюра'
 
 
 @admin.register(ProjectsDocs)

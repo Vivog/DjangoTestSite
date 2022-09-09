@@ -44,7 +44,7 @@
         {% block main %}
         <li class="current-menu-item menu-item-has-children">
         {% endblock main %}
-          <a href="#" id="nav_header"><i class="flaticon-technology46"></i>Головна</a>
+          <a href="{% url 'nio_app:index_portal' %}" id="nav_header"><i class="flaticon-technology46"></i>Головна</a>
           <div class="mega-menu">
             <ul>
               <li class="current-menu-item"><a href="{% url 'nio_app:index_portal' %}">Головна</a></li>
@@ -59,7 +59,7 @@
         {% block divs %}
         <li class="menu-item-has-children">
           {% endblock divs %}
-          <a href="#"><i class="flaticon-space-ship2"></i>Підрозділи</a>
+          <a href="{% url 'nio_app:index_portal' %}#divs"><i class="flaticon-space-ship2"></i>Підрозділи</a>
           <ul class="sub-menu">
             {% for d in divisions %}
             <li><a href="{% url 'divisions:division' d.slug %}">{{ d.abr }}</a></li>
@@ -69,7 +69,7 @@
         {% block staff %}
         <li class="menu-item-has-children">
           {% endblock staff %}
-          <a href="#"><i class="flaticon-technological"></i>Персонал</a>
+          <a href="{% url 'staff:staff' %}"><i class="flaticon-technological"></i>Персонал</a>
           <ul class="sub-menu">
             <li><a href="{% url 'staff:staff' %}">Увесь персонал</a></li>
             <li><a href="{% url 'staff:staff' %}filter/?sort=tabel">За табелем</a></li>
@@ -80,7 +80,7 @@
         {% block docs %}
         <li class="menu-item-has-children">
           {% endblock docs %}
-          <a href="#"><i class="flaticon-writing50"></i>Документація</a>
+          <a href="{% url 'documents:docs' %}"><i class="flaticon-writing50"></i>Документація</a>
           <ul class="sub-menu">
             {% for v in dt %}
             <li><a href="{% url 'documents:docs_type' v.0 %}">{{ v.1 }}</a></li>
@@ -90,7 +90,7 @@
         {% block projects %}
         <li class="menu-item-has-children">
           {% endblock projects %}
-          <a href="#"><i class="flaticon-drawing33"></i>Проекти</a>
+          <a href="{% url 'projects:projects' %}"><i class="flaticon-drawing33"></i>Проекти</a>
           <ul class="sub-menu">
             {% for pr in projects %}
             <li><a href="{% url 'projects:project_single' pr.slug %}">{{pr.name|truncatewords:3}}</a></li>
@@ -101,7 +101,7 @@
         {% block other %}
         <li class="menu-item-has-children">
           {% endblock other %}
-          <a href="#"><i class="flaticon-positive"></i>Інше</a>
+          <a href="{% url 'nio_app:cats' %}"><i class="flaticon-positive"></i>Інше</a>
           <ul class="sub-menu">
             <li><a href="#">Про розробку</a></li>
             <li><a href="{% url 'nio_app:cats' %}">Категорії</a></li>

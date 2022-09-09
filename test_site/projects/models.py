@@ -6,6 +6,8 @@ from divisions.models import Divisions
 from nio_app.models import Categories
 from staff.models import Staff
 
+from .validators import validate_file_extension
+
 
 class Projects(models.Model):
     """Проекти підрозділу"""
@@ -23,10 +25,6 @@ class Projects(models.Model):
 
     category = models.ManyToManyField(Categories, help_text='оберіть категорію/категорії',
                                       verbose_name='Оберіть категорію')
-
-    docs = models.ManyToManyField('ProjectsDocs', verbose_name='Документ до проекту')
-
-    pics = models.ManyToManyField('ProjectsPics', verbose_name='Картинка до проекту')
 
     objects = models.Manager()
 
@@ -61,7 +59,9 @@ class ProjectsDocs(models.Model):
         # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
         return f'archives/{instance.project.div.slug}/projects/{instance.project.pk}/{instance.project.slug}/{filename}'
 
-    doc = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500)
+    doc = models.FileField(upload_to=directory_path, blank=True, null=True, max_length=500,
+                           help_text='Усі файли проекту повинні бути додані до архіву у форматі *.zip чи *.rar і завантажені єдиним файлом',
+                           validators=[validate_file_extension])
 
     objects = models.Manager()
 

@@ -53,9 +53,6 @@
       <!-- Post -->
       {% for pr in object_list %}
       <section class="post-item">
-        <a href="{% url 'projects:project_single' pr.slug %}" class="post-thumb waves-effect">
-          <img src="{{ pr.pics.all.0.url }}" alt="Post01" style="width: 100%; max-height: 500px; object-fit: cover;">
-        </a><!-- .post-thumb -->
         <div class="post-body">
           <div class="post-meta">
             <div class="column">
@@ -83,6 +80,11 @@
           <a href="{% url 'projects:project_single' pr.slug %}" class="post-title">
             <h3>{{ pr.name }}</h3>
           </a>
+           <a href="{% url 'projects:project_single' pr.slug %}" class="post-thumb waves-effect">
+          {% for pic in pr.projectspics_set.all %}
+          <img src="{{ pic.pic.url }}" alt="Post01" style="width: 100%; max-height: 500px; object-fit: cover;">
+          {% endfor %}
+        </a><!-- .post-thumb -->
           <p>{{ pr.description|safe }}</p>
           <a href="{% url 'projects:project_single' pr.slug %}">Читати далі</a>
         </div><!-- .post-body -->

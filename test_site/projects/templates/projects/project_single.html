@@ -73,6 +73,11 @@
         </div>
         <div class="column"><span>{{ object.pub_date }}</span></div>
       </div><!-- .post-meta -->
+      <div class="image-carousel space-bottom-2x">
+        <div class="inner">
+          <img src="{{ pic.url }}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+        </div>
+      </div><!-- .image-carousel -->
        <p>{{ object.description|safe }}</p>
 
       <!-- Завантаження файлу -->
@@ -99,7 +104,7 @@
         <div class="inner">
           {% for pic in object.pics.all %}
           {% if pic %}
-          <img src="{{ pic.pic.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
+          <img src="{{ pic.url}}" alt="Image" style="width: auto; max-height: 500px; object-fit: cover;">
           {% endif %}
           {% endfor %}
         </div>

@@ -45,8 +45,6 @@ def download_doc(request, id):
     BASE_DIR = Path(__file__).resolve().parent.parent
     path = str(Documents.objects.get(pk=id).doc)
     filename = Path(BASE_DIR, 'media/', path)
-    # if not filename.exists():
-    #     filename = Path(BASE_DIR, 'static/site_app/cv', 'Savushkin_CV.pdf')
     return FileResponse(open(filename, 'rb'), as_attachment=True)
 
 
