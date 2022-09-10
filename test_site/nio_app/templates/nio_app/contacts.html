@@ -151,7 +151,11 @@
       <h6 class="text-normal text-muted">Допомога та підтримка</h6>
       <hr class="space-bottom">
       <ul class="list-featured">
+        {% if request.user.is_staff %}
         <li><a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!">vvsav@zorya.com</a></li>
+        {% else %}
+        <li><a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!">xxxxx@xxxxx.com</a></li>
+        {% endif %}
         <li class="text-semibold">{{dev.phone}}</li>
       </ul>
     </div>
@@ -159,7 +163,11 @@
       <h6 class="text-normal text-muted">Приймальня</h6>
       <hr class="space-bottom">
       <ul class="list-featured">
+        {% if request.user.is_staff %}
         <li><a href=mailto:savolk@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20дня">savolk@zorya.com</a></li>
+        {% else %}
+        <li><a href=mailto:savolk@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20дня">xxxxx@xxxxx.com</a></li>
+        {% endif %}
         <li class="text-semibold">{{sec.phone}}</li>
       </ul>
     </div>
@@ -174,7 +182,11 @@
       <h6 class="text-normal text-muted">Співробітництво</h6>
       <hr class="space-bottom">
       <ul class="list-featured">
+        {% if request.user.is_staff %}
         <li><a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!">vvsav@zorya.com</a></li>
+         {% else %}
+        <li><a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!">xxxxx@xxxxx.com</a></li>
+        {% endif %}
         <li class="text-semibold">{{dev.phone}}</li>
       </ul>
     </div>

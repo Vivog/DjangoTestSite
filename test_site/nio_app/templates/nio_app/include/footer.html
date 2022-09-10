@@ -8,10 +8,17 @@
               <i><img src="{% static 'nio_app/img/footer/icons/email.png' %}" alt="Email"></i>
               <span><a href=mailto:savolk@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20дня">ПОШТА НДВ</a></span>
             </div>
+            {% if request.user.is_staff %}
             <div class="cell">
               <i><img src="{% static 'nio_app/img/footer/icons/phone-call.png' %}" alt="Phone"></i>
               <span><a href="#"></a>9-78-33</span>
             </div>
+            {% else %}
+            <div class="cell">
+              <i><img src="{% static 'nio_app/img/footer/icons/phone-call.png' %}" alt="Phone"></i>
+              <span><a href="#"></a>X-XX-XX</span>
+            </div>
+            {% endif %}
           </div>
         </div><!-- .container -->
       </div><!-- .top-footer -->
@@ -68,11 +75,23 @@
               </section><!-- .widget.widget_pages -->
             </div><!-- .col-md-3 -->
           </div><!-- .row -->
+          {% if request.user.is_staff %}
           <div class="copyright">
             <div class="column">
-              <p>&copy; Портал НДВ 2022. Розроблено <a href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!" class="text-sm space-top">vvsav@zorya.com</a>, задля інформування. Усі права захищено.
+              <p>&copy; Портал НДВ 2022. Розроблено <a
+                      href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!"
+                      class="text-sm space-top">vvsav@zorya.com</a>, задля інформування. Усі права захищено.
             </div><!-- .column -->
           </div><!-- .copyright -->
+          {% else %}
+          <div class="copyright">
+            <div class="column">
+              <p>&copy; Портал НДВ 2022. Розроблено <a
+                      href="mailto:vvsav@zorya.com?subject=Повідомлення%20з%20порталу&amp;body=Доброго%20Віталій!"
+                      class="text-sm space-top">xxxxx@xxxxx.com</a>, задля інформування. Усі права захищено.
+            </div><!-- .column -->
+          </div><!-- .copyright -->
+          {% endif %}
         </div><!-- .container -->
       </div><!-- .bottom-footer -->
     </footer><!-- .footer -->

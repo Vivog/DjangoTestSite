@@ -90,9 +90,14 @@ def contacts(request):
     """Контакти"""
     context = {}
     contact = Staff.objects.only('phone')
-    context['dev'] = contact.get(tabel='654')
-    context['sec'] = contact.get(tabel='633')
-    context['arh'] = contact.get(tabel='672')
+    try:
+        context['dev'] = contact.get(tabel='654')
+        context['sec'] = contact.get(tabel='633')
+        context['arh'] = contact.get(tabel='672')
+    except:
+        context['dev'] = contact.first()
+        context['sec'] = contact.first()
+        context['arh'] = contact.last()
 
     """використання PortalMixin"""
     mixin = PortalMixin()

@@ -38,7 +38,7 @@
               <span>
                 {% for a in pr.author.all %}
                 <i class="icon-head"></i>
-                <a href="{% url 'staff:staff' %}#{{ a.slug }}">{{ a.fio }}</a>
+                <a href="{% url 'staff:staff_single' a.slug %}">{{ a.fio }}</a>
                 {% endfor %}
               </span>
               <span>у</span>

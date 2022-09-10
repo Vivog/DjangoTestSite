@@ -74,11 +74,18 @@
       <p>{{ documents.description|safe }}</p>
 
       <!-- Завантаження файлу -->
-      {% if request.user.is_authenticated %}
+       {% if request.user.is_authenticated %}
+      {% if request.user.is_staff %}
       <a href="{% url 'documents:download_doc' id=documents.pk %}"
          class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
         ЗАВАНТАЖИТИ ДОКУМЕНТ
       </a>
+      {% else %}
+      <a href="#"
+         class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
+        НЕ МАЄ ДОЗВОЛУ
+      </a>
+      {% endif %}
       {% else %}
       <a href="{% url 'nio_app:login' %}"
          class="btn btn-sm btn-default btn-icon-right waves-effect waves-light">
