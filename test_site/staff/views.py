@@ -146,7 +146,11 @@ class SearchStaff(ListView, PortalMixin):
     template_name = 'staff/staff.html'
 
     def get_queryset(self):
-        search_list = Staff.objects.select_related('div').filter(fio__icontains=self.request.GET.get('search_staff'))
+        search_stf = self.request.GET.get('search_staff').title()
+        search_list = Staff.objects.select_related('div').filter(fio__icontains=search_stf)
+        if not search_list.exists():
+            search = self.request.GET.get('search_staff')
+            search_list = Staff.objects.select_related('div').filter(fio__icontains=search)
         return search_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
