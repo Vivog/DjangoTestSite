@@ -11,11 +11,13 @@ class StaffList(ListView, PortalMixin):
     model = Staff
     template_name = 'staff/staff.html'
     paginate_by = 5
-    STAFF = Staff.objects.select_related('div')
+
+    def get_queryset(self):
+        return Staff.objects.select_related('div')
 
     def staff_prof(self):
         PROF = []
-        for s in self.STAFF:
+        for s in Staff.objects.only('prof'):
             if s.prof not in PROF:
                 PROF.append(s.prof)
             else:
@@ -26,7 +28,6 @@ class StaffList(ListView, PortalMixin):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context['staff_prof'] = self.staff_prof()
-        context['staff'] = self.STAFF
         context['page'] = ''
         if self.request.GET.get('divs'):
             context['page'] += f"divs={self.request.GET.get('divs')}&"
@@ -44,64 +45,76 @@ class StaffList(ListView, PortalMixin):
 class StaffSortList(ListView, PortalMixin):
     """Сортування персоналу"""
     template_name = 'staff/staff_sort.html'
-    context_object_name = 'staff_sort'
-    paginate_by = 5
-    STAFF = Staff.objects.select_related('div')
+    paginate_by = 0
 
     def get_queryset(self):
-        # queryset = Staff.objects.order_by('fio')
         sorting = ('fio', 'tabel', 'oklad', 'birthday')
         if self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') == None:
-            queryset = self.STAFF.filter(
+            queryset = Staff.objects.filter(
                 Q(div_id__in=self.request.GET.getlist("divs"))
             ).order_by('fio')
+
+
         elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get(
                 'sort') == None:
-            queryset = self.STAFF.filter(
+            queryset =  Staff.objects.filter(
                 Q(div_id__in=self.request.GET.getlist("divs")),
                 Q(prof__in=self.request.GET.getlist("prof"))
             ).order_by('fio')
+
+
         elif self.request.GET.get('divs') != None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = self.STAFF.filter(
+                    queryset = Staff.objects.filter(
                         Q(div_id__in=self.request.GET.getlist("divs"))
                     ).order_by(s)
+
+
         elif self.request.GET.get('divs') != None and self.request.GET.get('prof') != None and self.request.GET.get(
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = self.STAFF.filter(
+                    queryset = Staff.objects.filter(
                         Q(div_id__in=self.request.GET.getlist("divs")),
                         Q(prof__in=self.request.GET.getlist("prof"))
                     ).order_by(s)
+
+
         elif self.request.GET.get('divs') == None and self.request.GET.get('prof') != None and self.request.GET.get(
                 'sort') == None:
             queryset = Staff.objects.filter(
                 Q(prof__in=self.request.GET.getlist("prof"))
             ).order_by('fio')
+
+
         elif self.request.GET.get('divs') == None and self.request.GET.get('prof') != None and self.request.GET.get(
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = self.STAFF.filter(
+                    queryset = Staff.objects.filter(
                         Q(prof__in=self.request.GET.getlist("prof"))
                     ).order_by(s)
+
+
         elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') != None:
             for s in sorting:
                 if self.request.GET.get('sort') == s:
-                    queryset = self.STAFF.order_by(s)
+                    queryset = Staff.objects.order_by(s)
+
+
         elif self.request.GET.get('divs') == None and self.request.GET.get('prof') == None and self.request.GET.get(
                 'sort') == None:
-            queryset = self.STAFF.order_by('fio')
+            queryset = Staff.objects.order_by('fio')
+        print('QUERY', queryset)
         return queryset
 
     def staff_prof(self):
         PROF = []
-        for s in self.STAFF:
+        for s in Staff.objects.only('prof'):
             if s.prof not in PROF:
                 PROF.append(s.prof)
             else:
@@ -111,6 +124,7 @@ class StaffSortList(ListView, PortalMixin):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
+
         context['staff_prof'] = self.staff_prof()
         context['page'] = ''
         if self.request.GET.get('divs'):
@@ -119,6 +133,7 @@ class StaffSortList(ListView, PortalMixin):
             context['page'] += f"prof={self.request.GET.get('prof')}&"
         if self.request.GET.get('sort'):
             context['page'] += f"sort={self.request.GET.get('sort')}&"
+
 
         """використання PortalMixin"""
         self.divisions = Divisions.objects.only('abr', 'slug')

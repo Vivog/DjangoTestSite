@@ -96,7 +96,8 @@
     <div class="shop-search">
       <div class="widget widget_search">
         <form method="get" class="search-box" action="{% url 'staff:search_staff' %}">
-          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за прізвищем">
+          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за прізвищем"
+           pattern="^[А-Яа-яґҐЁёІіЇїЄє'''\s-]+$" title="Не підтримуються латинськи символи" >
           <button type="submit"><i class="icon-search"></i></button>
         </form>
       </div>

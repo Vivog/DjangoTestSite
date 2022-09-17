@@ -11,7 +11,7 @@
               </h3>
               <ul>
                   {% for m in models %}
-                  <li><a href="{% url 'search:search_cat' cat=m.0|lower search=m.2 %}" id="cat">
+                  <li><a href="{% url 'search:search_cat' cat=m.0|lower search=search_text %}" id="cat">
                    {{ m.0 }}
                   <span>{{ m.1 }}</span>
                 </a>

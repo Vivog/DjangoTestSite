@@ -32,7 +32,8 @@
         <div class="search-btn">
           <i class="icon-search"></i>
           <form method="get" class="search-box" action="{% url 'search:search' %}">
-            <input type="text" class="form-control input-sm" placeholder="Пошук" name="search">
+            <input type="text" class="form-control input-sm" placeholder="Пошук" name="search"
+            pattern="^[А-Яа-яґҐЁёІіЇїЄє'''\s-]+$" title="Не підтримуються латинськи символи" >
             <button type="submit"><i class="icon-search"></i></button>
           </form>
         </div><!-- .search-btn -->

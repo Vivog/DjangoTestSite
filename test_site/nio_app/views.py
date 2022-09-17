@@ -1,17 +1,19 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from django.db.models import Count
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
-from .forms import RegisterUserForm, LoginUserForm
-
-from staff.models import Staff
 from divisions.models import Divisions
+from documents.models import Documents
+from staff.models import Staff
+from .forms import RegisterUserForm, LoginUserForm
 from .models import *
-
 from .utilits import PortalMixin
+
+
 # Create your views here.
 
 
@@ -31,11 +33,13 @@ class Index(PortalMixin, ListView):
     """Головна сторінка"""
     model = Main
     template_name = 'nio_app/index_portal.html'
-    staff = Staff.objects.select_related('div').only('fio', 'prof', 'div_id').filter(prof__icontains='нач')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context['boss'] = self.staff
+        context['divisions'] = Divisions.objects.prefetch_related('locs', 'coops').values('name', 'abr', 'slug', 'locs', 'coops')
+        context['staff_count'] = Staff.objects.values('div').annotate(number=Count('div'))
+        context['doc_count'] = Documents.objects.values('div').annotate(number=Count('div'))
+        context['boss'] = Staff.objects.only('fio', 'slug', 'div_id').filter(prof__icontains='нач')
 
         """використання PortalMixin"""
         mixin_context = self.get_user_context()

@@ -73,8 +73,13 @@ class SearchDoc(ListView, PortalMixin):
     paginate_by = 5
 
     def get_queryset(self):
-        search_list = Documents.objects.filter(name__icontains=self.request.GET.get('search_docs'))
+        search_stf = self.request.GET.get('search_docs').title()
+        search_list = Documents.objects.filter(name__icontains=search_stf)
+        if not search_list.exists():
+            search = self.request.GET.get('search_docs')
+            search_list = Documents.objects.filter(name__icontains=search)
         return search_list
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)

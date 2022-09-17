@@ -95,14 +95,15 @@
     <div class="shop-search">
       <div class="widget widget_search">
         <form method="get" class="search-box" action="{% url 'staff:search_staff' %}">
-          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за прізвищем">
+          <input type="text" class="form-control" name="search_staff" placeholder="Пошук за прізвищем"
+          pattern="^[А-Яа-яґҐЁёІіЇїЄє'''\s-]+$" title="Не підтримуються латинськи символи" >
           <button type="submit"><i class="icon-search"></i></button>
         </form>
       </div>
     </div><!-- .shop-search -->
   </div><!-- .shop-fiters-wrap -->
   <!-- Shop Items -->
-  {% for s in staff %}
+  {% for s in object_list %}
   <a name="{{s.slug}}"></a>
   <div class="shop-tile">
     <a href="#" class="thumbnail">
@@ -157,6 +158,6 @@
   </div><!-- .shop-tile -->
   {% endfor %}
   <!-- Pagination -->
-    {% include 'nio_app/include/pagination.html' %}
+    {% include 'staff/include/pagination.html' %}
 </section>
 {% endblock content %}

@@ -5,7 +5,8 @@
       <aside class="sidebar">
         <section class="widget widget_search">
           <form method="get" class="search-box" action="{% url 'news:search_news' %}">
-            <input type="text" class="form-control" name="search_news" placeholder="Пошук новини">
+            <input type="text" class="form-control" name="search_news" placeholder="Пошук новини"
+            pattern="^[А-Яа-яґҐЁёІіЇїЄє'''\s-]+$" title="Не підтримуються латинськи символи" >
             <button type="submit"><i class="icon-search"></i></button>
           </form>
         </section>
